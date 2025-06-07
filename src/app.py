@@ -1,15 +1,24 @@
+# src/app.py
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from tkinter import messagebox
-from src.theme_manager import ThemeManager
+from src.config_manager import ConfigManager
+from src.settings_window import SettingsWindow
 
 class BotApp:
     def __init__(self, root):
         self.root = root
         self.root.title("AutoAFK")
+        self.config_manager = ConfigManager()
 
-        self.theme_manager = ThemeManager(root)
-        self.theme_manager.apply_theme(self.theme_manager.theme)
+        # Apply the theme directly
+        self.config_manager.apply_theme(self.root)
+
+        # Tasks
+        self.task_vars = {
+            task: tb.BooleanVar(value=val)
+            for task, val in self.config_manager.load_tasks().items()
+        }
 
         self.create_menu()
         self.build_layout()
@@ -17,18 +26,18 @@ class BotApp:
     def create_menu(self):
         menu_bar = tb.Menu(self.root)
 
-        # File menu
+        # File
         file_menu = tb.Menu(menu_bar, tearoff=0)
         file_menu.add_command(label="Settings", command=self.show_settings)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.root.quit)
         menu_bar.add_cascade(label="File", menu=file_menu)
 
-        # View menu from ThemeManager
-        view_menu = self.theme_manager.create_view_menu(menu_bar)
+        # View
+        view_menu = self.config_manager.create_view_menu(menu_bar, self.root)
         menu_bar.add_cascade(label="View", menu=view_menu)
 
-        # Help menu
+        # Help
         help_menu = tb.Menu(menu_bar, tearoff=0)
         help_menu.add_command(label="Help", command=self.show_help)
         help_menu.add_command(label="About", command=self.show_about)
@@ -58,7 +67,7 @@ class BotApp:
         self.log("Welcome to AFK Arena Bot!")
 
     def show_settings(self):
-        messagebox.showinfo("Settings", "Settings dialog would appear here.")
+        SettingsWindow(self.root, self.config_manager, self.task_vars)
 
     def show_help(self):
         messagebox.showinfo("Help", "Help info goes here.")
@@ -71,3 +80,6 @@ class BotApp:
         self.output.insert("end", message + "\n")
         self.output.see("end")
         self.output.config(state="disabled")
+
+    def save_task_settings(self):
+        self.config_manager.save_tasks({task: var.get() for task, var in self.task_vars.items()})
