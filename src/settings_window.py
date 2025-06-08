@@ -4,11 +4,12 @@ from tkinter import Toplevel, BooleanVar
 from src.config_manager import ConfigManager
 
 class SettingsWindow:
-    def __init__(self, master, config: ConfigManager, task_vars: dict):
+    def __init__(self, master, config: ConfigManager, task_vars: dict, logger):
         self.top = Toplevel(master)
         self.top.title("Settings")
         self.config = config
         self.task_vars = task_vars
+        self.logger = logger
 
         self.check_vars = {}
         self.build_ui()
@@ -27,5 +28,6 @@ class SettingsWindow:
     def on_close(self):
         task_values = {task: var.get() for task, var in self.task_vars.items()}
         self.config.save_tasks(task_values)
+        self.logger("Settings saved!", "success")
         self.top.destroy()
 

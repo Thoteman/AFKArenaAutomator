@@ -11,18 +11,21 @@ class ThemeManager:
         self.config = configparser.ConfigParser()
         self.theme = self.load_theme()
 
-        self.light_mode_var = tk.BooleanVar(value=(self.theme == "pulse"))
-        self.dark_mode_var = tk.BooleanVar(value=(self.theme == "cyborg"))
+        self.theme_var = tk.StringVar(value=self.theme)
+
 
     def create_view_menu(self, parent_menu):
         view_menu = tb.Menu(parent_menu, tearoff=0)
-        view_menu.add_checkbutton(label="Light Mode",
-                                  command=lambda: self.change_theme("pulse"),
-                                  variable=self.light_mode_var)
-        view_menu.add_checkbutton(label="Dark Mode",
-                                  command=lambda: self.change_theme("cyborg"),
-                                  variable=self.dark_mode_var)
+        view_menu.add_radiobutton(label="Light Mode", 
+                                value="pulse", 
+                                variable=self.theme_var,
+                                command=lambda: self.change_theme("pulse"))
+        view_menu.add_radiobutton(label="Dark Mode", 
+                                value="cyborg", 
+                                variable=self.theme_var,
+                                command=lambda: self.change_theme("cyborg"))
         return view_menu
+
 
     def change_theme(self, theme_name):
         if theme_name == self.theme:
