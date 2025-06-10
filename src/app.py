@@ -3,9 +3,10 @@ import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Style
 from tkinter import messagebox
+import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
-from src.autoafk import connect_emulator, take_screenshot
+from src.autoafk import connect_emulator, take_screenshot, start_daily_tasks, start_scrcpy_client, stop_scrcpy_client
 
 class BotApp:
     def __init__(self, root):
@@ -18,9 +19,10 @@ class BotApp:
 
         # Tasks
         self.task_vars = {
-            task: tb.BooleanVar(value=val)
+            task: tb.BooleanVar(value=val) if isinstance(val, bool) else tb.IntVar(value=val)
             for task, val in self.config_manager.load_tasks().items()
         }
+
 
         self.create_menu()
         self.build_layout()
@@ -56,22 +58,12 @@ class BotApp:
         left_panel.pack(side=LEFT, fill=Y, padx=10)
 
         # Button Functions
-        def start_dailies(self):
-            self.log("Starting Dailies...", "info")
-            # Implement the logic for starting dailies here
-
-        def task4(self):
-            pass
-
-        def task5(self):
-            pass
-
         button_actions = {
-            "Connect Emulator": lambda: connect_emulator(self.log),
-            "Start Dailies": start_dailies,
-            "Screenshot": lambda: take_screenshot(self.log),
-            "Task 4": task4,
-            "Task 5": task5,
+            "Connect Emulator": lambda: threading.Thread(target=connect_emulator, args=(self.log,), daemon=True).start(),
+            "Start scrcpy": lambda: threading.Thread(target=start_scrcpy_client, args=(self.log,), daemon=True).start(),
+            "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
+            "Daily tasks": lambda: threading.Thread(target=start_daily_tasks, args=(self.log,), daemon=True).start(),
+            "Stop scrcpy": lambda: threading.Thread(target=stop_scrcpy_client, args=(self.log,), daemon=True).start(),
         }
 
         btn_texts = button_actions.keys()
@@ -97,21 +89,24 @@ class BotApp:
         messagebox.showinfo("About", "AFK Arena Bot\nVersion 1.0")
 
     def log(self, message, level="info"):
-        style = Style()
-        color_map = {
-            "info": style.colors.get("info"),
-            "success": style.colors.get("success"),
-            "warning": style.colors.get("warning"),
-            "error": style.colors.get("danger"),
-        }
+        def _log():
+            style = Style()
+            color_map = {
+                "info": style.colors.get("info"),
+                "success": style.colors.get("success"),
+                "warning": style.colors.get("warning"),
+                "error": style.colors.get("danger"),
+            }
 
-        color = color_map.get(level, style.colors.get("secondary"))
+            color = color_map.get(level, style.colors.get("secondary"))
 
-        self.output.config(state="normal")
-        self.output.insert("end", message + "\n", level)
-        self.output.tag_config(level, foreground=color)
-        self.output.see("end")
-        self.output.config(state="disabled")
+            self.output.config(state="normal")
+            self.output.insert("end", message + "\n", level)
+            self.output.tag_config(level, foreground=color)
+            self.output.see("end")
+            self.output.config(state="disabled")
+
+        self.output.after(0, _log)
 
 
     def save_task_settings(self):

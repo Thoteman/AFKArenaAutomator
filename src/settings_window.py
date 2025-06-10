@@ -20,10 +20,23 @@ class SettingsWindow:
         frame.pack(fill="both", expand=True)
 
         for task, var in self.task_vars.items():
-            check = tb.Checkbutton(
-                frame, text=task, variable=var, bootstyle="success-round-toggle"
-            )
-            check.pack(anchor="w", pady=5)
+            row = tb.Frame(frame)
+            row.pack(anchor="w", pady=5, fill="x")
+
+            if isinstance(var, BooleanVar):
+                check = tb.Checkbutton(
+                    row, text=task, variable=var, bootstyle="success-round-toggle"
+                )
+                check.pack(anchor="w")
+            else:
+                tb.Label(row, text=task).pack(side="left", padx=(0, 5))
+                entry = tb.Entry(row, textvariable=var, width=5)
+                entry.pack(side="left")
+
+                # Optional input validation (allow only integers)
+                def validate(P): return P.isdigit() or P == ""
+                vcmd = (self.top.register(validate), '%P')
+                entry.config(validate="key", validatecommand=vcmd)
 
     def on_close(self):
         task_values = {task: var.get() for task, var in self.task_vars.items()}

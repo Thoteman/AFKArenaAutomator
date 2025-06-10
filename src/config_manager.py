@@ -7,8 +7,10 @@ import tkinter as tk
 CONFIG_PATH = "config.ini"
 
 task_defaults = {
-    "Collect Rewards": True,
-    "Fast Rewards": True,
+    "Claim AFK Rewards": True,
+    "Campaign Battle": True,
+    "Claim Fast Rewards": True,
+    "Amount of Fast Rewards": 1,
     "Arena Fights": False,
     "Boss Challenge": False,
     "Dispatch Quests": True,
