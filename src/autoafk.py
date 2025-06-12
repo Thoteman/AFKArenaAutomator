@@ -57,21 +57,15 @@ def take_screenshot(logger):
     pil_img = Image.fromarray(img_rgb)
     pil_img.save(f"screenshots/screenshot_{random_text}.png")
 
-    logger(f"Screenshot saved to {f"screenshots/screenshot_{random_text}.png"}", "success")
+    logger(f"Screenshot saved to screenshots/screenshot_{random_text}.png", "success")
 
 def start_daily_tasks(logger):
     global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH
-    if DEVICE_ID:
-        logger("Device already connected. Please disconnect from emulator first.", "error")
-        return
-    
-    connect_emulator(logger)
+    if not DEVICE_ID:
+        connect_emulator(logger)
 
-    if SCRCPY_CLIENT:
-        logger("scrcpy client is already running. Please stop it first.", "error")
-        return
-    
-    start_scrcpy_client(logger)
+    if not SCRCPY_CLIENT:
+        start_scrcpy_client(logger)
     
     config = configparser.ConfigParser()
     config.read(CONFIG_PATH)
@@ -89,6 +83,6 @@ def start_daily_tasks(logger):
     time.sleep(3)
     if config['Tasks']['Claim Fast Rewards'] == 'True':
         logger("Starting Fast Rewards claim task...", "info")
-        claim_fast_rewards(DEVICE_ID, SCRCPY_CLIENT, logger)
+        claim_fast_rewards(DEVICE_ID, SCRCPY_CLIENT, logger, int(config['Tasks']['Amount of Fast Rewards']))
 
     stop_scrcpy_client(logger)

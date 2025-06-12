@@ -19,24 +19,62 @@ class SettingsWindow:
         frame = tb.Frame(self.top, padding=10)
         frame.pack(fill="both", expand=True)
 
-        for task, var in self.task_vars.items():
-            row = tb.Frame(frame)
-            row.pack(anchor="w", pady=5, fill="x")
+        # Define task categories and their tasks
+        categories = {
+            "Campaign Tasks": [
+                "Claim AFK Rewards",
+                "Campaign Battle",
+                "Claim Fast Rewards",
+                "Amount of Fast Rewards",
+            ],
+            "Dark Forest Tasks": [
+                "Bounty Board",
+                "Temporal Rift Fountain",
+                "King's Tower Battle",
+                "Arcane Labyrinth",
+                "Treasure Scramble",
+                "Arena of Heroes",
+                "Amount of Arena Battles",
+                "Legends Challenger Coins",
+                "Legends Championship Betting",
+            ],
+            "Ranhorn Tasks": [
+                "Store Purchases",
+                "Use quick buy",
+                "Use refresh",
+                "Noble Tavern",
+                "Temple of Ascension",
+                "Resonating Crystal",
+                "Oak Inn Gifts",
+                "Draconis gifts",
+                "Guid hunt",
+                "Twisted Realm",
+            ],
+            "Banner Tasks": [
+                "Solemn vow",
+                "Friendship points",
+                "Read mail",
+                "Claim bags",
+                "Claim quests",
+                "Claim free merchants",
+                "Event markers",
+            ],
+        }
 
-            if isinstance(var, BooleanVar):
-                check = tb.Checkbutton(
-                    row, text=task, variable=var, bootstyle="success-round-toggle"
-                )
-                check.pack(anchor="w")
-            else:
-                tb.Label(row, text=task).pack(side="left", padx=(0, 5))
-                entry = tb.Entry(row, textvariable=var, width=5)
-                entry.pack(side="left")
+        for i, (category, tasks) in enumerate(categories.items()):
+            col = tb.LabelFrame(frame, text=category, padding=10)
+            col.grid(row=0, column=i, padx=10, pady=5, sticky="n")
 
-                # Optional input validation (allow only integers)
-                def validate(P): return P.isdigit() or P == ""
-                vcmd = (self.top.register(validate), '%P')
-                entry.config(validate="key", validatecommand=vcmd)
+            for task in tasks:
+                var = self.task_vars[task]
+                if isinstance(var, tb.BooleanVar):
+                    tb.Checkbutton(
+                        col, text=task, variable=var, bootstyle="success-round-toggle"
+                    ).pack(anchor="w", pady=2)
+                else:
+                    tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
+                    tb.Entry(col, textvariable=var, width=5).pack(anchor="w", pady=(0, 5))
+
 
     def on_close(self):
         task_values = {task: var.get() for task, var in self.task_vars.items()}
