@@ -3,6 +3,7 @@ import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Style
 from tkinter import messagebox
+from datetime import datetime
 import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
@@ -18,9 +19,12 @@ class BotApp:
         self.config_manager.apply_theme(self.root)
 
         # Tasks
+        globals = self.config_manager.load_globals()
+        tasks = self.config_manager.load_tasks()
+
         self.task_vars = {
-            task: tb.BooleanVar(value=val) if isinstance(val, bool) else tb.IntVar(value=val)
-            for task, val in self.config_manager.load_tasks().items()
+            task: (tb.BooleanVar(value=val) if isinstance(val, bool) else tb.IntVar(value=val))
+            for task, val in {**globals, **tasks}.items()
         }
 
 
@@ -99,9 +103,11 @@ class BotApp:
             }
 
             color = color_map.get(level, style.colors.get("secondary"))
+            timestamp = datetime.now().strftime("[%H:%M:%S]")  # Add timestamp
+            full_message = f"{timestamp} {message}" if message else ""
 
             self.output.config(state="normal")
-            self.output.insert("end", message + "\n", level)
+            self.output.insert("end", full_message + "\n", level)
             self.output.tag_config(level, foreground=color)
             self.output.see("end")
             self.output.config(state="disabled")

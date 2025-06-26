@@ -6,22 +6,32 @@ import tkinter as tk
 
 CONFIG_PATH = "config.ini"
 
+global_defaults = {
+    # global settings
+    "Test Server": False,
+    "Max Attempts": 3,
+    "Delay": 3,
+}
+
 task_defaults = {
     # campaign tasks
     "Claim AFK Rewards": True,
     "Campaign Battle": True,
     "Claim Fast Rewards": True,
     "Amount of Fast Rewards": 1,
+    "Friendship Points": True,
+    "Loan Mercenaries": False,
+    "Read Mail": True,
+    "Delete Mail": False,
     # dark forest tasks
-    "Bounty Board": False,
-    "Temporal Rift Fountain": False,
-    "King's Tower Battle": False,
-    "Arcane Labyrinth": False,
-    "Treasure Scramble": False,
-    "Arena of Heroes": False,
-    "Amount of Arena Battles": 1,
-    "Legends Challenger Coins": False,
-    "Legends Championship Betting": False,
+    "Bounty Board": True,
+    "Temporal Rift Fountain": True,
+    "King's Tower Battle": True,
+    "Arcane Labyrinth": True,
+    "Treasure Scramble": True,
+    "Arena of Heroes": True,
+    "Amount of Arena Battles": 3,
+    "Gladiator Coins": True,
     # ranhorn tasks
     "Store Purchases": False,
     "Use quick buy": False,
@@ -34,9 +44,6 @@ task_defaults = {
     "Guid hunt": False,
     "Twisted Realm": False,
     # banner tasks
-    "Solemn vow": False,
-    "Friendship points": False,
-    "Read mail": False,
     "Claim bags": False,
     "Claim quests": False,
     "Claim free merchants": False,
@@ -110,6 +117,26 @@ class ConfigManager:
         for task, val in task_values.items():
             self.config["Tasks"][task] = str(val)
         self._write()
+
+    def load_globals(self):
+        if "Global" not in self.config:
+            self.config["Global"] = {}
+        return {
+            key: (
+                self.config.getboolean("Global", key, fallback=default)
+                if isinstance(default, bool)
+                else self.config.getint("Global", key, fallback=default)
+            )
+            for key, default in global_defaults.items()
+        }
+
+    def save_globals(self, global_values):
+        if "Global" not in self.config:
+            self.config["Global"] = {}
+        for key, val in global_values.items():
+            self.config["Global"][key] = str(val)
+        self._write()
+
 
     def _write(self):
         with open(self.path, "w") as configfile:

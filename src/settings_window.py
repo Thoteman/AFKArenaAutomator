@@ -1,17 +1,22 @@
 # src/settings_window.py
 import ttkbootstrap as tb
 from tkinter import Toplevel, BooleanVar
-from src.config_manager import ConfigManager
+from src.config_manager import ConfigManager, global_defaults
 
 class SettingsWindow:
     def __init__(self, master, config: ConfigManager, task_vars: dict, logger):
         self.top = Toplevel(master)
         self.top.title("Settings")
         self.config = config
-        self.task_vars = task_vars
+        self.original_task_vars = task_vars
         self.logger = logger
 
-        self.check_vars = {}
+        self.task_vars = {
+            key: (tb.BooleanVar(value=var.get()) if isinstance(var, tb.BooleanVar)
+                  else tb.IntVar(value=var.get()))
+            for key, var in task_vars.items()
+        }
+
         self.build_ui()
         self.top.protocol("WM_DELETE_WINDOW", self.on_close)
 
@@ -21,11 +26,20 @@ class SettingsWindow:
 
         # Define task categories and their tasks
         categories = {
+            "Global Settings": [
+                "Test Server",
+                "Max Attempts",
+                "Delay",
+            ],
             "Campaign Tasks": [
                 "Claim AFK Rewards",
                 "Campaign Battle",
                 "Claim Fast Rewards",
                 "Amount of Fast Rewards",
+                "Friendship Points",
+                "Loan Mercenaries",
+                "Read Mail",
+                "Delete Mail",
             ],
             "Dark Forest Tasks": [
                 "Bounty Board",
@@ -35,8 +49,7 @@ class SettingsWindow:
                 "Treasure Scramble",
                 "Arena of Heroes",
                 "Amount of Arena Battles",
-                "Legends Challenger Coins",
-                "Legends Championship Betting",
+                "Gladiator Coins",
             ],
             "Ranhorn Tasks": [
                 "Store Purchases",
@@ -51,9 +64,6 @@ class SettingsWindow:
                 "Twisted Realm",
             ],
             "Banner Tasks": [
-                "Solemn vow",
-                "Friendship points",
-                "Read mail",
                 "Claim bags",
                 "Claim quests",
                 "Claim free merchants",
@@ -74,11 +84,37 @@ class SettingsWindow:
                 else:
                     tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
                     tb.Entry(col, textvariable=var, width=5).pack(anchor="w", pady=(0, 5))
+        
+        button_frame = tb.Frame(self.top)
+        button_frame.pack(fill="x", pady=(0, 10), padx=10)
+        
+        tb.Button(
+            button_frame,
+            text="Save",
+            bootstyle="success",
+            command=self.save_settings
+        ).pack(side="right")
+
+    def save_settings(self):
+        task_values = {}
+        global_values = {}
+        for task, var in self.task_vars.items():
+            val = var.get()
+
+            if task in global_defaults:
+                global_values[task] = val
+            else:
+                task_values[task] = val
+
+            self.original_task_vars[task].set(val)
+
+        self.config.save_globals(global_values)
+        self.config.save_tasks(task_values)
+
+        self.logger("Settings saved!", "success")
+        self.top.destroy()
 
 
     def on_close(self):
-        task_values = {task: var.get() for task, var in self.task_vars.items()}
-        self.config.save_tasks(task_values)
-        self.logger("Settings saved!", "success")
         self.top.destroy()
 
