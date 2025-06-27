@@ -1,5 +1,5 @@
 from adbauto import *
-from src.utils import go_to_startscreen
+from src.utils import go_to_startscreen, is_color_match
 import time
 
 BACK_BUTTON = (30, 1890)
@@ -33,7 +33,7 @@ def campaign_battle(device_id, scrcpy):
         tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True)
         time.sleep(DELAY)
         tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True)
-        time.sleep(DELAY)
+        time.sleep(DELAY*2)
         tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
         time.sleep(DELAY)
         if tap_img_when_visible(device_id, scrcpy, "res/global/end_autobattle_button.png", timeout=5, random_delay=True):
@@ -167,6 +167,18 @@ def bounty_board(device_id, scrcpy):
         return True
     return False
 
+def claim_weekly_staves(device_id, scrcpy):
+    go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+
+    if find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8):
+        tap_img_when_visible(device_id, scrcpy, "res/darkforest/gg.png", timeout=5, random_delay=True, threshold=0.8)
+        time.sleep(DELAY)
+        while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8):
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            time.sleep(DELAY)
+        return True
+    return False
+
 # All functions related to Arena of Heroes screen
 def treasure_scramble(device_id, scrcpy):
     go_to_startscreen(device_id, scrcpy, "arena", DELAY)
@@ -174,6 +186,12 @@ def treasure_scramble(device_id, scrcpy):
     if find_image(scrcpy.last_frame, "res/darkforest/arena_text.png"):
         if tap_image(device_id, scrcpy.last_frame, "res/darkforest/treasure_scramble.png", random_delay=True, threshold=0.8):
             time.sleep(DELAY)
+            while find_image(scrcpy.last_frame, "res/darkforest/treasure_scramble_flag.png"):
+                tap_image(device_id, scrcpy.last_frame, "res/darkforest/treasure_scramble_flag.png", random_delay=True, threshold=0.8)
+                time.sleep(DELAY)
+                if find_image(scrcpy.last_frame, "res/darkforest/treasure_scramble_button.png"):
+                    tap_image(device_id, scrcpy.last_frame, "res/darkforest/treasure_scramble_button.png", random_delay=True, threshold=0.8)
+                    time.sleep(DELAY)
             while not find_image(scrcpy.last_frame, "res/darkforest/arena_text.png"):
                 tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                 time.sleep(DELAY)
@@ -227,7 +245,8 @@ def gladiator_coins(device_id, scrcpy):
 
     if find_image(scrcpy.last_frame, "res/darkforest/arena_text.png"):
         while not tap_image(device_id, scrcpy.last_frame, "res/darkforest/legend_challenger.png"):
-            scroll(device_id, "down", 300, scrcpy.resolution[0]//2, scrcpy.resolution[1]//2)
+            #TODO: Check scroll distance when an event is active
+            scroll(device_id, "up", 300, scrcpy.resolution[0]//2, scrcpy.resolution[1]//2)
             time.sleep(DELAY)
         if tap_img_when_visible(device_id, scrcpy, "res/darkforest/legend_challenger_chest1.png", timeout=5, random_delay=True) or tap_img_when_visible(device_id, scrcpy, "res/darkforest/legend_challenger_chest2.png", timeout=5, random_delay=True):
             time.sleep(DELAY)
@@ -263,11 +282,11 @@ def kings_tower(device_id, scrcpy):
         tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_main.png", timeout=5, random_delay=True)
         time.sleep(DELAY)
         tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True)
-        time.sleep(DELAY)
+        time.sleep(DELAY+3)
         tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True)
-        time.sleep(DELAY)
+        time.sleep(DELAY+3)
         tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True)
-        time.sleep(DELAY)
+        time.sleep(DELAY*2)
         tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
         time.sleep(DELAY)
         if tap_img_when_visible(device_id, scrcpy, "res/global/end_autobattle_button.png", timeout=5, random_delay=True):
@@ -286,53 +305,235 @@ def arcane_labyrinth(device_id, scrcpy, logger):
         time.sleep(DELAY)
         #TODO: Implement Arcane Labyrinth tasks
 
+def claim_wall_reward(device_id, scrcpy):
+    if tap_img_when_visible(device_id, scrcpy, "res/city/wall_rewards.png", timeout=5, random_delay=True):
+        time.sleep(DELAY)
+        if tap_img_when_visible(device_id, scrcpy, "res/city/wall_claim.png", timeout=5, random_delay=True):
+            time.sleep(DELAY)
+    while not find_image(scrcpy.last_frame, "res/city/wall_text.png"):
+        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+        time.sleep(DELAY)
+
+def wall_of_legends(device_id, scrcpy, logger):
+    go_to_startscreen(device_id, scrcpy, "citydown", DELAY)
+    
+    if find_image(scrcpy.last_frame, "res/city/wall_red.png"):
+        tap_img_when_visible(device_id, scrcpy, "res/city/wall_red.png")
+        time.sleep(DELAY)
+
+        if find_image(scrcpy.last_frame, "res/city/wall_text.png"):
+            claimed = False       
+            # TODO: Change Coordinates and Values when I get this next milestone
+            if get_pixel_color(scrcpy.last_frame, 100, 100) == (233, 66, 54): # Lightbearers Milestone
+                tap(device_id, 100, 100)
+                time.sleep(DELAY)
+                claim_wall_reward(device_id, scrcpy)
+                logger("Claimed Lightbearers Milestone", "success")
+                claimed = True
+
+            # TODO: Change Coordinates when I get this next milestone
+            if get_pixel_color(scrcpy.last_frame, 100, 200) == (233, 66, 54): # Maulers Milestone
+                tap(device_id, 100, 200)
+                time.sleep(DELAY)
+                claim_wall_reward(device_id, scrcpy)
+                logger("Claimed Maulers Milestone", "success")
+                claimed = True
+
+            # TODO: Change Coordinates when I get this next milestone
+            if get_pixel_color(scrcpy.last_frame, 100, 300) == (233, 66, 54): # Wilders Milestone
+                tap(device_id, 100, 300)
+                time.sleep(DELAY)
+                claim_wall_reward(device_id, scrcpy)
+                logger("Claimed Wilders Milestone", "success")
+                claimed = True
+
+            # TODO: Change Coordinates when I get this next milestone
+            if get_pixel_color(scrcpy.last_frame, 100, 400) == (233, 66, 54): # Graveborn Milestone
+                tap(device_id, 100, 400)
+                time.sleep(DELAY)
+                claim_wall_reward(device_id, scrcpy)
+                logger("Claimed Graveborn Milestone", "success")
+                claimed = True
+
+            if is_color_match(get_pixel_color(scrcpy.last_frame, 1014, 995), (233, 60, 40)): # Campaign Stage Milestone
+                tap(device_id, 1014, 995)
+                time.sleep(DELAY)
+                claim_wall_reward(device_id, scrcpy)
+                logger("Claimed Campaign Stage Milestone", "success")
+                claimed = True
+
+            # TODO: Change Coordinates when I get this next milestone
+            if get_pixel_color(scrcpy.last_frame, 100, 600) == (233, 66, 54): # King's Tower Milestone
+                tap(device_id, 100, 600)
+                time.sleep(DELAY)
+                claim_wall_reward(device_id, scrcpy)
+                logger("Claimed King's Tower Milestone", "success")
+                claimed = True
+                
+            while not find_image(scrcpy.last_frame, "res/city/city_selected.png", threshold=0.8):
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                time.sleep(DELAY)
+            return claimed
+    return False
+
 # All functions related to Ranhorn screen
-def store(device_id, scrcpy, logger):
-    pass
+def store_purchases(device_id, scrcpy, refreshes):
+    go_to_startscreen(device_id, scrcpy, "citydown", DELAY)
 
-def beast_grounds(device_id, scrcpy, logger):
-    pass
+    if find_image(scrcpy.last_frame, "res/city/store.png"):
+        tap_image(device_id, scrcpy.last_frame, "res/city/store.png")
+        time.sleep(DELAY)
 
-def noble_tavern(device_id, scrcpy, logger):
-    pass
+        refresh_count = 0
+        
+        for refresh in range(refreshes + 1):  # +1 for the initial buy
+            if not find_image(scrcpy.last_frame, "res/city/store_text.png"):
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                time.sleep(DELAY)
+                return False, refresh_count
+            if find_image(scrcpy.last_frame, "res/city/store_quickbuy.png"):
+                tap_image(device_id, scrcpy.last_frame, "res/city/store_quickbuy.png")
+                time.sleep(DELAY)
+                if find_image(scrcpy.last_frame, "res/city/store_purchase.png"):
+                    tap_image(device_id, scrcpy.last_frame, "res/city/store_purchase.png")
+                    time.sleep(DELAY)
+                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    time.sleep(DELAY)
+                    if refresh_count != refreshes:
+                        if find_image(scrcpy.last_frame, "res/city/store_refresh.png"):
+                            tap_image(device_id, scrcpy.last_frame, "res/city/store_refresh.png")
+                            time.sleep(DELAY)
+                            if find_image(scrcpy.last_frame, "res/city/store_refresh_confirm.png"):
+                                tap_image(device_id, scrcpy.last_frame, "res/city/store_refresh_confirm.png")
+                                time.sleep(DELAY)
+                                refresh_count += 1
+        while not find_image(scrcpy.last_frame, "res/city/city_selected.png", threshold=0.8):
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            time.sleep(DELAY)
 
-def resonating_crystal(device_id, scrcpy, logger):
-    pass
+        return True, refresh_count
 
-def temple_of_ascension(device_id, scrcpy, logger):
-    pass
+    return False, 0
 
-def oak_inn(device_id, scrcpy, logger):
-    pass
+def resonating_crystal(device_id, scrcpy):
+    go_to_startscreen(device_id, scrcpy, "citydown", DELAY)
 
-def dragon_isle(device_id, scrcpy, logger):
-    pass
+    if find_image(scrcpy.last_frame, "res/city/crystal.png"):
+        return False
 
-# All functions related to Guild screen
-def guild_hunt(device_id, scrcpy, logger):
-    pass
+    if find_image(scrcpy.last_frame, "res/city/crystal_red.png"):
+        tap_image(device_id, scrcpy.last_frame, "res/city/crystal_red.png")
+        time.sleep(DELAY)
+        if tap_img_when_visible(device_id, scrcpy, "res/city/crystal_levelup.png", timeout=5, random_delay=True):
+            time.sleep(DELAY)
+            if tap_img_when_visible(device_id, scrcpy, "res/city/crystal_confirm.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                while not find_image(scrcpy.last_frame, "res/city/crystal_strengthen.png"):
+                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    time.sleep(DELAY)
+        while find_image(scrcpy.last_frame, "res/city/crystal_strengthen.png"):
+            tap_image(device_id, scrcpy.last_frame, "res/city/crystal_strengthen.png")
+            time.sleep(DELAY/2)
+        while not find_image(scrcpy.last_frame, "res/city/city_selected.png", threshold=0.8):
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            time.sleep(DELAY)
+        return True
+    return False
 
-def twisted_realm(device_id, scrcpy, logger):
-    pass
+#TODO: add failsave when no heroes selected
+def hunting_contract(device_id, scrcpy):
+    go_to_startscreen(device_id, scrcpy, "guild", DELAY)
 
-# All functions related to banners
-def solemn_vow(device_id, scrcpy, logger):
-    pass
+    if find_image(scrcpy.last_frame, "res/city/guild_hunt.png"):
+        tap_image(device_id, scrcpy.last_frame, "res/city/guild_hunt.png")
+        time.sleep(DELAY)
+        while tap_img_when_visible(device_id, scrcpy, "res/city/guild_contract.png", timeout=5, random_delay=True):
+            time.sleep(DELAY)
+            if tap_img_when_visible(device_id, scrcpy, "res/city/guild_nextteam.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/city/guild_beginbattle.png", timeout=5, random_delay=True):
+                    time.sleep(DELAY)
+                    if tap_img_when_visible(device_id, scrcpy, "res/darkforest/arena_of_heroes_skip.png", timeout=5, random_delay=True):
+                        time.sleep(DELAY)
+                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                        time.sleep(DELAY)
+        while tap_img_when_visible(device_id, scrcpy, "res/city/guild_contract_chest.png", timeout=5, random_delay=True):
+            time.sleep(DELAY)
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            time.sleep(DELAY)
+        while not find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            time.sleep(DELAY)
+        return True
+    return False
 
-def friends(device_id, scrcpy, logger):
-    pass
+#TODO: add option to open up Soren
+def guild_hunt(device_id, scrcpy):
+    go_to_startscreen(device_id, scrcpy, "guild", DELAY)
 
-def mail(device_id, scrcpy, logger):
-    pass
+    if find_image(scrcpy.last_frame, "res/city/guild_hunt.png"):
+        tap_image(device_id, scrcpy.last_frame, "res/city/guild_hunt.png")
+        time.sleep(DELAY)
+        for _ in range(2):
+            if find_image(scrcpy.last_frame, "res/city/guild_hunt_arrow1.png", threshold=0.9):
+                tap_image(device_id, scrcpy.last_frame, "res/city/guild_hunt_arrow1.png", threshold=0.9)
+                time.sleep(DELAY)
+            elif find_image(scrcpy.last_frame, "res/city/guild_hunt_arrow2.png", threshold=0.9):
+                tap_image(device_id, scrcpy.last_frame, "res/city/guild_hunt_arrow2.png", threshold=0.9)
+                time.sleep(DELAY)
+            elif find_image(scrcpy.last_frame, "res/city/guild_hunt_arrow3.png", threshold=0.9):
+                tap_image(device_id, scrcpy.last_frame, "res/city/guild_hunt_arrow3.png", threshold=0.9)
+                time.sleep(DELAY)
+            if tap_img_when_visible(device_id, scrcpy, "res/city/guild_hunt_quickbattle.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/city/guild_hunt_sweep.png", timeout=5, random_delay=True):
+                    time.sleep(DELAY)
+                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+        while not find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            time.sleep(DELAY)
+        return True
+    return False
 
-def bag(device_id, scrcpy, logger):
-    pass
+def twisted_realm(device_id, scrcpy):
+    go_to_startscreen(device_id, scrcpy, "guild", DELAY)
 
-def quests(device_id, scrcpy, logger):
-    pass
+    if find_image(scrcpy.last_frame, "res/city/guild_hell.png"):
+        tap_image(device_id, scrcpy.last_frame, "res/city/guild_hell.png")
+        time.sleep(DELAY)
+        if tap_img_when_visible(device_id, scrcpy, "res/city/guild_twistedrealm.png", timeout=5, random_delay=True):
+            time.sleep(DELAY)
+            if tap_img_when_visible(device_id, scrcpy, "res/city/guild_twisted_begin.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/city/guild_twisted_auto.png", timeout=5, random_delay=True):
+                    time.sleep(DELAY)
+                    if find_image(scrcpy.last_frame, "res/city/guild_twisted_noskip.png"):
+                        tap_image(device_id, scrcpy.last_frame, "res/city/guild_twisted_noskip.png")
+                        time.sleep(DELAY)
+                    if tap_img_when_visible(device_id, scrcpy, "res/city/guild_twisted_activate.png", timeout=5, random_delay=True):
+                        time.sleep(DELAY)
+                        tap_img_when_visible(device_id, scrcpy, "res/city/guild_twisted_exit.png", timeout=5, random_delay=True)
+                        time.sleep(DELAY)
+                        while not find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+                            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                            time.sleep(DELAY)
+                        return True
+    while not find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+        time.sleep(DELAY)
+    return False
 
-def merchants(device_id, scrcpy, logger):
-    pass
+def oak_inn_gifts(device_id, scrcpy):
+    go_to_startscreen(device_id, scrcpy, "cityup", DELAY)
 
-def events(device_id, scrcpy, logger):
-    pass
+    if find_image(scrcpy.last_frame, "res/city/inn.png", threshold=0.8):
+        tap_image(device_id, scrcpy.last_frame, "res/city/inn.png", threshold=0.8)
+        time.sleep(DELAY)
+        while find_image(scrcpy.last_frame, "res/city/inn_gift.png", threshold=0.8):
+            tap_image(device_id, scrcpy.last_frame, "res/city/inn_gift.png", threshold=0.8)
+            time.sleep(DELAY)
+        while not find_image(scrcpy.last_frame, "res/city/city_selected.png", threshold=0.8):
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            time.sleep(DELAY)
+        return True
+    return False

@@ -1,6 +1,5 @@
 # src/config_manager.py
 import configparser
-import os
 import ttkbootstrap as tb
 import tkinter as tk
 
@@ -19,31 +18,31 @@ task_defaults = {
     "Campaign Battle": True,
     "Claim Fast Rewards": True,
     "Amount of Fast Rewards": 1,
+    # dark forest tasks
+    "Bounty Board": True,
+    "Claim 10 weekly Staves (GG)": False,
+    "Treasure Scramble": True,
+    "Arena of Heroes": True,
+    "Amount of Arena Battles": 3,
+    "Claim Gladiator Coins": True,
+    "Temporal Rift Fountain": True,
+    "King's Tower Battle": True,
+    "Arcane Labyrinth": True,
+    # ranhorn tasks
+    "Wall of Legends": True,
+    "Store Purchases": False,
+    "Amount of Refreshes": 3,
+    "Resonating Crystal": False,
+    "Hunting Contract": False,
+    "Guild hunt": False,
+    "Twisted Realm": False,
+    "Oak Inn Gifts": False,
+    "Draconis gifts": False,
+    # misc tasks
     "Friendship Points": True,
     "Loan Mercenaries": False,
     "Read Mail": True,
     "Delete Mail": False,
-    # dark forest tasks
-    "Bounty Board": True,
-    "Temporal Rift Fountain": True,
-    "King's Tower Battle": True,
-    "Arcane Labyrinth": True,
-    "Treasure Scramble": True,
-    "Arena of Heroes": True,
-    "Amount of Arena Battles": 3,
-    "Gladiator Coins": True,
-    # ranhorn tasks
-    "Store Purchases": False,
-    "Use quick buy": False,
-    "Use refresh": False,
-    "Noble Tavern": False,
-    "Temple of Ascension": False,
-    "Resonating Crystal": False,
-    "Oak Inn Gifts": False,
-    "Draconis gifts": False,
-    "Guid hunt": False,
-    "Twisted Realm": False,
-    # banner tasks
     "Claim bags": False,
     "Claim quests": False,
     "Claim free merchants": False,

@@ -67,10 +67,14 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
         start_afk_test(device_id)
         time.sleep(delay * 3)
 
+    if find_image(scrcpy.last_frame, "res/global/hero_trial_button.png"):
+        tap_image(device_id, scrcpy.last_frame, "res/global/hero_trial_button.png")
+        time.sleep(delay)
+
     match task:
         case "campaign":
             while not find_image(scrcpy.last_frame, "res/campaign/campaign_selected.png") and not find_image(scrcpy.last_frame, "res/campaign/campaign_unselected.png"):
-                tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                 time.sleep(delay)
                         
             if find_image(scrcpy.last_frame, "res/campaign/campaign_unselected.png"):
@@ -81,7 +85,7 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
         
         case "rightbanner":
             while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8) and not find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
-                tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                 time.sleep(delay)
             
             if find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
@@ -100,7 +104,7 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
         
         case "darkforest":
             while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8) and not find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
-                tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                 time.sleep(delay)
             
             if find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
@@ -114,7 +118,7 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
                 return
             
             while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8) and not find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
-                tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                 time.sleep(delay)
             
             if find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
@@ -126,10 +130,54 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
                 time.sleep(delay)
 
             while not find_image(scrcpy.last_frame, "res/darkforest/arena_text.png"):
-                tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                 time.sleep(delay)
             
             return
         
-        case "city":
-            pass
+        case "citydown":
+            while not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                time.sleep(delay)
+            
+            scroll(device_id, "up", 1200, 600)
+            time.sleep(delay)
+            
+            return
+        
+        case "cityup":
+            while not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                time.sleep(delay)
+            
+            scroll(device_id, "down", 1200, 600)
+            time.sleep(delay)
+            
+            return
+        
+        case "guild":
+            if find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+                return
+            
+            while not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                time.sleep(delay)
+            
+            scroll(device_id, "down", 1200, 600)
+            time.sleep(delay)
+
+            if find_image(scrcpy.last_frame, "res/city/guild.png"):
+                tap_image(device_id, scrcpy.last_frame, "res/city/guild.png")
+                time.sleep(delay)
+
+            while not find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+                tap(device_id, scrcpy.resolution[0]//2, 2*scrcpy.resolution[1]//3)
+                time.sleep(delay)
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                time.sleep(delay)
+            
+            return
+
+
+def is_color_match(actual, expected, tolerance=5):
+    return all(abs(int(a) - int(e)) <= tolerance for a, e in zip(actual, expected))

@@ -21,8 +21,8 @@ AutoAFK is a GUI-based bot for automating daily tasks in **AFK Arena**, built wi
   * Dark Forest
     * ✅ Claim and send bounty board
     * ❌ Send bounty board based on task
-    * ❌ Claim 10 free staves from weekly Ghoulish Gallery
-    * ✅ Claim Trease Scramble rewards
+    * ✅ Claim 10 free staves from weekly Ghoulish Gallery
+    * ✅ Claim Treasure Scramble rewards
     * ✅ Attack in Arena of Heroes (You choose how many times)
     * ✅ Claim Gladiator Coins
     * ❌ Bet on Legend's Tournament
@@ -30,19 +30,19 @@ AutoAFK is a GUI-based bot for automating daily tasks in **AFK Arena**, built wi
     * ✅ Attempt King's Tower Battle
     * ❌ Arcane Labyrinth
   * Ranhorn
-    * ❌ Claim wall of Legends Milestones
-    * ❌ Buy from Store
-    * ❌ Level Resonating Crystal
-    * ❌ Guild Hunt
-    * ❌ Twisted Realm
-    * ❌ Claim Oak Inn gifts
-    * ❌ Pull for Furniture
+    * ⚠️ Claim wall of Legends Milestones
+    * ✅ Store Purchases
+    * ✅ Level Resonating Crystal
+    * ✅ Guild Hunt
+    * ✅ Twisted Realm
+    * ✅ Claim Oak Inn gifts
   * Misc
     * ✅ Claim Friendship Points
     * ✅ Send out Mercenaries
     * ✅ Read (and delete) Mail
     * ❌ Use Bag Items
     * ❌ Claim Quests
+    * ❌ Claim Merchant deals
 * ⚙️ Auto-saves configuration to `config.ini`
 * 🧠 Future plans:
   * Turn all ❌ into ✅

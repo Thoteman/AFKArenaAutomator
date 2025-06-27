@@ -150,6 +150,17 @@ def start_daily_tasks(logger):
         logger("Bounty Board completed!\n", "success") if result else logger("Bounty Board failed.\n", "error")
         time.sleep(DELAY)
 
+    # TODO: check last time this task was completed
+    if config['Tasks']['Claim 10 weekly Staves (GG)'] == 'True':
+        attempt = 0
+        result = False
+        logger("Starting Claim 10 weekly Staves (GG)...", "info")
+        while attempt < MAX_ATTEMPTS and not result:
+            result = claim_weekly_staves(DEVICE_ID, SCRCPY_CLIENT)
+            attempt += 1
+        logger("Weekly Staves claimed!\n", "success") if result else logger("Weekly Staves claim failed.\n", "error")
+        time.sleep(DELAY)
+
     if config['Tasks']['Treasure Scramble'] == 'True':
         attempt = 0
         result = False
@@ -172,7 +183,7 @@ def start_daily_tasks(logger):
         logger("Arena of Heroes battles completed!\n", "success") if result else logger("Arena of Heroes battles failed.\n", "error")
         time.sleep(DELAY)
 
-    if config['Tasks']['Gladiator Coins'] == 'True':
+    if config['Tasks']['Claim Gladiator Coins'] == 'True':
         attempt = 0
         result = False
         logger("Starting Claiming Gladiator Coins...", "info")
@@ -205,6 +216,74 @@ def start_daily_tasks(logger):
     if config['Tasks']['Arcane Labyrinth'] == 'True':
         logger("Starting Arcane Labyrinth task...", "info")
         arcane_labyrinth(DEVICE_ID, SCRCPY_CLIENT, logger)
-        time.sleep(DELAY)  
+        time.sleep(DELAY)
+
+    if config['Tasks']['Wall of Legends'] == 'True':
+        logger("Starting Wall of Legends task...", "info")
+        result = wall_of_legends(DEVICE_ID, SCRCPY_CLIENT, logger)
+        logger("Wall of Legends new Milestones claimed!\n", "success") if result else logger("No new milestones in Wall of Legends.\n", "success")
+        time.sleep(DELAY)
+
+    if config['Tasks']['Store Purchases'] == 'True':
+        attempt = 0
+        result = False
+        amount_of_refreshes = int(config['Tasks']['Amount of Refreshes'])
+        logger("Starting Store Purchases...", "info")
+        while attempt < MAX_ATTEMPTS and not result:
+            result, amount = store_purchases(DEVICE_ID, SCRCPY_CLIENT, amount_of_refreshes)
+            amount_of_refreshes -= amount
+            attempt += 1
+        logger("Store Purchases completed!\n", "success") if result else logger("Store Purchases failed.\n", "error")
+        time.sleep(DELAY)
+
+    if config['Tasks']['Resonating Crystal'] == 'True':
+        attempt = 0
+        result = False
+        logger("Starting Resonating Crystal task...", "info")
+        while attempt < MAX_ATTEMPTS and not result:
+            result = resonating_crystal(DEVICE_ID, SCRCPY_CLIENT)
+            attempt += 1
+        logger("Resonating Crystal leveled!\n", "success") if result else logger("Not enough resources to level Resonating Crystal.\n", "error")
+        time.sleep(DELAY)
+
+    if config['Tasks']['Hunting Contract'] == 'True':
+        attempt = 0
+        result = False
+        logger("Starting Hunting Contract task...", "info")
+        while attempt < MAX_ATTEMPTS and not result:
+            result = hunting_contract(DEVICE_ID, SCRCPY_CLIENT)
+            attempt += 1
+        logger("Hunting Contract completed!\n", "success") if result else logger("Hunting Contract failed.\n", "error")
+        time.sleep(DELAY)
+
+    if config['Tasks']['Guild hunt'] == 'True':
+        attempt = 0
+        result = False
+        logger("Starting Guild hunt task...", "info")
+        while attempt < MAX_ATTEMPTS and not result:
+            result = guild_hunt(DEVICE_ID, SCRCPY_CLIENT)
+            attempt += 1
+        logger("Guild hunt completed!\n", "success") if result else logger("Guild hunt failed.\n", "error")
+        time.sleep(DELAY)
+
+    if config['Tasks']['Twisted Realm'] == 'True':
+        attempt = 0
+        result = False
+        logger("Starting Twisted Realm task...", "info")
+        while attempt < MAX_ATTEMPTS and not result:
+            result = twisted_realm(DEVICE_ID, SCRCPY_CLIENT)
+            attempt += 1
+        logger("Twisted Realm completed!\n", "success") if result else logger("Twisted Realm failed.\n", "error")
+        time.sleep(DELAY)
+
+    if config['Tasks']['Oak Inn Gifts'] == 'True':
+        attempt = 0
+        result = False
+        logger("Starting Oak Inn Gifts task...", "info")
+        while attempt < MAX_ATTEMPTS and not result:
+            result = oak_inn_gifts(DEVICE_ID, SCRCPY_CLIENT)
+            attempt += 1
+        logger("Oak Inn Gifts claimed!\n", "success") if result else logger("Oak Inn Gifts claim failed.\n", "error")
+        time.sleep(DELAY)
 
     stop_scrcpy_client(logger)
