@@ -1,4 +1,4 @@
-# 🛡️ AutoAFK - AFK Arena Automation Bot
+# AutoAFK - AFK Arena Automation Bot
 
 AutoAFK is a GUI-based bot for automating daily tasks in **AFK Arena**, built with Python and `ttkbootstrap`. It interfaces with Android emulators to automate in-game actions like claiming rewards, completing battles, and more — so you can focus on the fun, not the grind.
 
@@ -6,7 +6,7 @@ AutoAFK is a GUI-based bot for automating daily tasks in **AFK Arena**, built wi
 
 ---
 
-## 🚀 Features
+## Features
 
 * ✅ Beautiful, customizable GUI
 * ✅ Auto-connect to Android emulator via `adb`
@@ -141,4 +141,4 @@ Discord: https://discord.gg/zuvcJ7yRgN
 
 ## 📄 License
 
-MIT License — free for personal or educational use. Commercial use prohibited unless approved by the author.
+MIT License — free for personal or educational use.
