@@ -30,18 +30,18 @@ def campaign_battle(device_id, scrcpy):
         time.sleep(DELAY)
         if tap_img_when_visible(device_id, scrcpy, "res/campaign/begin_battle_button_multistage.png", timeout=5, random_delay=True):
             time.sleep(DELAY)
-        tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True)
-        time.sleep(DELAY)
-        tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True)
-        time.sleep(DELAY*2)
-        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-        time.sleep(DELAY)
-        if tap_img_when_visible(device_id, scrcpy, "res/global/end_autobattle_button.png", timeout=5, random_delay=True):
+        if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
             time.sleep(DELAY)
-            while not find_image(scrcpy.last_frame, "res/campaign/campaign_selected.png") and not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
-                tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
+            if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
+                time.sleep(DELAY*2)
+                tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                 time.sleep(DELAY)
-            return True
+                if tap_img_when_visible(device_id, scrcpy, "res/global/end_autobattle_button.png", timeout=5, random_delay=True):
+                    time.sleep(DELAY)
+                    while not find_image(scrcpy.last_frame, "res/campaign/campaign_selected.png") and not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
+                        tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
+                        time.sleep(DELAY)
+                    return True
     return False
         
 
@@ -55,7 +55,7 @@ def claim_fast_rewards(device_id, scrcpy, amount, logger):
             if not claim_button:
                 logger("Fast rewards already claimed! Skipping this task.", "warning")
                 tap(device_id,  BACK_BUTTON[0], BACK_BUTTON[1])
-                return False
+                return True
             for _ in range(amount):
                 tap(device_id, claim_button[0], claim_button[1])
                 time.sleep(DELAY)
@@ -279,21 +279,21 @@ def kings_tower(device_id, scrcpy):
     if find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8):
         tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower.png", threshold=0.8)
         time.sleep(DELAY)
-        tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_main.png", timeout=5, random_delay=True)
-        time.sleep(DELAY)
-        tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True)
-        time.sleep(DELAY+3)
-        tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True)
-        time.sleep(DELAY+3)
-        tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True)
-        time.sleep(DELAY*2)
-        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-        time.sleep(DELAY)
-        if tap_img_when_visible(device_id, scrcpy, "res/global/end_autobattle_button.png", timeout=5, random_delay=True):
-            while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8):
-                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
-                time.sleep(DELAY)
-            return True
+        if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_main.png", timeout=5, random_delay=True):
+            time.sleep(DELAY)
+            if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
+                time.sleep(DELAY+3)
+                if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
+                    time.sleep(DELAY+3)
+                    if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
+                        time.sleep(DELAY*2)
+                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                        time.sleep(DELAY)
+                        if tap_img_when_visible(device_id, scrcpy, "res/global/end_autobattle_button.png", timeout=5, random_delay=True):
+                            while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8):
+                                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                                time.sleep(DELAY)
+                            return True
     return False
         
 # TODO: not yet implemented as I haven't unlocked highest level
@@ -394,8 +394,8 @@ def store_purchases(device_id, scrcpy, refreshes):
             if find_image(scrcpy.last_frame, "res/city/store_quickbuy.png"):
                 tap_image(device_id, scrcpy.last_frame, "res/city/store_quickbuy.png")
                 time.sleep(DELAY)
-                if find_image(scrcpy.last_frame, "res/city/store_purchase.png"):
-                    tap_image(device_id, scrcpy.last_frame, "res/city/store_purchase.png")
+                if find_image(scrcpy.last_frame, "res/city/store_purchase.png", threshold=0.8):
+                    tap_image(device_id, scrcpy.last_frame, "res/city/store_purchase.png", threshold=0.8)
                     time.sleep(DELAY)
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(DELAY)
