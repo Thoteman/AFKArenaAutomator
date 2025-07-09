@@ -318,7 +318,7 @@ def auto_push_campaign(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_campaign(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
@@ -342,7 +342,7 @@ def auto_push_tower(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_tower(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
@@ -371,7 +371,7 @@ def auto_push_lb(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_lb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
@@ -401,7 +401,7 @@ def auto_push_m(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_m(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
@@ -430,7 +430,7 @@ def auto_push_w(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_w(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
@@ -459,7 +459,7 @@ def auto_push_gb(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_gb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
@@ -488,7 +488,7 @@ def auto_push_cel(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_cel(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
@@ -517,7 +517,7 @@ def auto_push_hypo(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
-        formation_no = formation_no if formation_no > 0 and formation_no < 6 else 1
+        formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
 
         push_hypo(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)

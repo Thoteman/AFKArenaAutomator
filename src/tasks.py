@@ -651,52 +651,51 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                         if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
                             time.sleep(DELAY)
 
-
-            if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
-                time.sleep(DELAY)
-
-                formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
-                formations = filter_near_duplicates(formations)
-                if len(formations) == 0:
-                    logger("No formations available, using current formation.", "warning")
-                    formation_no = 0
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            if formation_no > 0:
+                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
                     time.sleep(DELAY)
-                if formation_no > len(formations):
-                    logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
-                    formation_no = len(formations)
 
-                if formation_no > 0:
-                    tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
-                    time.sleep(DELAY)
-                    if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                    formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
+                    formations = filter_near_duplicates(formations)
+                    if len(formations) == 0:
+                        logger("No formations available, using current formation.", "warning")
+                        formation_no = 0
+                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                         time.sleep(DELAY)
-                        
-                        set_artifacts(device_id, scrcpy, artifacts, DELAY)
-                        
+                    if formation_no > len(formations):
+                        logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
+                        formation_no = len(formations)
 
-                if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                    if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
-                        time.sleep(DELAY*2)
-                        level_up = False
-                        while not level_up:
-                            while find_image(scrcpy.last_frame, "res/autopush/push_0tower.png", threshold=0.9):
-                                time.sleep(10)
+                    if formation_no > 0:
+                        tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
+                        time.sleep(DELAY)
+                        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                            time.sleep(DELAY)
+                            
+                            set_artifacts(device_id, scrcpy, artifacts, DELAY)
+
+            if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
+                    time.sleep(DELAY*2)
+                    level_up = False
+                    while not level_up:
+                        while find_image(scrcpy.last_frame, "res/autopush/push_0tower.png", threshold=0.9):
+                            time.sleep(10)
+                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                        time.sleep(DELAY)
+                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
                             tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                             time.sleep(DELAY)
-                            while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
-                                tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                                time.sleep(DELAY)
-                            if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
-                                tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
-                                time.sleep(10)
-                            else:
-                                level_up = True
-                        tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
-                        time.sleep(DELAY)
-                        floors += 1
-                        logger(f"Cleared {floors} floor(s) this session", "success")
+                        if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
+                            time.sleep(10)
+                        else:
+                            level_up = True
+                    tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
+                    time.sleep(DELAY)
+                    floors += 1
+                    logger(f"Cleared {floors} floor(s) this session", "success")
     except Exception:
         raise Exception
 
@@ -733,52 +732,51 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                         if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
                             time.sleep(DELAY)
 
-
-            if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
-                time.sleep(DELAY)
-
-                formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
-                formations = filter_near_duplicates(formations)
-                if len(formations) == 0:
-                    logger("No formations available, using current formation.", "warning")
-                    formation_no = 0
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            if formation_no > 0:
+                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
                     time.sleep(DELAY)
-                if formation_no > len(formations):
-                    logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
-                    formation_no = len(formations)
 
-                if formation_no > 0:
-                    tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
-                    time.sleep(DELAY)
-                    if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                    formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
+                    formations = filter_near_duplicates(formations)
+                    if len(formations) == 0:
+                        logger("No formations available, using current formation.", "warning")
+                        formation_no = 0
+                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                         time.sleep(DELAY)
-                        
-                        set_artifacts(device_id, scrcpy, artifacts, DELAY)
-                        
+                    if formation_no > len(formations):
+                        logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
+                        formation_no = len(formations)
 
-                if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                    if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
-                        time.sleep(DELAY*2)
-                        level_up = False
-                        while not level_up:
-                            while find_image(scrcpy.last_frame, "res/autopush/push_0w.png", threshold=0.9):
-                                time.sleep(10)
+                    if formation_no > 0:
+                        tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
+                        time.sleep(DELAY)
+                        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                            time.sleep(DELAY)
+                            
+                            set_artifacts(device_id, scrcpy, artifacts, DELAY)
+
+            if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
+                    time.sleep(DELAY*2)
+                    level_up = False
+                    while not level_up:
+                        while find_image(scrcpy.last_frame, "res/autopush/push_0w.png", threshold=0.9):
+                            time.sleep(10)
+                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                        time.sleep(DELAY)
+                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
                             tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                             time.sleep(DELAY)
-                            while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
-                                tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                                time.sleep(DELAY)
-                            if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
-                                tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
-                                time.sleep(10)
-                            else:
-                                level_up = True
-                        tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
-                        time.sleep(DELAY)
-                        floors += 1
-                        logger(f"Cleared {floors} floor(s) this session", "success")
+                        if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
+                            time.sleep(10)
+                        else:
+                            level_up = True
+                    tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
+                    time.sleep(DELAY)
+                    floors += 1
+                    logger(f"Cleared {floors} floor(s) this session", "success")
     except Exception:
         raise Exception
 
@@ -809,52 +807,51 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                         if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
                             time.sleep(DELAY)
 
-
-            if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
-                time.sleep(DELAY)
-
-                formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
-                formations = filter_near_duplicates(formations)
-                if len(formations) == 0:
-                    logger("No formations available, using current formation.", "warning")
-                    formation_no = 0
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            if formation_no > 0:
+                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
                     time.sleep(DELAY)
-                if formation_no > len(formations):
-                    logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
-                    formation_no = len(formations)
 
-                if formation_no > 0:
-                    tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
-                    time.sleep(DELAY)
-                    if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                    formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
+                    formations = filter_near_duplicates(formations)
+                    if len(formations) == 0:
+                        logger("No formations available, using current formation.", "warning")
+                        formation_no = 0
+                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                         time.sleep(DELAY)
-                        
-                        set_artifacts(device_id, scrcpy, artifacts, DELAY)
-                        
+                    if formation_no > len(formations):
+                        logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
+                        formation_no = len(formations)
 
-                if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                    if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
-                        time.sleep(DELAY*2)
-                        level_up = False
-                        while not level_up:
-                            while find_image(scrcpy.last_frame, "res/autopush/push_0cel.png", threshold=0.9):
-                                time.sleep(10)
+                    if formation_no > 0:
+                        tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
+                        time.sleep(DELAY)
+                        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                            time.sleep(DELAY)
+                            
+                            set_artifacts(device_id, scrcpy, artifacts, DELAY)
+
+            if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
+                    time.sleep(DELAY*2)
+                    level_up = False
+                    while not level_up:
+                        while find_image(scrcpy.last_frame, "res/autopush/push_0cel.png", threshold=0.9):
+                            time.sleep(10)
+                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                        time.sleep(DELAY)
+                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
                             tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                             time.sleep(DELAY)
-                            while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
-                                tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                                time.sleep(DELAY)
-                            if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
-                                tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
-                                time.sleep(10)
-                            else:
-                                level_up = True
-                        tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
-                        time.sleep(DELAY)
-                        floors += 1
-                        logger(f"Cleared {floors} floor(s) this session", "success")
+                        if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
+                            time.sleep(10)
+                        else:
+                            level_up = True
+                    tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
+                    time.sleep(DELAY)
+                    floors += 1
+                    logger(f"Cleared {floors} floor(s) this session", "success")
     except Exception:
         raise Exception
 
