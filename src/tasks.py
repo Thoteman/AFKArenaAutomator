@@ -1,5 +1,5 @@
 from adbauto import *
-from src.utils import go_to_startscreen, is_color_match, filter_near_duplicates, set_artifacts
+from src.utils import go_to_startscreen, is_color_match, filter_near_duplicates, choose_formation_to_copy
 import time
 
 BACK_BUTTON = (30, 1890)
@@ -652,27 +652,7 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             time.sleep(DELAY)
 
             if formation_no > 0:
-                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-
-                    formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
-                    formations = filter_near_duplicates(formations)
-                    if len(formations) == 0:
-                        logger("No formations available, using current formation.", "warning")
-                        formation_no = 0
-                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
-                        time.sleep(DELAY)
-                    if formation_no > len(formations):
-                        logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
-                        formation_no = len(formations)
-
-                    if formation_no > 0:
-                        tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
-                        time.sleep(DELAY)
-                        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
-                            time.sleep(DELAY)
-                            
-                            set_artifacts(device_id, scrcpy, artifacts, DELAY)
+                choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
 
             if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
                 time.sleep(DELAY)
@@ -737,27 +717,7 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             time.sleep(DELAY)
 
             if formation_no > 0:
-                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-
-                    formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
-                    formations = filter_near_duplicates(formations)
-                    if len(formations) == 0:
-                        logger("No formations available, using current formation.", "warning")
-                        formation_no = 0
-                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
-                        time.sleep(DELAY)
-                    if formation_no > len(formations):
-                        logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
-                        formation_no = len(formations)
-
-                    if formation_no > 0:
-                        tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
-                        time.sleep(DELAY)
-                        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
-                            time.sleep(DELAY)
-                            
-                            set_artifacts(device_id, scrcpy, artifacts, DELAY)
+                choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
 
             if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
                 time.sleep(DELAY)
@@ -816,27 +776,7 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             time.sleep(DELAY)
 
             if formation_no > 0:
-                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-
-                    formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
-                    formations = filter_near_duplicates(formations)
-                    if len(formations) == 0:
-                        logger("No formations available, using current formation.", "warning")
-                        formation_no = 0
-                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
-                        time.sleep(DELAY)
-                    if formation_no > len(formations):
-                        logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
-                        formation_no = len(formations)
-
-                    if formation_no > 0:
-                        tap(device_id, formations[formation_no - 1][0], formations[formation_no - 1][1])
-                        time.sleep(DELAY)
-                        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
-                            time.sleep(DELAY)
-                            
-                            set_artifacts(device_id, scrcpy, artifacts, DELAY)
+                choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
 
             if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
                 time.sleep(DELAY)

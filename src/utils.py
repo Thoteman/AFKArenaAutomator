@@ -209,6 +209,42 @@ def filter_near_duplicates(points, y_threshold=5):
 
     return filtered
 
+def choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, delay=3):
+    """
+    Chooses a formation based on the provided formation number.
+    
+    Args:
+        device_id: The ID of the ADB device.
+        scrcpy: The Scrcpy instance for capturing frames.
+        formation_no: The formation number to select (1-6).
+    """
+    try:
+        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
+            time.sleep(delay)
+
+            formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
+            formations = filter_near_duplicates(formations)
+            if len(formations) == 0:
+                logger("No formations available, using current formation.", "warning")
+                formation_using = 0
+                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                time.sleep(delay)
+            elif formation_no > len(formations):
+                logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
+                formation_using = len(formations)
+            else:
+                formation_using = formation_no
+
+            if formation_using > 0:
+                tap(device_id, formations[formation_using - 1][0], formations[formation_using - 1][1])
+                time.sleep(delay)
+                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                    time.sleep(delay)
+                    
+                    set_artifacts(device_id, scrcpy, artifacts, delay)
+    except Exception as e:
+        raise e
+
 def set_artifacts(device_id, scrcpy, artifacts, delay = 3):
     """
     Sets the artifacts for the hero in the artifact selection screen.
