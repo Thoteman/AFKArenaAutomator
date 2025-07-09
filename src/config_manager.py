@@ -10,6 +10,9 @@ global_defaults = {
     "Test Server": False,
     "Max Attempts": 3,
     "Delay": 3,
+    # auto push tasks
+    "Copy Artifacts": False,
+    "Copy Formation #": 1,
 }
 
 task_defaults = {

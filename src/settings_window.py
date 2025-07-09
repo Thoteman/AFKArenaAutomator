@@ -20,6 +20,11 @@ class SettingsWindow:
         self.build_ui()
         self.top.protocol("WM_DELETE_WINDOW", self.on_close)
 
+        # Make the window modal
+        self.top.transient(master)
+        self.top.grab_set()
+        self.top.focus()
+
     def build_ui(self):
         frame = tb.Frame(self.top, padding=10)
         frame.pack(fill="both", expand=True)
@@ -30,6 +35,10 @@ class SettingsWindow:
                 "Test Server",
                 "Max Attempts",
                 "Delay",
+            ],
+            "Auto Push Settings": [
+                "Copy Artifacts",
+                "Copy Formation #",
             ],
             "Campaign Tasks": [
                 "Claim AFK Rewards",

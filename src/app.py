@@ -7,7 +7,7 @@ from datetime import datetime
 import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
-from src.autoafk import connect_emulator, take_screenshot, start_daily_tasks, start_scrcpy_client, stop_scrcpy_client
+from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action
 
 class BotApp:
     def __init__(self, root):
@@ -53,6 +53,15 @@ class BotApp:
 
         self.root.config(menu=menu_bar)
 
+    def show_settings(self):
+        SettingsWindow(self.root, self.config_manager, self.task_vars, self.log)
+
+    def show_help(self):
+        messagebox.showinfo("Help", "Help info goes here.")
+
+    def show_about(self):
+        messagebox.showinfo("About", "AFK Arena Bot\nVersion 1.0")
+
     def build_layout(self):
         frame = tb.Frame(self.root)
         frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
@@ -63,16 +72,24 @@ class BotApp:
 
         # Button Functions
         button_actions = {
-            "Connect Emulator": lambda: threading.Thread(target=connect_emulator, args=(self.log,), daemon=True).start(),
-            "Start scrcpy": lambda: threading.Thread(target=start_scrcpy_client, args=(self.log,), daemon=True).start(),
-            "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
+            "Settings": self.show_settings,
             "Daily tasks": lambda: threading.Thread(target=start_daily_tasks, args=(self.log,), daemon=True).start(),
-            "Stop scrcpy": lambda: threading.Thread(target=stop_scrcpy_client, args=(self.log,), daemon=True).start(),
+            "Push Campaign": lambda: threading.Thread(target=auto_push_campaign, args=(self.log,), daemon=True).start(),
+            "Push Kings Tower": lambda: threading.Thread(target=auto_push_tower, args=(self.log,), daemon=True).start(),
+            "Push Tower of Light": lambda: threading.Thread(target=auto_push_lb, args=(self.log,), daemon=True).start(),
+            "Push Brutal Citadel": lambda: threading.Thread(target=auto_push_m, args=(self.log,), daemon=True).start(),
+            "Push World Tree": lambda: threading.Thread(target=auto_push_w, args=(self.log,), daemon=True).start(),
+            "Push Forsaken Necropolis": lambda: threading.Thread(target=auto_push_gb, args=(self.log,), daemon=True).start(),
+            "Push Celestial Sanctum": lambda: threading.Thread(target=auto_push_cel, args=(self.log,), daemon=True).start(),
+            "Push Infernal Fortress": lambda: threading.Thread(target=auto_push_hypo, args=(self.log,), daemon=True).start(),
+            "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
         }
 
         btn_texts = button_actions.keys()
         for text in btn_texts:
-            tb.Button(left_panel, text=text, bootstyle=PRIMARY, width=20, command=button_actions[text]).pack(pady=5)
+            pady = (5, 25) if text == "Settings" or text == "Daily tasks" else 5
+            tb.Button(left_panel, text=text, bootstyle=PRIMARY, width=25, command=button_actions[text]).pack(pady=pady)
+        tb.Button(left_panel, text="Stop Current Action", bootstyle=DANGER, width=25, command=lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start()).pack(pady=(25, 5))
 
         # Right Panel (Output)
         right_panel = tb.Frame(frame)
@@ -81,18 +98,11 @@ class BotApp:
         self.output = tb.ScrolledText(right_panel, wrap="word", height=25)
         self.output.pack(fill=BOTH, expand=True)
         self.output.config(state="disabled")
-        self.log("Welcome to AFK Arena Bot!", "info")
+        self.log("Welcome to AFK Arena Bot!\nDeveloped by Thoteman\nBrought to you by 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\n\n", "info", True)
+        self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nArcane Labyrinth / Draconis gift / Claim bags / Claim quests / Claim merchants are not yet implemented!\nI released this version already for testing / auto pushing towers! (Campaign is still acting funky)\n\n", "error", True)
+                                                                              
 
-    def show_settings(self):
-        SettingsWindow(self.root, self.config_manager, self.task_vars, self.log)
-
-    def show_help(self):
-        messagebox.showinfo("Help", "Help info goes here.")
-
-    def show_about(self):
-        messagebox.showinfo("About", "AFK Arena Bot\nVersion 1.0")
-
-    def log(self, message, level="info"):
+    def log(self, message, level="info", no_timestamp=False):
         def _log():
             style = Style()
             color_map = {
@@ -103,8 +113,11 @@ class BotApp:
             }
 
             color = color_map.get(level, style.colors.get("secondary"))
-            timestamp = datetime.now().strftime("[%H:%M:%S]")  # Add timestamp
-            full_message = f"{timestamp} {message}" if message else ""
+            if no_timestamp:
+                full_message = f"{message}" if message else ""
+            else:
+                timestamp = datetime.now().strftime("[%H:%M:%S]")  # Add timestamp
+                full_message = f"{timestamp} {message}" if message else ""
 
             self.output.config(state="normal")
             self.output.insert("end", full_message + "\n", level)
