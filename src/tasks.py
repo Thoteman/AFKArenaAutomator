@@ -684,11 +684,11 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             time.sleep(10)
                         tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                         time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
+                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8):
                             tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                             time.sleep(DELAY)
                         if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
-                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png", threshold=0.8)
                             time.sleep(10)
                         else:
                             level_up = True
@@ -716,6 +716,8 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         floors = 0
         while True:
             if find_image(scrcpy.last_frame, "res/autopush/text_w.png"):
+                if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                    return True
                 tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True)
                 time.sleep(DELAY)
 
@@ -728,6 +730,8 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
 
                     if tap_img_when_visible(device_id, scrcpy, "res/autopush/kings_tower_w.png", timeout=5, random_delay=True):
                         time.sleep(DELAY)
+                        if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                            return True
 
                         if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
                             time.sleep(DELAY)
@@ -765,11 +769,11 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             time.sleep(10)
                         tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                         time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png"):
+                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8):
                             tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                             time.sleep(DELAY)
                         if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
-                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png", threshold=0.8)
                             time.sleep(10)
                         else:
                             level_up = True
@@ -791,6 +795,8 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         floors = 0
         while True:
             if find_image(scrcpy.last_frame, "res/autopush/text_cel.png"):
+                if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                    return True
                 tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True)
                 time.sleep(DELAY)
 
@@ -803,6 +809,8 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
 
                     if tap_img_when_visible(device_id, scrcpy, "res/autopush/kings_tower_cel.png", timeout=5, random_delay=True):
                         time.sleep(DELAY)
+                        if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                            return True
 
                         if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
                             time.sleep(DELAY)
@@ -844,11 +852,11 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                             time.sleep(DELAY)
                         if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
-                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png")
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png", threshold=0.8)
                             time.sleep(10)
                         else:
                             level_up = True
-                    tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
+                    tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8)
                     time.sleep(DELAY)
                     floors += 1
                     logger(f"Cleared {floors} floor(s) this session", "success")

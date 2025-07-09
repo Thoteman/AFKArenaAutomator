@@ -311,7 +311,6 @@ def auto_push_campaign(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -320,6 +319,7 @@ def auto_push_campaign(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
         push_campaign(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
         stop_scrcpy_client(logger)
@@ -335,7 +335,6 @@ def auto_push_tower(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -344,6 +343,7 @@ def auto_push_tower(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
         push_tower(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
         stop_scrcpy_client(logger)
@@ -364,7 +364,6 @@ def auto_push_lb(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -373,8 +372,12 @@ def auto_push_lb(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
-        push_lb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_lb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        if done60:
+            logger("All 60 battles done... Come back another day!")
+            config['Autopush']['lb'] = "True"
         stop_scrcpy_client(logger)
     except Exception:
         logger("Stopped the current action.", "error")
@@ -393,8 +396,6 @@ def auto_push_m(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
-        stop_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -403,8 +404,12 @@ def auto_push_m(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
-        push_m(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_m(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        if done60:
+            logger("All 60 battles done... Come back another day!")
+            config['Autopush']['m'] = "True"
         stop_scrcpy_client(logger)
     except Exception:
         logger("Stopped the current action.", "error")
@@ -423,7 +428,6 @@ def auto_push_w(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -432,8 +436,12 @@ def auto_push_w(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
-        push_w(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_w(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        if done60:
+            logger("All 60 battles done... Come back another day!")
+            config['Autopush']['w'] = "True"
         stop_scrcpy_client(logger)
     except Exception:
         logger("Stopped the current action.", "error")
@@ -452,7 +460,6 @@ def auto_push_gb(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -461,8 +468,12 @@ def auto_push_gb(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
-        push_gb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_gb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        if done60:
+            logger("All 60 battles done... Come back another day!")
+            config['Autopush']['gb'] = "True"
         stop_scrcpy_client(logger)
     except Exception:
         logger("Stopped the current action.", "error")
@@ -481,7 +492,6 @@ def auto_push_cel(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -490,8 +500,12 @@ def auto_push_cel(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
-        push_cel(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_cel(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        if done60:
+            logger("All 60 battles done... Come back another day!")
+            config['Autopush']['cel'] = "True"
         stop_scrcpy_client(logger)
     except Exception:
         logger("Stopped the current action.", "error")
@@ -510,7 +524,6 @@ def auto_push_hypo(logger):
         if SCRCPY_CLIENT:
             logger("Already running a task. Can't run 2 at the same time.", "error", True)
             return
-        start_scrcpy_client(logger)
 
         config = configparser.ConfigParser()
         config.read(CONFIG_PATH)
@@ -519,8 +532,12 @@ def auto_push_hypo(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        start_scrcpy_client(logger)
 
-        push_hypo(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_hypo(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        if done60:
+            logger("All 60 battles done... Come back another day!")
+            config['Autopush']['hypo'] = "True"
         stop_scrcpy_client(logger)
     except Exception:
         logger("Stopped the current action.", "error")
