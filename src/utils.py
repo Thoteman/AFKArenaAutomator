@@ -138,7 +138,6 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
             
             case "citydown":
                 while not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
-                    print(scrcpy.last_frame)
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
