@@ -38,6 +38,7 @@ class SettingsWindow:
             ],
             "Auto Push Settings": [
                 "Copy Artifacts",
+                "Copy Singlestage Formations",
                 "Copy Formation #",
             ],
             "Campaign Tasks": [

@@ -12,6 +12,7 @@ global_defaults = {
     "Delay": 3,
     # auto push tasks
     "Copy Artifacts": False,
+    "Copy Singlestage Formations": False,
     "Copy Formation #": 1,
 }
 

@@ -600,7 +600,7 @@ def oak_inn_gifts(device_id, scrcpy):
     except Exception:
         raise Exception
 
-def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, singlestage=False):
     try:
         while True:
             if not find_image(scrcpy.last_frame, "res/autopush/vs_campaign.png"):
@@ -611,18 +611,25 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
                     if tap_img_when_visible(device_id, scrcpy, "res/campaign/begin_battle_button_multistage.png", timeout=5, random_delay=True):
                         time.sleep(DELAY)
-
-            if formation_no > 0:
-                choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
+            print(singlestage, find_image(scrcpy.last_frame, "res/autopush/singlestage.png", threshold=0.8), formation_no > 0)
+            match singlestage, find_image(scrcpy.last_frame, "res/autopush/singlestage.png", threshold=0.8), formation_no > 0:
+                case (True, _, True):
+                    choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
+                case (False, None, True):
+                    choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
+                case (False, _, True):
+                    pass
+                case (_, _, False):
+                    pass
 
             if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
                 time.sleep(DELAY)
                 if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
                     level_up = False
+                    time.sleep(30)
                     while not level_up:
-                        while find_image(scrcpy.last_frame, "res/autopush/push_0.png", threshold=0.8):
-                            time.sleep(60)
+                        while find_image(scrcpy.last_frame, "res/autopush/push_0.png", threshold=0.9):
+                            time.sleep(30)
                         tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
                         time.sleep(DELAY)
                         while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8):
@@ -630,7 +637,7 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             time.sleep(DELAY)
                         if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
                             tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png", threshold=0.8)
-                            time.sleep(60)
+                            time.sleep(30)
                         else:
                             level_up = True
                     tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")

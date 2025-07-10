@@ -319,9 +319,10 @@ def auto_push_campaign(logger):
         formation_no = int(config['Global']['Copy Formation #']) if 'copy formation #' in config['Global'] else 1
         formation_no = formation_no if formation_no >= 0 and formation_no < 6 else 1
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
+        singlestage = True if config['Global']['Copy Singlestage Formations'] == "True" else False
         start_scrcpy_client(logger)
 
-        push_campaign(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        push_campaign(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts, singlestage)
         stop_scrcpy_client(logger)
     except Exception:
         logger("Stopped the current action.", "error")
