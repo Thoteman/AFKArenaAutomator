@@ -2,9 +2,9 @@
 import configparser
 import ttkbootstrap as tb
 import tkinter as tk
-from src.utils import resource_path
+from src.utils import get_config_path
 
-CONFIG_PATH = resource_path("config.ini")
+CONFIG_PATH = get_config_path()
 
 global_defaults = {
     # global settings

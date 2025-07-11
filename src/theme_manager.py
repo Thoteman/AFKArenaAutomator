@@ -2,9 +2,9 @@ import tkinter as tk
 import ttkbootstrap as tb
 import configparser
 import os
-from src.utils import resource_path
+from src.utils import get_config_path
 
-CONFIG_PATH = resource_path("config.ini")
+CONFIG_PATH = get_config_path()
 
 class ThemeManager:
     def __init__(self, root):

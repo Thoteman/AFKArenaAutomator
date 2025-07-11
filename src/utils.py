@@ -1,6 +1,6 @@
 import configparser
 import time
-import sys, os
+import sys, os, shutil
 from adbauto import *
 
 def resource_path(relative_path):
@@ -12,7 +12,17 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-CONFIG_PATH = resource_path("config.ini")
+def get_config_path():
+    # We'll store the real config in the same directory as the .exe
+    exe_dir = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else __file__)
+    target_path = os.path.join(exe_dir, "config.ini")
+
+    # If it doesn't exist yet, copy from the bundled resource
+    if not os.path.exists(target_path):
+        shutil.copy(resource_path("config.ini"), target_path)
+
+    return target_path
+
 BACK_BUTTON = (30, 1890)
 
 def check_afk_running(device_id):
@@ -64,7 +74,7 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
     """
     try:
         config = configparser.ConfigParser()
-        config.read(CONFIG_PATH)
+        config.read(get_config_path())
         test_server = bool(config['Global']['Test Server'])
         running = check_afk_running(device_id)
 

@@ -1,7 +1,7 @@
 # src/autoafk.py
 from adbauto import *
 from src.tasks import *
-from src.utils import resource_path
+from src.utils import get_config_path
 from PIL import Image
 from datetime import datetime, timezone
 import cv2
@@ -9,7 +9,7 @@ import configparser
 
 DEVICE_ID = ""
 SCRCPY_CLIENT = None
-CONFIG_PATH = resource_path("config.ini")
+CONFIG_PATH = get_config_path()
 BACK_BUTTON = (30, 1890)
 MAX_ATTEMPTS = 0
 DELAY = 0
