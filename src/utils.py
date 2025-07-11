@@ -1,8 +1,18 @@
 import configparser
 import time
+import sys, os
 from adbauto import *
 
-CONFIG_PATH = "config.ini"
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+CONFIG_PATH = resource_path("config.ini")
 BACK_BUTTON = (30, 1890)
 
 def check_afk_running(device_id):
@@ -68,76 +78,76 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
             start_afk_test(device_id)
             time.sleep(delay * 3)
 
-        if find_image(scrcpy.last_frame, "res/global/hero_trial_button.png"):
-            tap_image(device_id, scrcpy.last_frame, "res/global/hero_trial_button.png")
+        if find_image(scrcpy.last_frame, resource_path("res/global/hero_trial_button.png")):
+            tap_image(device_id, scrcpy.last_frame, resource_path("res/global/hero_trial_button.png"))
             time.sleep(delay)
 
         match task:
             case "campaign":
-                while not find_image(scrcpy.last_frame, "res/campaign/campaign_selected.png") and not find_image(scrcpy.last_frame, "res/campaign/campaign_unselected.png"):
+                while not find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png")) and not find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_unselected.png")):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                             
-                if find_image(scrcpy.last_frame, "res/campaign/campaign_unselected.png"):
-                    tap_image(device_id, scrcpy.last_frame, "res/campaign/campaign_unselected.png")
+                if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_unselected.png")):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/campaign/campaign_unselected.png"))
                     time.sleep(delay)
                 
                 return
             
             case "rightbanner":
-                while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8) and not find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
-                if find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
-                    tap_image(device_id, scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8)
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
                     time.sleep(delay)
                 
-                if find_image(scrcpy.last_frame, "res/banner/closed_right_banner_red.png"):
-                    tap_image(device_id, scrcpy.last_frame, "res/banner/closed_right_banner_red.png")
+                if find_image(scrcpy.last_frame, resource_path("res/banner/closed_right_banner_red.png")):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/banner/closed_right_banner_red.png"))
                     time.sleep(delay)
 
-                elif find_image(scrcpy.last_frame, "res/banner/closed_right_banner.png"):
-                    tap_image(device_id, scrcpy.last_frame, "res/banner/closed_right_banner.png")
+                elif find_image(scrcpy.last_frame, resource_path("res/banner/closed_right_banner.png")):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/banner/closed_right_banner.png"))
                     time.sleep(delay)
 
                 return
             
             case "darkforest":
-                while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8) and not find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
-                if find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
-                    tap_image(device_id, scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8)
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
                     time.sleep(delay)
                 
                 return
             
             case "arena":
-                if find_image(scrcpy.last_frame, "res/darkforest/arena_text.png"):
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
                     return
                 
-                while not find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8) and not find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
-                if find_image(scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8):
-                    tap_image(device_id, scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8)
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
                     time.sleep(delay)
 
-                if find_image(scrcpy.last_frame, "res/darkforest/arena.png"):
-                    tap_image(device_id, scrcpy.last_frame, "res/darkforest/arena.png")
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/arena.png")):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/arena.png"))
                     time.sleep(delay)
 
-                while not find_image(scrcpy.last_frame, "res/darkforest/arena_text.png"):
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
                 return
             
             case "citydown":
-                while not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
+                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
@@ -147,7 +157,7 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
                 return
             
             case "cityup":
-                while not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
+                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
@@ -159,10 +169,10 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
                 return
             
             case "guild":
-                if find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+                if find_image(scrcpy.last_frame, resource_path("res/city/guild_text.png")):
                     return
                 
-                while not find_image(scrcpy.last_frame, "res/city/city_selected.png"):
+                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
                     tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
                     time.sleep(delay)
                 
@@ -171,11 +181,11 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
                 scroll(device_id, "down", 1200, 600)
                 time.sleep(delay)
 
-                if find_image(scrcpy.last_frame, "res/city/guild.png", threshold=0.8):
-                    tap_image(device_id, scrcpy.last_frame, "res/city/guild.png", threshold=0.8)
+                if find_image(scrcpy.last_frame, resource_path("res/city/guild.png"), threshold=0.8):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/city/guild.png"), threshold=0.8)
                     time.sleep(delay)
 
-                    while not find_image(scrcpy.last_frame, "res/city/guild_text.png"):
+                    while not find_image(scrcpy.last_frame, resource_path("res/city/guild_text.png")):
                         tap(device_id, scrcpy.resolution[0]//2, 2*scrcpy.resolution[1]//3)
                         time.sleep(delay)
                         tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
@@ -219,10 +229,10 @@ def choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts,
         formation_no: The formation number to select (1-6).
     """
     try:
-        if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations.png", timeout=5, random_delay=True):
+        if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/formations.png"), timeout=5, random_delay=True):
             time.sleep(delay)
 
-            formations = find_all_images(scrcpy.last_frame, "res/autopush/formations_select.png")
+            formations = find_all_images(scrcpy.last_frame, resource_path("res/autopush/formations_select.png"))
             formations = filter_near_duplicates(formations)
             if len(formations) == 0:
                 logger("No formations available, using current formation.", "warning")
@@ -238,7 +248,7 @@ def choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts,
             if formation_using > 0:
                 tap(device_id, formations[formation_using - 1][0], formations[formation_using - 1][1])
                 time.sleep(delay)
-                if tap_img_when_visible(device_id, scrcpy, "res/autopush/formations_use.png", timeout=5, random_delay=True):
+                if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/formations_use.png"), timeout=5, random_delay=True):
                     time.sleep(delay)
                     
                     set_artifacts(device_id, scrcpy, artifacts, delay)
@@ -256,34 +266,34 @@ def set_artifacts(device_id, scrcpy, artifacts, delay = 3):
         artifacts: A list of artifact names to set.
     """
     try:
-        if find_image(scrcpy.last_frame, "res/autopush/artifacts_allselected.png"):
-            tap_image(device_id, scrcpy.last_frame, "res/autopush/artifacts_allselected.png")
+        if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_allselected.png")):
+            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_allselected.png"))
             time.sleep(delay)
 
         if artifacts:
-            if find_image(scrcpy.last_frame, "res/autopush/artifacts_inverted.png"):
-                tap_image(device_id, scrcpy.last_frame, "res/autopush/artifacts_inverted.png")
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png")):
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png"))
                 time.sleep(delay)
-                tap_image(device_id, scrcpy.last_frame, "res/autopush/artifacts_unselected.png")
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png"))
                 time.sleep(delay)
-            elif find_image(scrcpy.last_frame, "res/autopush/artifacts_unselected.png"):
-                tap_image(device_id, scrcpy.last_frame, "res/autopush/artifacts_unselected.png")
+            elif find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png")):
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png"))
                 time.sleep(delay)
 
-            if not find_image(scrcpy.last_frame, "res/autopush/artifacts_selected.png"):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_selected.png")):
                 return
         else:
-            if find_image(scrcpy.last_frame, "res/autopush/artifacts_inverted.png"):
-                tap_image(device_id, scrcpy.last_frame, "res/autopush/artifacts_inverted.png")
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png")):
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png"))
                 time.sleep(delay)
-            elif find_image(scrcpy.last_frame, "res/autopush/artifacts_selected.png"):
-                tap_image(device_id, scrcpy.last_frame, "res/autopush/artifacts_selected.png")
+            elif find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_selected.png")):
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_selected.png"))
                 time.sleep(delay)
 
-            if not find_image(scrcpy.last_frame, "res/autopush/artifacts_unselected.png"):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png")):
                 return
             
-        tap_img_when_visible(device_id, scrcpy, "res/autopush/artifacts_confirm.png", delay=delay)
+        tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/artifacts_confirm.png"), delay=delay)
         time.sleep(delay)
     except Exception as e:
         print(e)

@@ -1,6 +1,7 @@
 # src/autoafk.py
 from adbauto import *
 from src.tasks import *
+from src.utils import resource_path
 from PIL import Image
 from datetime import datetime, timezone
 import cv2
@@ -8,7 +9,7 @@ import configparser
 
 DEVICE_ID = ""
 SCRCPY_CLIENT = None
-CONFIG_PATH = "config.ini"
+CONFIG_PATH = resource_path("config.ini")
 BACK_BUTTON = (30, 1890)
 MAX_ATTEMPTS = 0
 DELAY = 0
@@ -45,33 +46,33 @@ def stop_scrcpy_client(logger):
     
     return
 
-def take_screenshot(logger):
-    try:
-        global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH
-        if not DEVICE_ID:
-            connect_emulator(logger)
+# def take_screenshot(logger):
+#     try:
+#         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH
+#         if not DEVICE_ID:
+#             connect_emulator(logger)
 
-        if SCRCPY_CLIENT:
-            logger("Already running a task. Can't run 2 at the same time.", "error")
-            return
-        start_scrcpy_client(logger)
+#         if SCRCPY_CLIENT:
+#             logger("Already running a task. Can't run 2 at the same time.", "error")
+#             return
+#         start_scrcpy_client(logger)
         
-        random_text = ''.join(__import__('random').choices(__import__('string').ascii_letters + __import__('string').digits, k=20))
+#         random_text = ''.join(__import__('random').choices(__import__('string').ascii_letters + __import__('string').digits, k=20))
 
-        img = SCRCPY_CLIENT.last_frame
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+#         img = SCRCPY_CLIENT.last_frame
+#         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        pil_img = Image.fromarray(img_rgb)
-        pil_img.save(f"screenshots/screenshot_{random_text}.png")
+#         pil_img = Image.fromarray(img_rgb)
+#         pil_img.save(f"screenshots/screenshot_{random_text}.png")
 
-        logger(f"Screenshot saved to screenshots/screenshot_{random_text}.png", "success")
+#         logger(f"Screenshot saved to screenshots/screenshot_{random_text}.png", "success")
 
-        stop_scrcpy_client(logger)
-    except cv2.error:
-        logger("Stopped the current action.", "error")
-    except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+#         stop_scrcpy_client(logger)
+#     except cv2.error:
+#         logger("Stopped the current action.", "error")
+#     except Exception as e:
+#         print(e)
+#         logger("Something went wrong.", "error")
 
 def start_daily_tasks(logger):
     try:
