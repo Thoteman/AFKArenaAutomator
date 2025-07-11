@@ -720,14 +720,106 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
 
 def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
-        pass
+        
+        while True:
+            if find_image(scrcpy.last_frame, "res/autopush/text_lb.png"):
+                if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                    return True
+                tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True)
+                time.sleep(DELAY)
+
+            if not find_image(scrcpy.last_frame, "res/autopush/vs_lb.png"):
+                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+
+                if find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8):
+                    tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower.png", threshold=0.8)
+                    time.sleep(DELAY)
+
+                    if tap_img_when_visible(device_id, scrcpy, "res/autopush/kings_tower_lb.png", timeout=5, random_delay=True):
+                        time.sleep(DELAY)
+                        if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                            return True
+
+                        if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
+                            time.sleep(DELAY)
+
+            if formation_no > 0:
+                choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
+
+            if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
+                    time.sleep(DELAY*2)
+                    level_up = False
+                    while not level_up:
+                        while find_image(scrcpy.last_frame, "res/autopush/push_0lb.png", threshold=0.9):
+                            time.sleep(10)
+                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                        time.sleep(DELAY)
+                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8):
+                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                            time.sleep(DELAY)
+                        if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png", threshold=0.8)
+                            time.sleep(10)
+                        else:
+                            level_up = True
+                    tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
+                    time.sleep(DELAY)
+
     except Exception as e:
         print(e)
         raise
 
 def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
-        pass
+        
+        while True:
+            if find_image(scrcpy.last_frame, "res/autopush/text_m.png"):
+                if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                    return True
+                tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True)
+                time.sleep(DELAY)
+
+            if not find_image(scrcpy.last_frame, "res/autopush/vs_m.png"):
+                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+
+                if find_image(scrcpy.last_frame, "res/darkforest/darkforest_selected.png", threshold=0.8):
+                    tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower.png", threshold=0.8)
+                    time.sleep(DELAY)
+
+                    if tap_img_when_visible(device_id, scrcpy, "res/autopush/kings_tower_m.png", timeout=5, random_delay=True):
+                        time.sleep(DELAY)
+                        if find_image(scrcpy.last_frame, "res/autopush/done_60.png"):
+                            return True
+
+                        if tap_img_when_visible(device_id, scrcpy, "res/darkforest/kings_tower_battle.png", timeout=5, random_delay=True):
+                            time.sleep(DELAY)
+
+            if formation_no > 0:
+                choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
+
+            if tap_img_when_visible(device_id, scrcpy, "res/global/begin_autobattle_button.png", timeout=5, random_delay=True):
+                time.sleep(DELAY)
+                if tap_img_when_visible(device_id, scrcpy, "res/global/confirm_begin_autobattle_button.png", timeout=5, random_delay=True, threshold=0.8):
+                    time.sleep(DELAY*2)
+                    level_up = False
+                    while not level_up:
+                        while find_image(scrcpy.last_frame, "res/autopush/push_0m.png", threshold=0.9):
+                            time.sleep(10)
+                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                        time.sleep(DELAY)
+                        while not find_image(scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8):
+                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+                            time.sleep(DELAY)
+                        if find_image(scrcpy.last_frame, "res/autopush/confirm_0.png"):
+                            tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_close.png", threshold=0.8)
+                            time.sleep(10)
+                        else:
+                            level_up = True
+                    tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
+                    time.sleep(DELAY)
+
     except Exception as e:
         print(e)
         raise
