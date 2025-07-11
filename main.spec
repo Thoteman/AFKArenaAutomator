@@ -1,5 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_data_files
 
+block_cipher = None
+adbauto_data = collect_data_files('adbauto', includes=[
+    'bin/adb.exe',
+    'scrcpy/scrcpy-server.jar',
+])
 
 a = Analysis(
     ['main.py'],
@@ -8,6 +14,9 @@ a = Analysis(
     datas=[
         ('res', 'res'),
         ('config.ini', '.'),
+        ('icon.ico', '.'),
+        ('src', 'src'),
+        *adbauto_data,
     ],
     hiddenimports=[],
     hookspath=[],
@@ -30,13 +39,13 @@ exe = EXE(
     a.datas,
     [],
     name='AutoAFK',
-    debug=False,
+    debug=True,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

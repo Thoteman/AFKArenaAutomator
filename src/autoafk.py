@@ -46,7 +46,8 @@ def stop_scrcpy_client(logger):
     
     return
 
-# def take_screenshot(logger):
+def take_screenshot(logger):
+    pass
 #     try:
 #         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH
 #         if not DEVICE_ID:
