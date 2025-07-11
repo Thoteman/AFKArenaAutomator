@@ -9,8 +9,9 @@ def set_delay(delay):
     try:
         global DELAY
         DELAY = delay
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 # All functions related to campaign screen
 def claim_afk_rewards(device_id, scrcpy):
@@ -25,8 +26,9 @@ def claim_afk_rewards(device_id, scrcpy):
                 time.sleep(DELAY)
             return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def campaign_battle(device_id, scrcpy):
     try:
@@ -50,8 +52,9 @@ def campaign_battle(device_id, scrcpy):
                             time.sleep(DELAY)
                         return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
         
 
 def claim_fast_rewards(device_id, scrcpy, amount, logger):
@@ -76,8 +79,9 @@ def claim_fast_rewards(device_id, scrcpy, amount, logger):
                     time.sleep(DELAY)
                 return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
             
 def friendship_points(device_id, scrcpy):
     try:
@@ -93,8 +97,9 @@ def friendship_points(device_id, scrcpy):
                     time.sleep(DELAY)
                 return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def loan_mercenaries(device_id, scrcpy):
     try:
@@ -116,8 +121,9 @@ def loan_mercenaries(device_id, scrcpy):
                         time.sleep(DELAY)
                     return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def read_mail(device_id, scrcpy, delete=False):
     try:
@@ -138,8 +144,9 @@ def read_mail(device_id, scrcpy, delete=False):
                     time.sleep(DELAY)
                 return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def bounty_board(device_id, scrcpy):
     try:
@@ -186,8 +193,9 @@ def bounty_board(device_id, scrcpy):
             tap_img_when_visible(device_id, scrcpy, "res/global/back_arrow.png", timeout=5, random_delay=True)
             return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def claim_weekly_staves(device_id, scrcpy):
     try:
@@ -201,8 +209,9 @@ def claim_weekly_staves(device_id, scrcpy):
                 time.sleep(DELAY)
             return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def treasure_scramble(device_id, scrcpy):
     try:
@@ -222,8 +231,9 @@ def treasure_scramble(device_id, scrcpy):
                     time.sleep(DELAY)
                 return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
             
 def arena_of_heroes(device_id, scrcpy, amount, logger):
     try:
@@ -267,8 +277,9 @@ def arena_of_heroes(device_id, scrcpy, amount, logger):
 
                     return True, battle + 1
         return False, 0
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def gladiator_coins(device_id, scrcpy):
     try:
@@ -286,8 +297,9 @@ def gladiator_coins(device_id, scrcpy):
                     time.sleep(DELAY)
                 return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def temporal_rift(device_id, scrcpy):
     try:
@@ -306,8 +318,9 @@ def temporal_rift(device_id, scrcpy):
                     time.sleep(DELAY)
                 return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def kings_tower(device_id, scrcpy):
     try:
@@ -332,8 +345,9 @@ def kings_tower(device_id, scrcpy):
                                     time.sleep(DELAY)
                                 return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
         
 def arcane_labyrinth(device_id, scrcpy, logger):
     try:
@@ -343,8 +357,9 @@ def arcane_labyrinth(device_id, scrcpy, logger):
             tap_img_when_visible(device_id, scrcpy, "res/darkforest/arcane_labyrinth.png", threshold=0.8)
             time.sleep(DELAY)
             #TODO: Implement Arcane Labyrinth tasks
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def claim_wall_reward(device_id, scrcpy):
     try:
@@ -355,8 +370,9 @@ def claim_wall_reward(device_id, scrcpy):
         while not find_image(scrcpy.last_frame, "res/city/wall_text.png"):
             tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
             time.sleep(DELAY)
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def wall_of_legends(device_id, scrcpy, logger):
     try:
@@ -418,8 +434,9 @@ def wall_of_legends(device_id, scrcpy, logger):
                     time.sleep(DELAY)
                 return claimed
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def store_purchases(device_id, scrcpy, refreshes):
     try:
@@ -459,8 +476,9 @@ def store_purchases(device_id, scrcpy, refreshes):
             return True, refresh_count
 
         return False, 0
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def resonating_crystal(device_id, scrcpy):
     try:
@@ -489,8 +507,9 @@ def resonating_crystal(device_id, scrcpy):
             return True
         tap_image(device_id, scrcpy.last_frame, "res/darkforest/darkforest_unselected.png", threshold=0.8)
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def hunting_contract(device_id, scrcpy):
     try:
@@ -518,8 +537,9 @@ def hunting_contract(device_id, scrcpy):
                 time.sleep(DELAY)
             return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def guild_hunt(device_id, scrcpy):
     try:
@@ -548,8 +568,9 @@ def guild_hunt(device_id, scrcpy):
                 time.sleep(DELAY)
             return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def twisted_realm(device_id, scrcpy):
     try:
@@ -579,8 +600,9 @@ def twisted_realm(device_id, scrcpy):
             tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
             time.sleep(DELAY)
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def oak_inn_gifts(device_id, scrcpy):
     try:
@@ -597,8 +619,9 @@ def oak_inn_gifts(device_id, scrcpy):
                 time.sleep(DELAY)
             return True
         return False
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, singlestage=False):
     try:
@@ -642,8 +665,9 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                             level_up = True
                     tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
                     time.sleep(DELAY)
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
@@ -690,20 +714,23 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
                     time.sleep(DELAY)
 
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
         pass
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
         pass
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
@@ -754,8 +781,9 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png")
                     time.sleep(DELAY)
 
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
@@ -806,8 +834,9 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8)
                     time.sleep(DELAY)
 
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
@@ -858,8 +887,9 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8)
                     time.sleep(DELAY)
 
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
 
 def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     try:
@@ -910,5 +940,6 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     tap_image(device_id, scrcpy.last_frame, "res/autopush/confirm_exit.png", threshold=0.8)
                     time.sleep(DELAY)
 
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise

@@ -67,8 +67,11 @@ def take_screenshot(logger):
         logger(f"Screenshot saved to screenshots/screenshot_{random_text}.png", "success")
 
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def start_daily_tasks(logger):
     try:
@@ -298,8 +301,11 @@ def start_daily_tasks(logger):
             time.sleep(DELAY)
 
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
         return
 
 def auto_push_campaign(logger):
@@ -324,8 +330,11 @@ def auto_push_campaign(logger):
 
         push_campaign(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts, singlestage)
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def auto_push_tower(logger):
     try:
@@ -348,8 +357,11 @@ def auto_push_tower(logger):
 
         push_tower(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def auto_push_lb(logger):
     try:
@@ -380,8 +392,11 @@ def auto_push_lb(logger):
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['lb'] = "True"
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def auto_push_m(logger):
     try:
@@ -412,8 +427,11 @@ def auto_push_m(logger):
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['m'] = "True"
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def auto_push_w(logger):
     try:
@@ -444,8 +462,11 @@ def auto_push_w(logger):
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['w'] = "True"
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def auto_push_gb(logger):
     try:
@@ -476,8 +497,11 @@ def auto_push_gb(logger):
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['gb'] = "True"
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def auto_push_cel(logger):
     try:
@@ -508,8 +532,11 @@ def auto_push_cel(logger):
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['cel'] = "True"
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def auto_push_hypo(logger):
     try:
@@ -540,8 +567,11 @@ def auto_push_hypo(logger):
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['hypo'] = "True"
         stop_scrcpy_client(logger)
-    except Exception:
+    except cv2.error:
         logger("Stopped the current action.", "error")
+    except Exception as e:
+        print(e)
+        logger("Something went wrong.", "error")
 
 def stop_action(logger):
     global SCRCPY_CLIENT

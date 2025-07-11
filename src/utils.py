@@ -182,8 +182,9 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
                         time.sleep(delay)
                 
                 return
-    except AttributeError:
-        raise AttributeError
+    except Exception as e:
+        print(e)
+        raise
 
 
 def is_color_match(actual, expected, tolerance=5):
@@ -242,7 +243,8 @@ def choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts,
                     
                     set_artifacts(device_id, scrcpy, artifacts, delay)
     except Exception as e:
-        raise e
+        print(e)
+        raise
 
 def set_artifacts(device_id, scrcpy, artifacts, delay = 3):
     """
@@ -283,5 +285,6 @@ def set_artifacts(device_id, scrcpy, artifacts, delay = 3):
             
         tap_img_when_visible(device_id, scrcpy, "res/autopush/artifacts_confirm.png", delay=delay)
         time.sleep(delay)
-    except Exception:
-        raise Exception
+    except Exception as e:
+        print(e)
+        raise
