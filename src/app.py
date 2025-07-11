@@ -98,7 +98,7 @@ class BotApp:
         self.output = tb.ScrolledText(right_panel, wrap="word", height=25)
         self.output.pack(fill=BOTH, expand=True)
         self.output.config(state="disabled")
-        self.log("Welcome to AFK Arena Bot!\nDeveloped by Thoteman\nBrought to you by 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\n\n", "info", True)
+        self.log("Welcome to AFK Arena Automator!\nDeveloped by Thoteman\nBrought to you by 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\n\n", "info", True)
         self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nArcane Labyrinth / Draconis gift / Claim bags / Claim quests / Claim merchants are not yet implemented!\nI released this version already for testing / auto pushing towers!\n\n", "error", True)
                                                                               
 
