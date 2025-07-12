@@ -2,12 +2,7 @@
 from PyInstaller.utils.hooks import collect_data_files
 
 block_cipher = None
-adbauto_data = collect_data_files('adbauto', includes=[
-    'bin/adb.exe',
-    'bin/AdbWinApi.dll',
-    'bin/AdbWinUsbApi.dll',
-    'scrcpy/scrcpy-server.jar',
-])
+adbauto_data = collect_data_files('adbauto')
 
 a = Analysis(
     ['main.py'],
