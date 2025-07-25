@@ -1,0 +1,4 @@
+combobox_awakened = ["aTalene", "aEzizh", "aThane", "aBrutus", "aSolise", "aBaden", "aAthalia", "Maetria", "aBelinda", "aSafiya", "aLyca", "aShemira", "Gavus", "Eugene", "aLucius", "aAntandra", "aEironn", "aThoran", "Zohra", "Envydiel", "aEstrilda", "None"]
+combobox_celepog = ["Athalia", "Ezizh", "Mehira", "Twins", "Zolrath", "Orthros", "Talene", "Wukong", "Khazard", "Mezoth", "Flora", "Zaphrael", "Lucretia", "Mortas", "Alna", "Morael", "Leofric", "Titus", "Zikis", "Haelus", "Frampton", "Audrea", "Vyloris", "Tarnos", "Canisa & Ruke", "Veithael", "Olgath", "Daemia", "Liberta", "Lucilla", "Lavatune", "Malkrie", "Khaltin", "Aurelia", "Knox", "Lysander", "Serenmira", "None"]
+unlimited_summons_tap_next = [850, 1830]
+unlimited_summons_tap_record = [400, 1830]

@@ -52,6 +52,9 @@ task_defaults = {
     "Claim quests": False,
     "Claim free merchants": False,
     "Event markers": False,
+    # unlimited summons
+    "Awakened": "aTalene",
+    "Celepog": "Athalia",
 }
 
 class ConfigManager:
@@ -110,6 +113,8 @@ class ConfigManager:
             task: (
                 self.config.getboolean("Tasks", task, fallback=default)
                 if isinstance(default, bool)
+                else self.config.get("Tasks", task, fallback=default)
+                if isinstance(default, str)
                 else self.config.getint("Tasks", task, fallback=default)
             )
             for task, default in task_defaults.items()

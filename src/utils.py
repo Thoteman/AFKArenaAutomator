@@ -15,6 +15,8 @@ def resource_path(relative_path):
 def get_config_path():
     # We'll store the real config in the same directory as the .exe
     exe_dir = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else __file__)
+    if exe_dir.endswith("src"):
+        exe_dir = exe_dir[:-4]  # Remove 'src' from the path
     target_path = os.path.join(exe_dir, "config.ini")
 
     # If it doesn't exist yet, copy from the bundled resource
@@ -202,6 +204,36 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
                         time.sleep(delay)
                 
                 return
+            
+            case "unlimited":
+                if find_image(scrcpy.last_frame, resource_path("res/unlimited/text.png")):
+                    tap(device_id, 730, 1650)
+                    time.sleep(delay)
+                    tap(device_id, 850, 1830)
+                    time.sleep(delay)
+                    return
+                
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
+                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    time.sleep(delay)
+
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
+                    time.sleep(delay)
+
+                if not find_image(scrcpy.last_frame, resource_path("res/unlimited/icon.png")):
+                    tap(device_id, 100, 400)
+                    time.sleep(delay)
+
+                if find_image(scrcpy.last_frame, resource_path("res/unlimited/icon.png"), threshold=0.8):
+                    tap_image(device_id, scrcpy.last_frame, resource_path("res/unlimited/icon.png"), threshold=0.8)
+                    time.sleep(delay)
+                    tap(device_id, 730, 1650)
+                    time.sleep(delay)
+                    tap(device_id, 850, 1830)
+                    time.sleep(delay)
+                    return
+
     except Exception as e:
         print(e)
         raise

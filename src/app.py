@@ -7,7 +7,7 @@ from datetime import datetime
 import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
-from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action
+from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action, unlimited_summons
 
 class BotApp:
     def __init__(self, root):
@@ -23,7 +23,7 @@ class BotApp:
         tasks = self.config_manager.load_tasks()
 
         self.task_vars = {
-            task: (tb.BooleanVar(value=val) if isinstance(val, bool) else tb.IntVar(value=val))
+            task: (tb.BooleanVar(value=val) if isinstance(val, bool) else tb.StringVar(value=val) if isinstance(val, str) else tb.IntVar(value=val))
             for task, val in {**globals, **tasks}.items()
         }
 
@@ -82,12 +82,13 @@ class BotApp:
             "Push Forsaken Necropolis": lambda: threading.Thread(target=auto_push_gb, args=(self.log,), daemon=True).start(),
             "Push Celestial Sanctum": lambda: threading.Thread(target=auto_push_cel, args=(self.log,), daemon=True).start(),
             "Push Infernal Fortress": lambda: threading.Thread(target=auto_push_hypo, args=(self.log,), daemon=True).start(),
-            # "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
+            "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
+            "Unlimited Summons": lambda: threading.Thread(target=unlimited_summons, args=(self.log,), daemon=True).start(),
         }
 
         btn_texts = button_actions.keys()
         for text in btn_texts:
-            pady = (5, 25) if text == "Settings" or text == "Daily tasks" else 5
+            pady = (5, 25) if text == "Settings" or text == "Daily tasks" or text == "Push Infernal Fortress" or text == "Unlimited Summons" else 5
             tb.Button(left_panel, text=text, bootstyle=PRIMARY, width=25, command=button_actions[text]).pack(pady=pady)
         tb.Button(left_panel, text="Stop Current Action", bootstyle=DANGER, width=25, command=lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start()).pack(pady=(25, 5))
 

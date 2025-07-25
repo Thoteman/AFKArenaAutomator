@@ -1,7 +1,9 @@
 # src/settings_window.py
+from numpy import var
 import ttkbootstrap as tb
 from tkinter import Toplevel, BooleanVar
 from src.config_manager import ConfigManager, global_defaults
+from src.strings import combobox_awakened, combobox_celepog
 
 class SettingsWindow:
     def __init__(self, master, config: ConfigManager, task_vars: dict, logger):
@@ -11,11 +13,21 @@ class SettingsWindow:
         self.original_task_vars = task_vars
         self.logger = logger
 
-        self.task_vars = {
-            key: (tb.BooleanVar(value=var.get()) if isinstance(var, tb.BooleanVar)
-                  else tb.IntVar(value=var.get()))
-            for key, var in task_vars.items()
-        }
+        self.task_vars = {}
+        for key, var in task_vars.items():
+            try:
+                value = var.get()
+            except Exception:
+                value = var
+
+            if isinstance(var, tb.BooleanVar):
+                self.task_vars[key] = tb.BooleanVar(value=value)
+            elif isinstance(var, tb.StringVar):
+                self.task_vars[key] = tb.StringVar(value=value)
+            elif isinstance(var, str):
+                self.task_vars[key] = tb.StringVar(value=value)
+            elif isinstance(var, tb.IntVar):
+                self.task_vars[key] = tb.IntVar(value=value)
 
         self.build_ui()
         self.top.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -79,6 +91,10 @@ class SettingsWindow:
                 "Claim free merchants",
                 "Event markers",
             ],
+            "Unlimited Summons": [
+                "Awakened",
+                "Celepog",
+            ],
         }
 
         for i, (category, tasks) in enumerate(categories.items()):
@@ -91,6 +107,12 @@ class SettingsWindow:
                     tb.Checkbutton(
                         col, text=task, variable=var, bootstyle="success-round-toggle"
                     ).pack(anchor="w", pady=2)
+                elif task == "Awakened":
+                    tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
+                    tb.Combobox(col, value=combobox_awakened, textvariable=var, state='readonly').pack(anchor="w", pady=(0, 5))
+                elif task == "Celepog":
+                    tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
+                    tb.Combobox(col, value=combobox_celepog, textvariable=var, state='readonly').pack(anchor="w", pady=(0, 5))
                 else:
                     tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
                     tb.Entry(col, textvariable=var, width=5).pack(anchor="w", pady=(0, 5))
