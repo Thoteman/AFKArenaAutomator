@@ -2,6 +2,9 @@ from adbauto import *
 from src.utils import go_to_startscreen, is_color_match, choose_formation_to_copy, resource_path
 from src.strings import unlimited_summons_tap_next, unlimited_summons_tap_record
 import time
+from PIL import Image
+from datetime import datetime, timezone
+import cv2
 
 BACK_BUTTON = (30, 1890)
 DELAY = 3
@@ -1041,7 +1044,7 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened="None", celepog=
     try:
         go_to_startscreen(device_id, scrcpy, "unlimited", DELAY)
         found_summon = False
-        cycle = 0
+        cycle = 1
         while not found_summon:
             time.sleep(5)
             found_awakened = False
@@ -1061,13 +1064,22 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened="None", celepog=
             elif find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{celepog}.png"), threshold=0.8):
                 found_celepog = True
 
-            if found_awakened and found_celepog:
-                logger(f"Cycle {cycle}: Found the summon we want! Waiting for player to double-check...", "success")
-                found_summon = True
-                tap(device_id, unlimited_summons_tap_record[0], unlimited_summons_tap_record[1])
+            match found_awakened, found_celepog:
+                case (True, True):
+                    logger(f"Cycle {cycle}: Found the summon we want! Waiting for player to double-check...", "success")
+                    found_summon = True
+                    tap(device_id, unlimited_summons_tap_record[0], unlimited_summons_tap_record[1])
+
+                case (True, False):
+                    logger(f"Cycle {cycle}: Found the awakened summon we want, but not the celepog. Trying again...", "info")
+                
+                case (False, True):
+                    logger(f"Cycle {cycle}: Found the celepog summon we want, but not the awakened. Trying again...", "info")
+
+                case (False, False):
+                    logger(f"Cycle {cycle}: Found neither the awakened nor the celepog summon we want. Trying again...", "info")
 
             if not found_summon:
-                logger(f"Cycle {cycle}: Not the summon we want, trying again...", "info")
                 cycle += 1
                 for _ in range(2):
                     tap(device_id, unlimited_summons_tap_next[0], unlimited_summons_tap_next[1])
