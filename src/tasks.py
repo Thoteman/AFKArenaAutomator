@@ -1045,6 +1045,8 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened="None", celepog=
         go_to_startscreen(device_id, scrcpy, "unlimited", DELAY)
         found_summon = False
         cycle = 1
+        seen_awakened = 0
+        seen_celepog = 0
         while not found_summon:
             time.sleep(5)
             found_awakened = False
@@ -1058,26 +1060,28 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened="None", celepog=
                 found_awakened = True
             elif find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{awakened}.png"), threshold=0.8):
                 found_awakened = True
+                seen_awakened += 1
 
             if celepog == "None":
                 found_celepog = True
             elif find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{celepog}.png"), threshold=0.8):
                 found_celepog = True
+                seen_celepog += 1
 
             match found_awakened, found_celepog:
                 case (True, True):
-                    logger(f"Cycle {cycle}: Found the summon we want! Waiting for player to double-check...", "success")
+                    logger(f"Cycle {cycle} [Saw {awakened}{seen_awakened} time(s) and {celepog} {seen_celepog} time(s).]: Found the summon we want! Waiting for player to double-check...", "success")
                     found_summon = True
                     tap(device_id, unlimited_summons_tap_record[0], unlimited_summons_tap_record[1])
 
                 case (True, False):
-                    logger(f"Cycle {cycle}: Found the awakened summon we want, but not the celepog. Trying again...", "info")
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}]: Found {awakened}, but not {celepog}. Trying again...", "info")
                 
                 case (False, True):
-                    logger(f"Cycle {cycle}: Found the celepog summon we want, but not the awakened. Trying again...", "info")
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}]: Found {celepog}, but not {awakened}. Trying again...", "info")
 
                 case (False, False):
-                    logger(f"Cycle {cycle}: Found neither the awakened nor the celepog summon we want. Trying again...", "info")
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}]: Found neither {awakened} nor {celepog}. Trying again...", "info")
 
             if not found_summon:
                 cycle += 1
