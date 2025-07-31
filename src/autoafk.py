@@ -17,7 +17,11 @@ DELAY = 0
 def connect_emulator(logger):
     try:
         global DEVICE_ID
-        DEVICE_ID = get_emulator_device()
+
+        config = configparser.ConfigParser()
+        config.read(CONFIG_PATH)
+        port = int(config['Global']['Emulator Port']) if 'Emulator Port' in config['Global'] else 5555
+        DEVICE_ID = get_emulator_device(port)
         logger(f"Connected to emulator with device ID: {DEVICE_ID}", "success")
     except Exception as e:
         logger(f"Failed to connect to emulator: {e}", "error")
@@ -102,8 +106,17 @@ def unlimited_summons(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
 
-        Awakened = config['Tasks']['Awakened'] if 'Awakened' in config['Tasks'] else "None"
-        Celepog = config['Tasks']['Celepog'] if 'Celepog' in config['Tasks'] else "None"
+        Awakened = []
+        Awakened.append(config['Tasks']['Awakened'] if 'Awakened' in config['Tasks'] else "None")
+        Awakened.append(config['Tasks']['Awakened 2 (optional)'] if 'Awakened 2 (optional)' in config['Tasks'] else "None")
+        Awakened.append(config['Tasks']['Awakened 3 (optional)'] if 'Awakened 3 (optional)' in config['Tasks'] else "None")
+        Awakened = [a for a in Awakened if a != "None"]
+
+        Celepog = []
+        Celepog.append(config['Tasks']['Celepog'] if 'Celepog' in config['Tasks'] else "None")
+        Celepog.append(config['Tasks']['Celepog 2 (optional)'] if 'Celepog 2 (optional)' in config['Tasks'] else "None")
+        Celepog.append(config['Tasks']['Celepog 3 (optional)'] if 'Celepog 3 (optional)' in config['Tasks'] else "None")
+        Celepog = [c for c in Celepog if c != "None"]
 
         unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, Awakened, Celepog)
         stop_scrcpy_client(logger)

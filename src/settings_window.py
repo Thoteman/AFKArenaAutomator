@@ -44,6 +44,7 @@ class SettingsWindow:
         # Define task categories and their tasks
         categories = {
             "Global Settings": [
+                "Emulator Port",
                 "Test Server",
                 "Max Attempts",
                 "Delay",
@@ -111,10 +112,10 @@ class SettingsWindow:
                     tb.Checkbutton(
                         col, text=task, variable=var, bootstyle="success-round-toggle"
                     ).pack(anchor="w", pady=2)
-                elif task == "Awakened":
+                elif task.startswith("Awakened"):
                     tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
                     tb.Combobox(col, value=combobox_awakened, textvariable=var, state='readonly').pack(anchor="w", pady=(0, 5))
-                elif task == "Celepog":
+                elif task.startswith("Celepog"):
                     tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
                     tb.Combobox(col, value=combobox_celepog, textvariable=var, state='readonly').pack(anchor="w", pady=(0, 5))
                 else:

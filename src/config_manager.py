@@ -8,6 +8,7 @@ CONFIG_PATH = get_config_path()
 
 global_defaults = {
     # global settings
+    "Emulator Port": 5555,
     "Test Server": False,
     "Max Attempts": 3,
     "Delay": 3,

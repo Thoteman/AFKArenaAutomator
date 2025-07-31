@@ -1040,7 +1040,7 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         print(e)
         raise
 
-def unlimited_summons_cycle(device_id, scrcpy, logger, awakened="None", celepog="None"):
+def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[]):
     try:
         go_to_startscreen(device_id, scrcpy, "unlimited", DELAY)
         found_summon = False
@@ -1056,21 +1056,25 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened="None", celepog=
                 tap(device_id, unlimited_summons_tap_next[0], unlimited_summons_tap_next[1])
                 time.sleep(5)
 
-            if awakened == "None":
+            if awakened == []:
                 found_awakened = True
-            elif find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{awakened}.png"), threshold=0.8):
-                found_awakened = True
-                seen_awakened += 1
+            else:
+                for a in awakened:
+                    if find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{a}.png"), threshold=0.8):
+                        found_awakened = True
+                        seen_awakened += 1
 
-            if celepog == "None":
+            if celepog == []:
                 found_celepog = True
-            elif find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{celepog}.png"), threshold=0.8):
-                found_celepog = True
-                seen_celepog += 1
+            else:
+                for c in celepog:
+                    if find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{c}.png"), threshold=0.8):
+                        found_celepog = True
+                        seen_celepog += 1
 
             match found_awakened, found_celepog:
                 case (True, True):
-                    logger(f"Cycle {cycle} [Saw {awakened}{seen_awakened} time(s) and {celepog} {seen_celepog} time(s).]: Found the summon we want! Waiting for player to double-check...", "success")
+                    logger(f"Cycle {cycle} [Saw {awakened} {seen_awakened} time(s) and {celepog} {seen_celepog} time(s).]: Found the summon we want! Waiting for player to double-check...", "success")
                     found_summon = True
                     tap(device_id, unlimited_summons_tap_record[0], unlimited_summons_tap_record[1])
 

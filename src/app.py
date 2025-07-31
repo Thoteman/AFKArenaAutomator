@@ -4,6 +4,7 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.style import Style
 from tkinter import messagebox
 from datetime import datetime
+from importlib import resources
 import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
@@ -12,7 +13,7 @@ from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, 
 class BotApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("AutoAFK")
+        self.root.title("AFK Arena Automator")
         self.config_manager = ConfigManager()
 
         # Apply the theme directly
@@ -30,6 +31,7 @@ class BotApp:
 
         self.create_menu()
         self.build_layout()
+        # self.sanity_check_adbauto()
 
     def create_menu(self):
         menu_bar = tb.Menu(self.root)
@@ -60,7 +62,7 @@ class BotApp:
         messagebox.showinfo("Help", "Help info goes here.")
 
     def show_about(self):
-        messagebox.showinfo("About", "AFK Arena Bot\nVersion 1.0")
+        messagebox.showinfo("About", "AFK Arena Bot\nVersion 0.2.2 Beta\nDeveloped by Thoteman")
 
     def build_layout(self):
         frame = tb.Frame(self.root)
@@ -99,8 +101,8 @@ class BotApp:
         self.output = tb.ScrolledText(right_panel, wrap="word", height=25)
         self.output.pack(fill=BOTH, expand=True)
         self.output.config(state="disabled")
-        self.log("Welcome to AFK Arena Automator!\nDeveloped by Thoteman\nBrought to you by 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\n\n", "info", True)
-        self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nArcane Labyrinth / Draconis gift / Claim bags / Claim quests / Claim merchants are not yet implemented!\nI released this version already for testing / auto pushing towers!\n\n", "error", True)
+        self.log("Welcome to AFK Arena Automator!\nDeveloped by Thoteman from 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\nJoin the Floofpire Discord for support\n\n", "info", True)
+        self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nArcane Labyrinth / Draconis gift / Claim bags / Claim quests / Claim merchants are not yet implemented!\nI released this version already for testing / auto pushing towers / Unlimited summons!\n\n", "error", True)
                                                                               
 
     def log(self, message, level="info", no_timestamp=False):
@@ -131,3 +133,16 @@ class BotApp:
 
     def save_task_settings(self):
         self.config_manager.save_tasks({task: var.get() for task, var in self.task_vars.items()})
+
+    def sanity_check_adbauto(self):
+        try:
+            adb_path = resources.files("adbauto").joinpath("bin/adb.exe")
+            scrcpy_path = resources.files("adbauto").joinpath("scrcpy/scrcpy-server.jar")
+
+            self.log(f"[Sanity Check] adb.exe exists: {adb_path.exists()}", "info")
+            self.log(f"[Sanity Check] scrcpy-server.jar exists: {scrcpy_path.exists()}", "info")
+            self.log(f"[Sanity Check] adb.exe path: {adb_path}", "info")
+            self.log(f"[Sanity Check] scrcpy-server path: {scrcpy_path}", "info")
+
+        except Exception as e:
+            self.log(f"[Sanity Check ERROR] {e}", "error")
