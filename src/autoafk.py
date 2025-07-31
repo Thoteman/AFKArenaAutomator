@@ -15,23 +15,33 @@ MAX_ATTEMPTS = 0
 DELAY = 0
 
 def connect_emulator(logger):
-    global DEVICE_ID
-    DEVICE_ID = get_emulator_device()
-    logger(f"Connected to emulator with device ID: {DEVICE_ID}", "success")
+    try:
+        global DEVICE_ID
+        DEVICE_ID = get_emulator_device()
+        logger(f"Connected to emulator with device ID: {DEVICE_ID}", "success")
+    except Exception as e:
+        logger(f"Failed to connect to emulator: {e}", "error")
+        DEVICE_ID = ""
+        return
 
 def start_scrcpy_client(logger):
-    global DEVICE_ID, SCRCPY_CLIENT
-    if not DEVICE_ID:
-        logger("No device connected. Please connect to an emulator first.", "error")
+    try:
+        global DEVICE_ID, SCRCPY_CLIENT
+        if not DEVICE_ID:
+            logger("No device connected. Please connect to an emulator first.", "error")
+            return
+        
+        if SCRCPY_CLIENT:
+            logger("scrcpy client is already running.", "info")
+            return
+        
+        SCRCPY_CLIENT = start_scrcpy(DEVICE_ID)
+        logger("Started video stream.", "success")
         return
-    
-    if SCRCPY_CLIENT:
-        logger("scrcpy client is already running.", "info")
+    except Exception as e:
+        logger(f"Failed to start scrcpy client: {e}", "error")
+        SCRCPY_CLIENT = None
         return
-    
-    SCRCPY_CLIENT = start_scrcpy(DEVICE_ID)
-    logger("Started video stream.", "success")
-    return
 
 def stop_scrcpy_client(logger):
     global SCRCPY_CLIENT
@@ -92,10 +102,10 @@ def unlimited_summons(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
 
-        AWAKENED = config['Tasks']['Awakened'] if 'Awakened' in config['Tasks'] else "None"
-        CELEPOG = config['Tasks']['Celepog'] if 'Celepog' in config['Tasks'] else "None"
+        Awakened = config['Tasks']['Awakened'] if 'Awakened' in config['Tasks'] else "None"
+        Celepog = config['Tasks']['Celepog'] if 'Celepog' in config['Tasks'] else "None"
 
-        unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, AWAKENED, CELEPOG)
+        unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, Awakened, Celepog)
         stop_scrcpy_client(logger)
 
     except cv2.error:

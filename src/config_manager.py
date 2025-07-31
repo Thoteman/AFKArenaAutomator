@@ -54,7 +54,11 @@ task_defaults = {
     "Event markers": False,
     # unlimited summons
     "Awakened": "aTalene",
+    "Awakened 2 (optional)": "aTalene",
+    "Awakened 3 (optional)": "aTalene",
     "Celepog": "Athalia",
+    "Celepog 2 (optional)": "Athalia",
+    "Celepog 3 (optional)": "Athalia",
 }
 
 class ConfigManager:

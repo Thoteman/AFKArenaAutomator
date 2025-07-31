@@ -93,7 +93,11 @@ class SettingsWindow:
             ],
             "Unlimited Summons": [
                 "Awakened",
+                "Awakened 2 (optional)",
+                "Awakened 3 (optional)",
                 "Celepog",
+                "Celepog 2 (optional)",
+                "Celepog 3 (optional)",
             ],
         }
 
