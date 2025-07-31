@@ -60,6 +60,7 @@ task_defaults = {
     "Celepog": "Athalia",
     "Celepog 2 (optional)": "Athalia",
     "Celepog 3 (optional)": "Athalia",
+    "Overwrite on success": False,
 }
 
 class ConfigManager:

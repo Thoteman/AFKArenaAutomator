@@ -118,7 +118,9 @@ def unlimited_summons(logger):
         Celepog.append(config['Tasks']['Celepog 3 (optional)'] if 'Celepog 3 (optional)' in config['Tasks'] else "None")
         Celepog = [c for c in Celepog if c != "None"]
 
-        unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, Awakened, Celepog)
+        overwrite_on_success = config['Tasks']['Overwrite on success'] if 'Overwrite on success' in config['Tasks'] else "False"
+
+        unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, Awakened, Celepog, overwrite_on_success)
         stop_scrcpy_client(logger)
 
     except cv2.error:

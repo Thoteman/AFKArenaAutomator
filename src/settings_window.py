@@ -99,6 +99,7 @@ class SettingsWindow:
                 "Celepog",
                 "Celepog 2 (optional)",
                 "Celepog 3 (optional)",
+                "Overwrite on success",
             ],
         }
 

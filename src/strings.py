@@ -2,3 +2,4 @@ combobox_awakened = ["aTalene", "aEzizh", "aThane", "aBrutus", "aSolise", "aBade
 combobox_celepog = ["Athalia", "Ezizh", "Mehira", "Twins", "Zolrath", "Orthros", "Talene", "Wukong", "Khazard", "Mezoth", "Flora", "Zaphrael", "Lucretia", "Mortas", "Alna", "Morael", "Leofric", "Titus", "Zikis", "Haelus", "Framton", "Audrae", "Vyloris", "Tarnos", "Canisa&Ruke", "Veithael", "Olgath", "Daemia", "Liberta", "Lucilla", "Lavatune", "Malkrie", "Kalthin", "Aurelia", "Knox", "Lysander", "Serenmira", "None"]
 unlimited_summons_tap_next = [850, 1830]
 unlimited_summons_tap_record = [400, 1830]
+unlimited_summons_tap_replace = [720, 1550]

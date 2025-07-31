@@ -1,6 +1,6 @@
 from adbauto import *
 from src.utils import go_to_startscreen, is_color_match, choose_formation_to_copy, resource_path
-from src.strings import unlimited_summons_tap_next, unlimited_summons_tap_record
+from src.strings import unlimited_summons_tap_next, unlimited_summons_tap_record, unlimited_summons_tap_replace
 import time
 from PIL import Image
 from datetime import datetime, timezone
@@ -1040,13 +1040,14 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         print(e)
         raise
 
-def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[]):
+def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], overwrite_on_success="False"):
     try:
         go_to_startscreen(device_id, scrcpy, "unlimited", DELAY)
         found_summon = False
         cycle = 1
         seen_awakened = 0
         seen_celepog = 0
+        overwrite_on_success = True if overwrite_on_success == "True" else False
         while not found_summon:
             time.sleep(5)
             found_awakened = False
@@ -1077,6 +1078,9 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[]):
                     logger(f"Cycle {cycle} [Saw {awakened} {seen_awakened} time(s) and {celepog} {seen_celepog} time(s).]: Found the summon we want! Waiting for player to double-check...", "success")
                     found_summon = True
                     tap(device_id, unlimited_summons_tap_record[0], unlimited_summons_tap_record[1])
+                    time.sleep(5)
+                    if find_image(scrcpy.last_frame, resource_path("res/unlimited/replace_record.png")):
+                        tap(device_id, unlimited_summons_tap_replace[0], unlimited_summons_tap_replace[1])
 
                 case (True, False):
                     logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}]: Found {awakened}, but not {celepog}. Trying again...", "info")
