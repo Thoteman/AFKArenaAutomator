@@ -1049,6 +1049,7 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], 
         seen_celepog = 0
         seen_4f = 0
         overwrite_on_success = True if overwrite_on_success == "True" else False
+        double_4f = True if double_4f == "True" else False
         while not found_summon:
             time.sleep(5)
             found_awakened = False
@@ -1097,7 +1098,7 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], 
                     found_summon = True
                     tap(device_id, unlimited_summons_tap_record[0], unlimited_summons_tap_record[1])
                     time.sleep(5)
-                    if find_image(scrcpy.last_frame, resource_path("res/unlimited/replace_record.png")):
+                    if find_image(scrcpy.last_frame, resource_path("res/unlimited/replace_record.png")) and overwrite_on_success:
                         tap(device_id, unlimited_summons_tap_replace[0], unlimited_summons_tap_replace[1])
 
                 case (True, False, False):

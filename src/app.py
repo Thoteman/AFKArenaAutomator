@@ -62,7 +62,7 @@ class BotApp:
         messagebox.showinfo("Help", "Help info goes here.")
 
     def show_about(self):
-        messagebox.showinfo("About", "AFK Arena Bot\nVersion 0.2.4 Beta\nDeveloped by Thoteman")
+        messagebox.showinfo("About", "AFK Arena Bot\nVersion 0.2.5 Beta\nDeveloped by Thoteman")
 
     def build_layout(self):
         frame = tb.Frame(self.root)

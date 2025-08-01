@@ -128,7 +128,6 @@ def unlimited_summons(logger):
 
         overwrite_on_success = config['Tasks']['Overwrite on success'] if 'Overwrite on success' in config['Tasks'] else "False"
         double_4f = config['Tasks']['Double 4F'] if 'Double 4F' in config['Tasks'] else "False"
-        triple_4f = config['Tasks']['Triple 4F'] if 'Triple 4F' in config['Tasks'] else "False"
 
         unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, Awakened, Celepog, F4, overwrite_on_success, double_4f)
         stop_scrcpy_client(logger)
