@@ -1,5 +1,5 @@
 from adbauto import *
-from src.utils import go_to_startscreen, is_color_match, choose_formation_to_copy, resource_path
+from src.utils import go_to_startscreen, is_color_match, choose_formation_to_copy, resource_path, remove_duplicate_centers
 from src.strings import unlimited_summons_tap_next, unlimited_summons_tap_record, unlimited_summons_tap_replace
 import time
 from PIL import Image
@@ -1040,18 +1040,20 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         print(e)
         raise
 
-def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], overwrite_on_success="False"):
+def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], F4=[], overwrite_on_success="False", double_4f="False"):
     try:
         go_to_startscreen(device_id, scrcpy, "unlimited", DELAY)
         found_summon = False
         cycle = 1
         seen_awakened = 0
         seen_celepog = 0
+        seen_4f = 0
         overwrite_on_success = True if overwrite_on_success == "True" else False
         while not found_summon:
             time.sleep(5)
             found_awakened = False
             found_celepog = False
+            found_4f = False
 
             if find_image(scrcpy.last_frame, resource_path("res/unlimited/back.png")):
                 tap(device_id, unlimited_summons_tap_next[0], unlimited_summons_tap_next[1])
@@ -1073,23 +1075,48 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], 
                         found_celepog = True
                         seen_celepog += 1
 
-            match found_awakened, found_celepog:
-                case (True, True):
-                    logger(f"Cycle {cycle} [Saw {awakened} {seen_awakened} time(s) and {celepog} {seen_celepog} time(s).]: Found the summon we want! Waiting for player to double-check...", "success")
+            if F4 == []:
+                found_4f = True
+            else:
+                for f in F4:
+                    if double_4f:
+                        summoned_4f = find_all_images(scrcpy.last_frame, resource_path(f"res/unlimited/{f}.png"), threshold=0.8)
+                        summoned_4f = remove_duplicate_centers(summoned_4f)
+                        if len(summoned_4f) >= 2:
+                            found_4f = True
+                            seen_4f += len(summoned_4f)
+
+                    else:
+                        if find_image(scrcpy.last_frame, resource_path(f"res/unlimited/{f}.png"), threshold=0.8):
+                            found_4f = True
+                            seen_4f += 1
+
+            match found_awakened, found_celepog, found_4f:
+                case (True, True, True):
+                    logger(f"Cycle {cycle} [Saw {awakened} {seen_awakened} time(s), {celepog} {seen_celepog} time(s), and {F4} {seen_4f} time(s).]: Found the summon we want! Waiting for player to double-check...", "success")
                     found_summon = True
                     tap(device_id, unlimited_summons_tap_record[0], unlimited_summons_tap_record[1])
                     time.sleep(5)
                     if find_image(scrcpy.last_frame, resource_path("res/unlimited/replace_record.png")):
                         tap(device_id, unlimited_summons_tap_replace[0], unlimited_summons_tap_replace[1])
 
-                case (True, False):
-                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}]: Found {awakened}, but not {celepog}. Trying again...", "info")
-                
-                case (False, True):
-                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}]: Found {celepog}, but not {awakened}. Trying again...", "info")
+                case (True, False, False):
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found {awakened}, but not {celepog} and not {F4}. Trying again...", "info")
 
-                case (False, False):
-                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}]: Found neither {awakened} nor {celepog}. Trying again...", "info")
+                case (True, False, True):
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found {awakened} and {F4}, but not {celepog}. Trying again...", "info")
+
+                case (False, True, False):
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found {celepog}, but not {awakened} and not {F4}. Trying again...", "info")
+
+                case (False, True, True):
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found {celepog} and {F4}, but not {awakened}. Trying again...", "info")
+
+                case (False, False, False):
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found neither {awakened} nor {celepog} nor {F4}. Trying again...", "info")
+
+                case (False, False, True):
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found {F4}, but not {awakened} and not {celepog}. Trying again...", "info")
 
             if not found_summon:
                 cycle += 1

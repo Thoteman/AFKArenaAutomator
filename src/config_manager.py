@@ -54,13 +54,19 @@ task_defaults = {
     "Claim free merchants": False,
     "Event markers": False,
     # unlimited summons
-    "Awakened": "aTalene",
-    "Awakened 2 (optional)": "aTalene",
-    "Awakened 3 (optional)": "aTalene",
-    "Celepog": "Athalia",
-    "Celepog 2 (optional)": "Athalia",
-    "Celepog 3 (optional)": "Athalia",
+    "Awakened": "None",
+    "Awakened 2 (optional)": "None",
+    "Awakened 3 (optional)": "None",
+    "Celepog": "None",
+    "Celepog 2 (optional)": "None",
+    "Celepog 3 (optional)": "None",
+    "4F": "None",
+    "4F 2 (optional)": "None",
+    "4F 3 (optional)": "None",
+    "4F 4 (optional)": "None",
+    "4F 5 (optional)": "None",
     "Overwrite on success": False,
+    "Double 4F": False,
 }
 
 class ConfigManager:

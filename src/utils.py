@@ -1,6 +1,7 @@
 import configparser
 import time
 import sys, os, shutil
+import numpy as np
 from adbauto import *
 
 def resource_path(relative_path):
@@ -260,6 +261,26 @@ def filter_near_duplicates(points, y_threshold=5):
             filtered.append((x, y))
 
     return filtered
+
+def remove_duplicate_centers(centers, threshold=10):
+    """
+    Removes centers that are within threshold px in both X and Y from another center.
+    Uses NumPy for speed.
+    """
+    centers = np.array(centers, dtype=np.int32)
+    deduped = []
+
+    for center in centers:
+        if len(deduped) == 0:
+            deduped.append(center)
+            continue
+
+        kept = np.array(deduped)
+        diffs = np.abs(kept - center)
+        if not np.any(np.all(diffs <= threshold, axis=1)):
+            deduped.append(center)
+
+    return np.array(deduped, dtype=np.int32)
 
 def choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, delay=3):
     """

@@ -118,9 +118,19 @@ def unlimited_summons(logger):
         Celepog.append(config['Tasks']['Celepog 3 (optional)'] if 'Celepog 3 (optional)' in config['Tasks'] else "None")
         Celepog = [c for c in Celepog if c != "None"]
 
-        overwrite_on_success = config['Tasks']['Overwrite on success'] if 'Overwrite on success' in config['Tasks'] else "False"
+        F4 = []
+        F4.append(config['Tasks']['4F'] if '4F' in config['Tasks'] else "None")
+        F4.append(config['Tasks']['4F 2 (optional)'] if '4F 2 (optional)' in config['Tasks'] else "None")
+        F4.append(config['Tasks']['4F 3 (optional)'] if '4F 3 (optional)' in config['Tasks'] else "None")
+        F4.append(config['Tasks']['4F 4 (optional)'] if '4F 4 (optional)' in config['Tasks'] else "None")
+        F4.append(config['Tasks']['4F 5 (optional)'] if '4F 5 (optional)' in config['Tasks'] else "None")
+        F4 = [f for f in F4 if f != "None"]
 
-        unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, Awakened, Celepog, overwrite_on_success)
+        overwrite_on_success = config['Tasks']['Overwrite on success'] if 'Overwrite on success' in config['Tasks'] else "False"
+        double_4f = config['Tasks']['Double 4F'] if 'Double 4F' in config['Tasks'] else "False"
+        triple_4f = config['Tasks']['Triple 4F'] if 'Triple 4F' in config['Tasks'] else "False"
+
+        unlimited_summons_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, Awakened, Celepog, F4, overwrite_on_success, double_4f)
         stop_scrcpy_client(logger)
 
     except cv2.error:

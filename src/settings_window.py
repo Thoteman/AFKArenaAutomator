@@ -3,7 +3,7 @@ from numpy import var
 import ttkbootstrap as tb
 from tkinter import Toplevel, BooleanVar
 from src.config_manager import ConfigManager, global_defaults
-from src.strings import combobox_awakened, combobox_celepog
+from src.strings import combobox_awakened, combobox_celepog, combobox_4f
 
 class SettingsWindow:
     def __init__(self, master, config: ConfigManager, task_vars: dict, logger):
@@ -99,7 +99,13 @@ class SettingsWindow:
                 "Celepog",
                 "Celepog 2 (optional)",
                 "Celepog 3 (optional)",
+                "4F",
+                "4F 2 (optional)",
+                "4F 3 (optional)",
+                "4F 4 (optional)",
+                "4F 5 (optional)",
                 "Overwrite on success",
+                "Double 4F",
             ],
         }
 
@@ -119,6 +125,9 @@ class SettingsWindow:
                 elif task.startswith("Celepog"):
                     tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
                     tb.Combobox(col, value=combobox_celepog, textvariable=var, state='readonly').pack(anchor="w", pady=(0, 5))
+                elif task.startswith("4F"):
+                    tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
+                    tb.Combobox(col, value=combobox_4f, textvariable=var, state='readonly').pack(anchor="w", pady=(0, 5))
                 else:
                     tb.Label(col, text=task).pack(anchor="w", pady=(5, 0))
                     tb.Entry(col, textvariable=var, width=5).pack(anchor="w", pady=(0, 5))
