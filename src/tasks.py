@@ -1101,6 +1101,9 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], 
                     if find_image(scrcpy.last_frame, resource_path("res/unlimited/replace_record.png")) and overwrite_on_success:
                         tap(device_id, unlimited_summons_tap_replace[0], unlimited_summons_tap_replace[1])
 
+                case (True, True, False):
+                    logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found {awakened} and {celepog}, but not {F4}. Trying again...", "info")
+
                 case (True, False, False):
                     logger(f"Cycle {cycle} [{seen_awakened}/{seen_celepog}/{seen_4f}]: Found {awakened}, but not {celepog} and not {F4}. Trying again...", "info")
 
