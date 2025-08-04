@@ -18,9 +18,9 @@ def set_delay(delay):
         raise
 
 # All functions related to campaign screen
-def claim_afk_rewards(device_id, scrcpy):
+def claim_afk_rewards(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "campaign", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png")):
             tap(device_id,  scrcpy.resolution[0]//2, scrcpy.resolution[1]//5*4) # Hard coded to click chest, as depending on how long you have been afk it uses a different image
@@ -34,9 +34,9 @@ def claim_afk_rewards(device_id, scrcpy):
         print(e)
         raise
 
-def campaign_battle(device_id, scrcpy):
+def campaign_battle(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "campaign", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/campaign/begin_battle_button.png"))
@@ -63,7 +63,7 @@ def campaign_battle(device_id, scrcpy):
 
 def claim_fast_rewards(device_id, scrcpy, amount, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "campaign", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png")):
             if tap_img_when_visible(device_id, scrcpy, resource_path("res/campaign/fast_rewards.png")) or tap_img_when_visible(device_id, scrcpy, resource_path("res/campaign/fast_rewards_red.png")):
@@ -87,9 +87,9 @@ def claim_fast_rewards(device_id, scrcpy, amount, logger):
         print(e)
         raise
             
-def friendship_points(device_id, scrcpy):
+def friendship_points(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "rightbanner", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "rightbanner", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/banner/friends.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/banner/friends.png"))
@@ -105,9 +105,9 @@ def friendship_points(device_id, scrcpy):
         print(e)
         raise
 
-def loan_mercenaries(device_id, scrcpy):
+def loan_mercenaries(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "rightbanner", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "rightbanner", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/banner/friends.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/banner/friends.png"))
@@ -129,9 +129,9 @@ def loan_mercenaries(device_id, scrcpy):
         print(e)
         raise
 
-def read_mail(device_id, scrcpy, delete=False):
+def read_mail(device_id, scrcpy, logger, delete=False):
     try:
-        go_to_startscreen(device_id, scrcpy, "rightbanner", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "rightbanner", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/banner/mail.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/banner/mail.png"))
@@ -152,9 +152,9 @@ def read_mail(device_id, scrcpy, delete=False):
         print(e)
         raise
 
-def bounty_board(device_id, scrcpy):
+def bounty_board(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/bounty_board.png"))
@@ -201,9 +201,9 @@ def bounty_board(device_id, scrcpy):
         print(e)
         raise
 
-def claim_weekly_staves(device_id, scrcpy):
+def claim_weekly_staves(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
             tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/gg.png"), timeout=5, random_delay=True, threshold=0.8)
@@ -217,9 +217,9 @@ def claim_weekly_staves(device_id, scrcpy):
         print(e)
         raise
 
-def treasure_scramble(device_id, scrcpy):
+def treasure_scramble(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "arena", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "arena", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
             if tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/treasure_scramble.png"), random_delay=True, threshold=0.8):
@@ -241,7 +241,7 @@ def treasure_scramble(device_id, scrcpy):
             
 def arena_of_heroes(device_id, scrcpy, amount, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "arena", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "arena", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
             if tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/arena_of_heroes.png")):
@@ -285,9 +285,9 @@ def arena_of_heroes(device_id, scrcpy, amount, logger):
         print(e)
         raise
 
-def gladiator_coins(device_id, scrcpy):
+def gladiator_coins(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "arena", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "arena", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
             while not tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/legend_challenger.png")):
@@ -305,9 +305,9 @@ def gladiator_coins(device_id, scrcpy):
         print(e)
         raise
 
-def temporal_rift(device_id, scrcpy):
+def temporal_rift(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
             tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/temporal_rift.png"), threshold=0.8)
@@ -326,9 +326,9 @@ def temporal_rift(device_id, scrcpy):
         print(e)
         raise
 
-def kings_tower(device_id, scrcpy):
+def kings_tower(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
             tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -355,7 +355,7 @@ def kings_tower(device_id, scrcpy):
         
 def arcane_labyrinth(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
             tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/arcane_labyrinth.png"), threshold=0.8)
@@ -365,7 +365,7 @@ def arcane_labyrinth(device_id, scrcpy, logger):
         print(e)
         raise
 
-def claim_wall_reward(device_id, scrcpy):
+def claim_wall_reward(device_id, scrcpy, logger):
     try:
         if tap_img_when_visible(device_id, scrcpy, resource_path("res/city/wall_rewards.png"), timeout=5, random_delay=True):
             time.sleep(DELAY)
@@ -380,7 +380,7 @@ def claim_wall_reward(device_id, scrcpy):
 
 def wall_of_legends(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "citydown", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
         
         if find_image(scrcpy.last_frame, resource_path("res/city/wall_red.png")):
             tap_img_when_visible(device_id, scrcpy, resource_path("res/city/wall_red.png"))
@@ -442,9 +442,9 @@ def wall_of_legends(device_id, scrcpy, logger):
         print(e)
         raise
 
-def store_purchases(device_id, scrcpy, refreshes):
+def store_purchases(device_id, scrcpy, logger, refreshes):
     try:
-        go_to_startscreen(device_id, scrcpy, "citydown", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/city/store.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/city/store.png"))
@@ -484,9 +484,9 @@ def store_purchases(device_id, scrcpy, refreshes):
         print(e)
         raise
 
-def resonating_crystal(device_id, scrcpy):
+def resonating_crystal(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "citydown", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/city/crystal.png")):
             return False
@@ -515,9 +515,9 @@ def resonating_crystal(device_id, scrcpy):
         print(e)
         raise
 
-def hunting_contract(device_id, scrcpy):
+def hunting_contract(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "guild", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "guild", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/city/guild_hunt.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/city/guild_hunt.png"))
@@ -545,9 +545,9 @@ def hunting_contract(device_id, scrcpy):
         print(e)
         raise
 
-def guild_hunt(device_id, scrcpy):
+def guild_hunt(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "guild", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "guild", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/city/guild_hunt.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/city/guild_hunt.png"))
@@ -576,9 +576,9 @@ def guild_hunt(device_id, scrcpy):
         print(e)
         raise
 
-def twisted_realm(device_id, scrcpy):
+def twisted_realm(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "guild", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "guild", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/city/guild_hell.png")):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/city/guild_hell.png"))
@@ -608,9 +608,9 @@ def twisted_realm(device_id, scrcpy):
         print(e)
         raise
 
-def oak_inn_gifts(device_id, scrcpy):
+def oak_inn_gifts(device_id, scrcpy, logger):
     try:
-        go_to_startscreen(device_id, scrcpy, "cityup", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "cityup", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/city/inn.png"), threshold=0.8):
             tap_image(device_id, scrcpy.last_frame, resource_path("res/city/inn.png"), threshold=0.8)
@@ -631,7 +631,7 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
     try:
         while True:
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_campaign.png")):
-                go_to_startscreen(device_id, scrcpy, "campaign", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/campaign/begin_battle_button.png"), threshold=0.8)
@@ -670,7 +670,7 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                     tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"))
                     time.sleep(DELAY)
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
@@ -682,7 +682,7 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 time.sleep(DELAY)
 
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_tower.png")):
-                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -719,7 +719,7 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
@@ -733,7 +733,7 @@ def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 time.sleep(DELAY)
 
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_lb.png")):
-                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -772,7 +772,7 @@ def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
@@ -786,7 +786,7 @@ def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 time.sleep(DELAY)
 
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_m.png")):
-                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -825,7 +825,7 @@ def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
@@ -839,7 +839,7 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 time.sleep(DELAY)
 
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_w.png")):
-                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -878,7 +878,7 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
@@ -892,7 +892,7 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 time.sleep(DELAY)
 
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_gb.png")):
-                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -931,7 +931,7 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
@@ -945,7 +945,7 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 time.sleep(DELAY)
 
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_cel.png")):
-                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -984,7 +984,7 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
@@ -998,7 +998,7 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 time.sleep(DELAY)
 
             if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_hypo.png")):
-                go_to_startscreen(device_id, scrcpy, "darkforest", DELAY)
+                go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
@@ -1037,12 +1037,12 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     time.sleep(DELAY)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise
 
 def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], F4=[], overwrite_on_success="False", double_4f="False"):
     try:
-        go_to_startscreen(device_id, scrcpy, "unlimited", DELAY)
+        go_to_startscreen(device_id, scrcpy, logger, "unlimited", DELAY)
         found_summon = False
         cycle = 1
         seen_awakened = 0
@@ -1129,5 +1129,5 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], 
                     time.sleep(1)
 
     except Exception as e:
-        print(e)
+        logger(f"Error occurred: {e}", "error")
         raise

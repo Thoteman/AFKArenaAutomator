@@ -86,8 +86,7 @@ def take_screenshot(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def unlimited_summons(logger):
     try:
@@ -135,8 +134,7 @@ def unlimited_summons(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 
 def start_daily_tasks(logger):
@@ -163,7 +161,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting claiming AFK rewards...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = claim_afk_rewards(DEVICE_ID, SCRCPY_CLIENT)
+                result = claim_afk_rewards(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Claimed AFK rewards!\n", "success") if result else logger("Failed claming AFK rewards.\n", "error")
             time.sleep(DELAY)
@@ -173,7 +171,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting battle in Campaign...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = campaign_battle(DEVICE_ID, SCRCPY_CLIENT)
+                result = campaign_battle(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Campaign Battle completed!\n", "success") if result else logger("Campaign Battle failed.\n", "error")
             time.sleep(DELAY)
@@ -194,7 +192,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting to claim Friendship Points...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = friendship_points(DEVICE_ID, SCRCPY_CLIENT)
+                result = friendship_points(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Friendship Points claimed!\n", "success") if result else logger("Friendship Points claim failed.\n", "error")
             time.sleep(DELAY)
@@ -204,7 +202,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting to loan Mercenaries...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = loan_mercenaries(DEVICE_ID, SCRCPY_CLIENT)
+                result = loan_mercenaries(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Mercenaries loaned!\n", "success") if result else logger("Mercenaries loan failed.\n", "error")
             time.sleep(DELAY)
@@ -215,7 +213,7 @@ def start_daily_tasks(logger):
             delete = True if config['Tasks']['Delete Mail'] == 'True' else False
             logger("Starting to read Mail...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = read_mail(DEVICE_ID, SCRCPY_CLIENT, delete)
+                result = read_mail(DEVICE_ID, SCRCPY_CLIENT, logger, delete)
                 attempt += 1
             logger(f"Mail read{' and deleted' if delete else ''}!\n", "success") if result else logger("Mail reading failed.\n", "error")
             time.sleep(DELAY)
@@ -225,7 +223,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Bounty Board...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = bounty_board(DEVICE_ID, SCRCPY_CLIENT)
+                result = bounty_board(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Bounty Board completed!\n", "success") if result else logger("Bounty Board failed.\n", "error")
             time.sleep(DELAY)
@@ -236,7 +234,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Claim 10 weekly Staves (GG)...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = claim_weekly_staves(DEVICE_ID, SCRCPY_CLIENT)
+                result = claim_weekly_staves(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Weekly Staves claimed!\n", "success") if result else logger("Weekly Staves claim failed.\n", "error")
             time.sleep(DELAY)
@@ -246,7 +244,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Claim Treasure Scramble resources...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = treasure_scramble(DEVICE_ID, SCRCPY_CLIENT)
+                result = treasure_scramble(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Treasure Scramble resources claimed!\n", "success") if result else logger("Treasure Scramble resources claim failed.\n", "error")
             time.sleep(DELAY)
@@ -268,7 +266,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Claiming Gladiator Coins...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = gladiator_coins(DEVICE_ID, SCRCPY_CLIENT)
+                result = gladiator_coins(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Gladiator Coins claimed!\n", "success") if result else logger("Gladiator Coins claim failed.\n", "error")
             time.sleep(DELAY)  
@@ -278,7 +276,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Temporal Rift Fountain task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = temporal_rift(DEVICE_ID, SCRCPY_CLIENT)
+                result = temporal_rift(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Temporal Rift fountain collected!\n", "success") if result else logger("Temporal Rift fountain failed.\n", "error")
             time.sleep(DELAY)
@@ -288,7 +286,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting King's Tower Battle task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = kings_tower(DEVICE_ID, SCRCPY_CLIENT)
+                result = kings_tower(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("King's Tower Battle completed!\n", "success") if result else logger("King's Tower Battle failed.\n", "error")
             time.sleep(DELAY)
@@ -310,7 +308,7 @@ def start_daily_tasks(logger):
             amount_of_refreshes = int(config['Tasks']['Amount of Refreshes'])
             logger("Starting Store Purchases...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result, amount = store_purchases(DEVICE_ID, SCRCPY_CLIENT, amount_of_refreshes)
+                result, amount = store_purchases(DEVICE_ID, SCRCPY_CLIENT, logger, amount_of_refreshes)
                 amount_of_refreshes -= amount
                 attempt += 1
             logger("Store Purchases completed!\n", "success") if result else logger("Store Purchases failed.\n", "error")
@@ -321,7 +319,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Resonating Crystal task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = resonating_crystal(DEVICE_ID, SCRCPY_CLIENT)
+                result = resonating_crystal(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Resonating Crystal leveled!\n", "success") if result else logger("Not enough resources to level Resonating Crystal.\n", "error")
             time.sleep(DELAY)
@@ -331,7 +329,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Hunting Contract task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = hunting_contract(DEVICE_ID, SCRCPY_CLIENT)
+                result = hunting_contract(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Hunting Contract completed!\n", "success") if result else logger("Hunting Contract failed.\n", "error")
             time.sleep(DELAY)
@@ -341,7 +339,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Guild hunt task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = guild_hunt(DEVICE_ID, SCRCPY_CLIENT)
+                result = guild_hunt(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Guild hunt completed!\n", "success") if result else logger("Guild hunt failed.\n", "error")
             time.sleep(DELAY)
@@ -351,7 +349,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Twisted Realm task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = twisted_realm(DEVICE_ID, SCRCPY_CLIENT)
+                result = twisted_realm(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Twisted Realm completed!\n", "success") if result else logger("Twisted Realm failed.\n", "error")
             time.sleep(DELAY)
@@ -361,7 +359,7 @@ def start_daily_tasks(logger):
             result = False
             logger("Starting Oak Inn Gifts task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result = oak_inn_gifts(DEVICE_ID, SCRCPY_CLIENT)
+                result = oak_inn_gifts(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Oak Inn Gifts claimed!\n", "success") if result else logger("Oak Inn Gifts claim failed.\n", "error")
             time.sleep(DELAY)
@@ -370,8 +368,7 @@ def start_daily_tasks(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
         return
 
 def auto_push_campaign(logger):
@@ -399,8 +396,7 @@ def auto_push_campaign(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def auto_push_tower(logger):
     try:
@@ -426,8 +422,7 @@ def auto_push_tower(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def auto_push_lb(logger):
     try:
@@ -461,8 +456,7 @@ def auto_push_lb(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def auto_push_m(logger):
     try:
@@ -496,8 +490,7 @@ def auto_push_m(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def auto_push_w(logger):
     try:
@@ -531,8 +524,7 @@ def auto_push_w(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def auto_push_gb(logger):
     try:
@@ -566,8 +558,7 @@ def auto_push_gb(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def auto_push_cel(logger):
     try:
@@ -601,8 +592,7 @@ def auto_push_cel(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def auto_push_hypo(logger):
     try:
@@ -636,8 +626,7 @@ def auto_push_hypo(logger):
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
-        print(e)
-        logger("Something went wrong.", "error")
+        logger(f"Something went wrong: {e}", "error")
 
 def stop_action(logger):
     global SCRCPY_CLIENT

@@ -28,7 +28,7 @@ def get_config_path():
 
 BACK_BUTTON = (30, 1890)
 
-def check_afk_running(device_id):
+def check_afk_running(device_id, logger):
     """
     Get the current activity of the device.
     
@@ -41,12 +41,16 @@ def check_afk_running(device_id):
     # Use dumpsys to get the current focus activity
     # This command may vary based on the Android version and device
     # Ensure that 'grep' is available in the shell environment
-    current_activity = shell(device_id, "dumpsys window windows | grep -E 'mCurrentFocus'")
-    if "com.lilithgames.hgame.gp.id" in current_activity:
-        return "Test Server"
-    elif "com.lilithgame.hgame.gp" in current_activity:
-        return "Official Server"
-    return None
+    try:
+        current_activity = shell(device_id, "dumpsys window windows | grep -E 'mCurrentFocus'")
+        if "com.lilithgames.hgame.gp.id" in current_activity:
+            return "Test Server"
+        elif "com.lilithgame.hgame.gp" in current_activity:
+            return "Official Server"
+        return None
+    except Exception as e:
+        logger(f"Error checking AFK Arena running state: {e}", "error")
+        return None
 
 def start_afk(device_id):
     """
@@ -68,7 +72,7 @@ def start_afk_test(device_id):
     # Use the shell command to start the test server app
     shell(device_id, "am start -n com.lilithgames.hgame.gp.id/sh.lilithgame.hgame.AppActivity")
 
-def go_to_startscreen(device_id, scrcpy, task, delay=3):
+def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
     """
     Navigate to the start screen for this specific task.
     
@@ -79,7 +83,7 @@ def go_to_startscreen(device_id, scrcpy, task, delay=3):
         config = configparser.ConfigParser()
         config.read(get_config_path())
         test_server = bool(config['Global']['Test Server'])
-        running = check_afk_running(device_id)
+        running = check_afk_running(device_id, logger)
 
         if not running and not test_server:
             print("AFK Arena is not running. Starting the app...")
