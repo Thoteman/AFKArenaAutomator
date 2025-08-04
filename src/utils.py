@@ -50,7 +50,7 @@ def check_afk_running(device_id, logger):
         return None
     except Exception as e:
         logger(f"Error checking AFK Arena running state: {e}", "error")
-        return None
+        return "Error"
 
 def start_afk(device_id):
     """
