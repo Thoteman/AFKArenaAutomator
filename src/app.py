@@ -84,14 +84,15 @@ class BotApp:
             "Push Forsaken Necropolis": lambda: threading.Thread(target=auto_push_gb, args=(self.log,), daemon=True).start(),
             "Push Celestial Sanctum": lambda: threading.Thread(target=auto_push_cel, args=(self.log,), daemon=True).start(),
             "Push Infernal Fortress": lambda: threading.Thread(target=auto_push_hypo, args=(self.log,), daemon=True).start(),
-            # "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
+            "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
             "Unlimited Summons": lambda: threading.Thread(target=unlimited_summons, args=(self.log,), daemon=True).start(),
         }
 
         btn_texts = button_actions.keys()
         for text in btn_texts:
             pady = (5, 25) if text == "Settings" or text == "Daily tasks" or text == "Push Infernal Fortress" or text == "Unlimited Summons" else 5
-            tb.Button(left_panel, text=text, bootstyle=PRIMARY, width=25, command=button_actions[text]).pack(pady=pady)
+            state = "normal" if text != "Unlimited Summons" else "disabled" ##TODO: This is how to activate and deactivate buttons!
+            tb.Button(left_panel, text=text, bootstyle=PRIMARY, width=25, command=button_actions[text], state=state).pack(pady=pady)
         tb.Button(left_panel, text="Stop Current Action", bootstyle=DANGER, width=25, command=lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start()).pack(pady=(25, 5))
 
         # Right Panel (Output)
@@ -134,6 +135,7 @@ class BotApp:
     def save_task_settings(self):
         self.config_manager.save_tasks({task: var.get() for task, var in self.task_vars.items()})
 
+    ## TODO: Remove this function after beta testing
     def sanity_check_adbauto(self):
         try:
             adb_path = resources.files("adbauto").joinpath("bin/adb.exe")
