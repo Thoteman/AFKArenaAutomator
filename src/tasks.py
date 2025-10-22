@@ -51,6 +51,7 @@ def claim_afk_rewards(device_id, scrcpy, logger):
         print(e)
         raise
 
+
 def campaign_battle(device_id, scrcpy, logger):
     """
     Performs a campaign battle from the campaign screen.
@@ -136,6 +137,7 @@ def claim_fast_rewards(device_id, scrcpy, amount, logger):
     except Exception as e:
         print(e)
         raise
+
             
 def friendship_points(device_id, scrcpy, logger):
     """
@@ -169,6 +171,7 @@ def friendship_points(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
+
 
 def loan_mercenaries(device_id, scrcpy, logger):
     """
@@ -214,24 +217,40 @@ def loan_mercenaries(device_id, scrcpy, logger):
         print(e)
         raise
 
+
 def read_mail(device_id, scrcpy, logger, delete=False):
+    """
+    Reads and optionally deletes all mail.
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        delete (bool): Whether to delete all mail after reading.
+        
+    Returns:
+        bool: True if mail was read (and deleted if specified) successfully, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "rightbanner", DELAY)
 
-        if find_image(scrcpy.last_frame, resource_path("res/banner/mail.png")):
-            tap_image(device_id, scrcpy.last_frame, resource_path("res/banner/mail.png"))
+        if find_image(scrcpy.last_frame, resource_path("res/banner/friends.png")):
+            tap(device_id, banner_mail_button[0], banner_mail_button[1])
             time.sleep(DELAY)
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/banner/mail_read.png"), timeout=5, random_delay=True):
-                time.sleep(DELAY)
-                if delete:
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/banner/mail_delete.png"), timeout=5, random_delay=True):
-                        time.sleep(DELAY)
-                        tap_img_when_visible(device_id, scrcpy, resource_path("res/banner/mail_delete_confirm.png"), timeout=5, random_delay=True)
-                        time.sleep(DELAY)
-                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png")):
-                    tap(device_id, back_button[0], back_button[1])
+            ## This screen takes longer to load, so a little delay added
+            for _ in range(3):
+                if find_image(scrcpy.last_frame, resource_path("res/banner/mail_text.png")):
+                    tap(device_id, mail_claim_all_button[0], mail_claim_all_button[1])
                     time.sleep(DELAY)
-                return True
+                    if delete:
+                        tap(device_id, mail_delete_all_button[0], mail_delete_all_button[1])
+                        time.sleep(DELAY)
+                        tap(device_id, mail_delete_all_confirm_button[0], mail_delete_all_confirm_button[1])
+                        time.sleep(DELAY)
+                        while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png")):
+                            tap(device_id, back_button[0], back_button[1])
+                            time.sleep(DELAY)
+                    return True
+                time.sleep(DELAY)
         return False
     except Exception as e:
         print(e)
