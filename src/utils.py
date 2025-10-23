@@ -3,6 +3,7 @@ import time
 import sys, os, shutil
 import numpy as np
 from adbauto import *
+from src.strings import formations_button, formations_use_button, artifacts_confirm_button, artifacts_checkmark_1, artifacts_checkmark_2
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -288,80 +289,88 @@ def remove_duplicate_centers(centers, threshold=10):
 
 def choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, delay=3):
     """
-    Chooses a formation based on the provided formation number.
+    Choose a formation to copy based on the formation number.
     
     Args:
-        device_id: The ID of the ADB device.
-        scrcpy: The Scrcpy instance for capturing frames.
-        formation_no: The formation number to select (1-6).
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+        delay (int): Delay in seconds for waiting between actions. Default is 3.
     """
     try:
-        if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/formations.png"), timeout=5, random_delay=True):
+        tap(device_id, formations_button[0], formations_button[1])
+        time.sleep(delay)
+        ## This screen takes longer to load, so a little delay added
+        for _ in range(3):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/formations_text.png")):
+                time.sleep(delay)
+
+        formations = find_all_images(scrcpy.last_frame, resource_path("res/autopush/formations_select.png"))
+        formations = filter_near_duplicates(formations)
+        if len(formations) == 0:
+            logger("No formations available, using current formation.", "warning")
+            formation_using = 0
+            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
             time.sleep(delay)
+        elif formation_no > len(formations):
+            logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
+            formation_using = len(formations)
+        else:
+            formation_using = formation_no
 
-            formations = find_all_images(scrcpy.last_frame, resource_path("res/autopush/formations_select.png"))
-            formations = filter_near_duplicates(formations)
-            if len(formations) == 0:
-                logger("No formations available, using current formation.", "warning")
-                formation_using = 0
-                tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
-                time.sleep(delay)
-            elif formation_no > len(formations):
-                logger(f"Formation {formation_no} not available, using last formation instead.", "warning")
-                formation_using = len(formations)
-            else:
-                formation_using = formation_no
-
-            if formation_using > 0:
-                tap(device_id, formations[formation_using - 1][0], formations[formation_using - 1][1])
-                time.sleep(delay)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/formations_use.png"), timeout=5, random_delay=True):
-                    time.sleep(delay)
-                    
+        if formation_using > 0:
+            tap(device_id, formations[formation_using - 1][0], formations[formation_using - 1][1])
+            time.sleep(delay)
+            for _ in range(3):
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/battle_statistics_text.png")):
+                    tap(device_id, formations_use_button[0], formations_use_button[1])
                     set_artifacts(device_id, scrcpy, artifacts, delay)
+                    time.sleep(delay)
+                    tap(device_id, artifacts_confirm_button[0], artifacts_confirm_button[1])
+                    time.sleep(delay)
+                    return
+                time.sleep(delay)   
     except Exception as e:
         print(e)
         raise
 
 def set_artifacts(device_id, scrcpy, artifacts, delay = 3):
     """
-    Sets the artifacts for the hero in the artifact selection screen.
+    Set artifacts based on the artifacts boolean.
     
     Args:
-        device_id: The ID of the ADB device.
-        scrcpy: The Scrcpy instance for capturing frames.
-        artifacts: A list of artifact names to set.
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+        delay (int): Delay in seconds for waiting between actions. Default is 3.
     """
     try:
-        if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_allselected.png")):
-            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_allselected.png"))
+        ## Wait for the artifacts screen to load
+        for _ in range(3):
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_text.png")):
+                break
+            time.sleep(delay)
+
+        if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_1_0.png")) or find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_1_1.png")):
+            tap(device_id, artifacts_checkmark_1[0], artifacts_checkmark_1[1])
             time.sleep(delay)
 
         if artifacts:
-            if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png")):
-                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png"))
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_0_1.png")):
+                return
+            else:
+                tap(device_id, artifacts_checkmark_2[0], artifacts_checkmark_2[1])
                 time.sleep(delay)
-                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png"))
-                time.sleep(delay)
-            elif find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png")):
-                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png"))
-                time.sleep(delay)
-
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_selected.png")):
                 return
         else:
-            if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png")):
-                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_inverted.png"))
-                time.sleep(delay)
-            elif find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_selected.png")):
-                tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/artifacts_selected.png"))
-                time.sleep(delay)
-
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_unselected.png")):
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/artifacts_0_0.png")):
                 return
-            
-        tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/artifacts_confirm.png"), delay=delay)
-        time.sleep(delay)
+            else:
+                tap(device_id, artifacts_checkmark_2[0], artifacts_checkmark_2[1])
+                time.sleep(delay)
+                return
     except Exception as e:
         print(e)
         raise

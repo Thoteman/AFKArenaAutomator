@@ -241,6 +241,8 @@ def read_mail(device_id, scrcpy, logger, delete=False):
                 if find_image(scrcpy.last_frame, resource_path("res/banner/mail_text.png")):
                     tap(device_id, mail_claim_all_button[0], mail_claim_all_button[1])
                     time.sleep(DELAY)
+                    tap(device_id, mail_claim_rewards_button[0], mail_claim_rewards_button[1])
+                    time.sleep(DELAY)
                     if delete:
                         tap(device_id, mail_delete_all_button[0], mail_delete_all_button[1])
                         time.sleep(DELAY)
@@ -257,54 +259,73 @@ def read_mail(device_id, scrcpy, logger, delete=False):
         raise
 
 def bounty_board(device_id, scrcpy, logger):
+    """
+    Manages the bounty board by claiming and dispatching bounties.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        
+    Returns:
+        bool: True if bounty board was managed successfully, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-            tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/bounty_board.png"))
+            tap(device_id, bounty_board_on_map[0], bounty_board_on_map[1])
             time.sleep(DELAY)
+            if find_image(scrcpy.last_frame, resource_path("res/darkforest/bounty_board_text.png")):
 
-            # This is only when an event is active
-            if tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/event_bounty_unselected.png")) or find_image(scrcpy.last_frame, resource_path("res/darkforest/event_bounty_selected.png")):
+                # This is only when an event is active
+                ## TODO: Rewrite this once there is a new event
+                # if tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/event_bounty_unselected.png")) or find_image(scrcpy.last_frame, resource_path("res/darkforest/event_bounty_selected.png")):
+                #     time.sleep(DELAY)
+                #     if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/event_bounty_claim.png"), timeout=5, random_delay=True):
+                #         time.sleep(DELAY)
+                #     while tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/event_bounty_dispatch.png")):
+                #         time.sleep(DELAY)
+                #         tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/event_bounty_herochoice.png"), timeout=5, random_delay=True, threshold=0.8)
+                #         time.sleep(DELAY)
+                #         tap(device_id, 118, 1482) # This is the upper left hero (what the game advices to send)
+                #         time.sleep(DELAY)
+                #         tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/event_bounty_start.png"), timeout=5, random_delay=True)
+                #         time.sleep(DELAY)
+
+                # This is the solo bounty board TODO: Make it possible to send each bounty on their own
+                tap(device_id, bounty_board_solo_flag[0], bounty_board_solo_flag[1])
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/event_bounty_claim.png"), timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                while tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/event_bounty_dispatch.png")):
-                    time.sleep(DELAY)
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/event_bounty_herochoice.png"), timeout=5, random_delay=True, threshold=0.8)
-                    time.sleep(DELAY)
-                    tap(device_id, 118, 1482) # This is the upper left hero (what the game advices to send)
-                    time.sleep(DELAY)
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/event_bounty_start.png"), timeout=5, random_delay=True)
-                    time.sleep(DELAY)
-
-            # This is the solo bounty board TODO: Make it possible to send each bounty on their own
-            if tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/solo_bounty_unselected.png")) or find_image(scrcpy.last_frame, resource_path("res/darkforest/solo_bounty_selected.png")):
+                tap(device_id, bounty_board_claim_all_button[0], bounty_board_claim_all_button[1])
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/solo_bounty_claim.png"), timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/solo_bounty_dispatch.png"), timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/solo_bounty_start.png"))
-                    time.sleep(DELAY)
-
-            # This is the team bounty board
-            if tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/team_bounty_unselected.png")) or find_image(scrcpy.last_frame, resource_path("res/darkforest/team_bounty_selected.png")):
+                tap(device_id, bounty_board_send_all_button[0], bounty_board_send_all_button[1])
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/solo_bounty_claim.png"), timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/solo_bounty_dispatch.png"), timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/solo_bounty_start.png"))
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/bounty_board_dispatch_text.png")):
+                    tap(device_id, bounty_board_dispatch_button[0], bounty_board_dispatch_button[1])
                     time.sleep(DELAY)
 
-            tap_img_when_visible(device_id, scrcpy, resource_path("res/global/back_arrow.png"), timeout=5, random_delay=True)
-            return True
+                # This is the team bounty board
+                tap(device_id, bounty_board_team_flag[0], bounty_board_team_flag[1])
+                time.sleep(DELAY)
+                tap(device_id, bounty_board_claim_all_button[0], bounty_board_claim_all_button[1])
+                time.sleep(DELAY)
+                tap(device_id, bounty_board_send_all_button[0], bounty_board_send_all_button[1])
+                time.sleep(DELAY)
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/bounty_board_dispatch_text.png")):
+                    tap(device_id, bounty_board_dispatch_button[0], bounty_board_dispatch_button[1])
+                    time.sleep(DELAY)
+
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png")):
+                    tap(device_id, back_button[0], back_button[1])
+                    time.sleep(DELAY)
+                return True
         return False
     except Exception as e:
         print(e)
         raise
 
+## TODO: Rewrite this function to use saved coordinates instead of images
+## TODO: Add timing memory as this needs to be done only once in a week
 def claim_weekly_staves(device_id, scrcpy, logger):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
@@ -732,17 +753,33 @@ def oak_inn_gifts(device_id, scrcpy, logger):
         raise
 
 def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, singlestage=False):
+    """
+    Automates pushing through campaign battles.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+        singlestage (bool): Whether to copy single stage battles. Default is False.
+    """
     try:
         while True:
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_campaign.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
 
-                if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/campaign/begin_battle_button.png"), threshold=0.8)
+                if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png")):
+                    tap(device_id, campaign_screen_battle_button[0], campaign_screen_battle_button[1])
                     time.sleep(DELAY)
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/campaign/begin_battle_button_multistage.png"), timeout=5, random_delay=True):
+                    ## If it is a multi stage battle, there is an extra button to tap
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/campaign/multi_battle_text.png")):
+                            tap(device_id, campaign_multi_battle_button[0], campaign_multi_battle_button[1])
+                            time.sleep(DELAY)
+                            break
                         time.sleep(DELAY)
-            print(singlestage, find_image(scrcpy.last_frame, resource_path("res/autopush/singlestage.png"), threshold=0.8), formation_no > 0)
+
             match singlestage, find_image(scrcpy.last_frame, resource_path("res/autopush/singlestage.png"), threshold=0.8), formation_no > 0:
                 case (True, _, True):
                     choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
@@ -753,26 +790,27 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                 case (_, _, False):
                     pass
 
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
+            if find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    level_up = False
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
                     time.sleep(30)
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0.png"), threshold=0.9):
-                            time.sleep(30)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(30)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"))
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/hero_xp_increase.png")):
+                            tap(device_id, exit_auto_battle_button[0], exit_auto_battle_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_text.png")):
+                                tap(device_id, continue_auto_battle_button[0], continue_auto_battle_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
