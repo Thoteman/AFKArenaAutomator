@@ -3,7 +3,7 @@ import time
 import sys, os, shutil
 import numpy as np
 from adbauto import *
-from src.strings import formations_button, formations_use_button, artifacts_confirm_button, artifacts_checkmark_1, artifacts_checkmark_2
+from src.strings import *
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -27,7 +27,6 @@ def get_config_path():
 
     return target_path
 
-BACK_BUTTON = (30, 1890)
 
 def check_afk_running(device_id, logger):
     """
@@ -103,7 +102,7 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
         match task:
             case "campaign":
                 while not find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_selected.png")) and not find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_unselected.png")):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
                             
                 if find_image(scrcpy.last_frame, resource_path("res/campaign/campaign_unselected.png")):
@@ -114,7 +113,7 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
             
             case "rightbanner":
                 while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
                 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
@@ -133,7 +132,7 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
             
             case "darkforest":
                 while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
                 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
@@ -147,26 +146,24 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
                     return
                 
                 while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
                 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
                     tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
                     time.sleep(delay)
 
-                if find_image(scrcpy.last_frame, resource_path("res/darkforest/arena.png")):
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/arena.png"))
-                    time.sleep(delay)
+                tap(device_id, arena_on_map[0], arena_on_map[1])
+                time.sleep(delay)
 
                 while not find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
-                
                 return
             
             case "citydown":
                 while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
                 
                 scroll(device_id, "up", 1200, 600)
@@ -176,7 +173,7 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
             
             case "cityup":
                 while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
                 
                 scroll(device_id, "down", 1200, 600)
@@ -191,7 +188,7 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
                     return
                 
                 while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
                 
                 scroll(device_id, "down", 1200, 600)
@@ -206,7 +203,7 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
                     while not find_image(scrcpy.last_frame, resource_path("res/city/guild_text.png")):
                         tap(device_id, scrcpy.resolution[0]//2, 2*scrcpy.resolution[1]//3)
                         time.sleep(delay)
-                        tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                        tap(device_id, back_button[0], back_button[1])
                         time.sleep(delay)
                 
                 return
@@ -220,7 +217,7 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
                     return
                 
                 while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
-                    tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+                    tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
@@ -312,7 +309,7 @@ def choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts,
         if len(formations) == 0:
             logger("No formations available, using current formation.", "warning")
             formation_using = 0
-            tap(device_id, BACK_BUTTON[0], BACK_BUTTON[1])
+            tap(device_id, back_button[0], back_button[1])
             time.sleep(delay)
         elif formation_no > len(formations):
             logger(f"Formation {formation_no} not available, using last formation instead.", "warning")

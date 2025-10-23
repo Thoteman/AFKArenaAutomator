@@ -324,14 +324,24 @@ def bounty_board(device_id, scrcpy, logger):
         print(e)
         raise
 
-## TODO: Rewrite this function to use saved coordinates instead of images
+
 ## TODO: Add timing memory as this needs to be done only once in a week
 def claim_weekly_staves(device_id, scrcpy, logger):
+    """
+    Claims weekly staves from the Ghoulish Gallery.
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        
+    Returns:
+        bool: True if weekly staves were claimed successfully, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-            tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/gg.png"), timeout=5, random_delay=True, threshold=0.8)
+            tap(device_id, ghoulish_gallery_on_map[0], ghoulish_gallery_on_map[1])
             time.sleep(DELAY)
             while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                 tap(device_id, back_button[0], back_button[1])
@@ -411,6 +421,17 @@ def arena_of_heroes(device_id, scrcpy, amount, logger):
         raise
 
 def gladiator_coins(device_id, scrcpy, logger):
+    """
+    Claims gladiator coins from the arena legends challenger chest.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        
+    Returns:
+        bool: True if gladiator coins were claimed successfully, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "arena", DELAY)
 
@@ -419,7 +440,9 @@ def gladiator_coins(device_id, scrcpy, logger):
                 #TODO: Check scroll distance when an event is active
                 scroll(device_id, "up", 300, scrcpy.resolution[0]//2, scrcpy.resolution[1]//2)
                 time.sleep(DELAY)
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/legend_challenger_chest1.png"), timeout=5, random_delay=True) or tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/legend_challenger_chest2.png"), timeout=5, random_delay=True):
+            if find_image(scrcpy.last_frame, resource_path("res/darkforest/legend_challenger_text.png")):
+                time.sleep(DELAY)
+                tap(device_id, arena_legends_challenger_chest[0], arena_legends_challenger_chest[1])
                 time.sleep(DELAY)
                 while not find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
                     tap(device_id, back_button[0], back_button[1])
@@ -431,16 +454,28 @@ def gladiator_coins(device_id, scrcpy, logger):
         raise
 
 def temporal_rift(device_id, scrcpy, logger):
+    """
+    Claims the afk rewards from the temporal rift fountain.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        
+    Returns:
+        bool: True if temporal rift rewards were claimed successfully, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-            tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/temporal_rift.png"), threshold=0.8)
+            tap(device_id, temporal_rift_on_map[0], temporal_rift_on_map[1])
             time.sleep(DELAY)
-            if not find_image(scrcpy.last_frame, resource_path("res/darkforest/temporal_fountain.png"), threshold=0.8):
-                tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
+            if not find_image(scrcpy.last_frame, resource_path("res/darkforest/temporal_rift_text.png")):
+                tap(device_id, middle_of_screen[0], middle_of_screen[1])
                 time.sleep(DELAY)
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/temporal_fountain.png"), timeout=5, random_delay=True):
+            if find_image(scrcpy.last_frame, resource_path("res/darkforest/temporal_rift_text.png")):
+                tap(device_id, temporal_rift_fountain[0], temporal_rift_fountain[1])
                 time.sleep(DELAY)
                 while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                     tap(device_id, back_button[0], back_button[1])
@@ -452,27 +487,55 @@ def temporal_rift(device_id, scrcpy, logger):
         raise
 
 def kings_tower(device_id, scrcpy, logger):
+    """
+    Performs a battle in the King's Tower.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        
+    Returns:
+        bool: True if the battle was completed, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-            tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+            tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
             time.sleep(DELAY)
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_main.png"), timeout=5, random_delay=True):
+            ## This screen takes longer to load, so a little delay added
+            for _ in range(3):
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                    break
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                    time.sleep(DELAY+3)
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
-                        time.sleep(DELAY+3)
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                            time.sleep(DELAY*2)
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/end_autobattle_button.png"), timeout=5, random_delay=True):
-                                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                                    tap(device_id, back_button[0], back_button[1])
-                                    time.sleep(DELAY)
-                                return True
+            tap(device_id, kings_tower_main[0], kings_tower_main[1])
+            time.sleep(DELAY)
+            ## This screen takes longer to load, so a little delay added
+            for _ in range(3):
+                if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_main_text.png")):
+                    break
+                time.sleep(DELAY)
+            tap(device_id, kings_tower_button[0], kings_tower_button[1])
+            time.sleep(DELAY)
+            ## This screen takes longer to load, so a little delay added
+            for _ in range(3):
+                if find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
+                    tap(device_id, start_battle_button[0], start_battle_button[1])
+                    time.sleep(DELAY)
+                    ## Confirm begin autobattle
+                    while find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
+                        time.sleep(1)
+                    tap(device_id, pause_battle_button[0], pause_battle_button[1])
+                    time.sleep(DELAY)
+                    tap(device_id, exit_battle_button[0], exit_battle_button[1])
+                    time.sleep(DELAY)
+                    while not find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
+                        time.sleep(1)
+                    while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
+                        tap(device_id, back_button[0], back_button[1])
+                        time.sleep(DELAY)
+                    return True
         return False
     except Exception as e:
         print(e)
@@ -790,6 +853,8 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                 case (_, _, False):
                     pass
 
+            time.sleep(DELAY)
+
             if find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
@@ -798,7 +863,7 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                 level_up = False
                 time.sleep(30)
                 while not level_up:
-                    time.sleep(30)
+                    time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
                     ## Check for level up screen
@@ -816,368 +881,510 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
         raise
 
 def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+    """
+    Automates pushing through King's Tower battles.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+    """
     try:
-
         while True:
-            if find_image(scrcpy.last_frame, resource_path("res/autopush/text_tower.png")):
-                tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True)
+            if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_main_text.png")):
+                tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
 
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_tower.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+                    tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
                     time.sleep(DELAY)
-
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_main.png"), timeout=5, random_delay=True):
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                            break
                         time.sleep(DELAY)
-
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                            time.sleep(DELAY)
+                    tap(device_id, kings_tower_main[0], kings_tower_main[1])
+                    time.sleep(DELAY)
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_main_text.png")):
+                            break
+                        time.sleep(DELAY)
+                    tap(device_id, kings_tower_button[0], kings_tower_button[1])
+                    time.sleep(DELAY)
 
             if formation_no > 0:
                 choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
-
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
-                    level_up = False
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0tower.png"), threshold=0.9):
-                            time.sleep(10)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(10)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"))
-                    time.sleep(DELAY)
 
+            if find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
+                time.sleep(DELAY)
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
+                    time.sleep(60)
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
+                    time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/items_placed_in_bag.png")):
+                            tap(device_id, exit_auto_battle_tower_button[0], exit_auto_battle_tower_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                                tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+    """
+    Automates pushing through King's Tower battles for Lightbearer faction.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+
+    Returns:
+        bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
+    """
     try:
-        
         while True:
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_lb.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
-                tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True)
+                tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
 
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_lb.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/battle_lightbearer.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+                    tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
                     time.sleep(DELAY)
-
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/kings_tower_lb.png"), timeout=5, random_delay=True):
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                            break
                         time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
-                            return True
-
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                            time.sleep(DELAY)
+                    tap(device_id, kings_tower_lightbearer[0], kings_tower_lightbearer[1])
+                    time.sleep(DELAY)
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/text_lb.png")):
+                            break
+                        time.sleep(DELAY)
+                    tap(device_id, kings_tower_button[0], kings_tower_button[1])
+                    time.sleep(DELAY)
 
             if formation_no > 0:
                 choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
-
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
-                    level_up = False
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0lb.png"), threshold=0.9):
-                            time.sleep(10)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(10)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"))
-                    time.sleep(DELAY)
 
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/battle_lightbearer.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
+                time.sleep(DELAY)
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
+                    time.sleep(60)
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
+                    time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/items_placed_in_bag.png")):
+                            tap(device_id, exit_auto_battle_tower_button[0], exit_auto_battle_tower_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                                tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
-    try:
+    """
+    Automates pushing through King's Tower battles for Mauler faction.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
         
+    Returns:
+        bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
+    """
+    try:
         while True:
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_m.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
-                tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True)
+                tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
 
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_m.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/battle_mauler.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+                    tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
                     time.sleep(DELAY)
-
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/kings_tower_m.png"), timeout=5, random_delay=True):
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                            break
                         time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
-                            return True
-
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                            time.sleep(DELAY)
+                    tap(device_id, kings_tower_mauler[0], kings_tower_mauler[1])
+                    time.sleep(DELAY)
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/text_m.png")):
+                            if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
+                                return True
+                            break
+                        time.sleep(DELAY)
+                    tap(device_id, kings_tower_button[0], kings_tower_button[1])
+                    time.sleep(DELAY)
 
             if formation_no > 0:
                 choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
-
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
-                    level_up = False
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0m.png"), threshold=0.9):
-                            time.sleep(10)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(10)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"))
-                    time.sleep(DELAY)
 
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/battle_mauler.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
+                time.sleep(DELAY)
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
+                    time.sleep(60)
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
+                    time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/items_placed_in_bag.png")):
+                            tap(device_id, exit_auto_battle_tower_button[0], exit_auto_battle_tower_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                                tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+    """
+    Automates pushing through King's Tower battles for Wilder faction.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+        
+    Returns:
+        bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
+    """
     try:
-
         while True:
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_w.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
-                tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True)
+                tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
 
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_w.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/battle_wilder.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+                    tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
                     time.sleep(DELAY)
-
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/kings_tower_w.png"), timeout=5, random_delay=True):
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                            break
                         time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
-                            return True
-
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                            time.sleep(DELAY)
+                    tap(device_id, kings_tower_wilder[0], kings_tower_wilder[1])
+                    time.sleep(DELAY)
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/text_w.png")):
+                            if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
+                                return True
+                            break
+                        time.sleep(DELAY)
+                    tap(device_id, kings_tower_button[0], kings_tower_button[1])
+                    time.sleep(DELAY)
 
             if formation_no > 0:
                 choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
-
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
-                    level_up = False
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0w.png"), threshold=0.9):
-                            time.sleep(10)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(10)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"))
-                    time.sleep(DELAY)
 
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/battle_wilder.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
+                time.sleep(DELAY)
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
+                    time.sleep(60)
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
+                    time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/items_placed_in_bag.png")):
+                            tap(device_id, exit_auto_battle_tower_button[0], exit_auto_battle_tower_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                                tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+    """
+    Automates pushing through King's Tower battles for Graveborn faction.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+        
+    Returns:
+        bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
+    """
     try:
-
         while True:
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_gb.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
-                tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True)
+                tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
 
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_gb.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/battle_graveborn.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+                    tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
                     time.sleep(DELAY)
-
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/kings_tower_gb.png"), timeout=5, random_delay=True):
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                            break
                         time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
-                            return True
-
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                            time.sleep(DELAY)
+                    tap(device_id, kings_tower_graveborn[0], kings_tower_graveborn[1])
+                    time.sleep(DELAY)
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/text_gb.png")):
+                            if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
+                                return True
+                            break
+                        time.sleep(DELAY)
+                    tap(device_id, kings_tower_button[0], kings_tower_button[1])
+                    time.sleep(DELAY)
 
             if formation_no > 0:
                 choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
-
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
-                    level_up = False
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0gb.png"), threshold=0.9):
-                            time.sleep(10)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png")):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(10)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8)
-                    time.sleep(DELAY)
 
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/battle_graveborn.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
+                time.sleep(DELAY)
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
+                    time.sleep(60)
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
+                    time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/items_placed_in_bag.png")):
+                            tap(device_id, exit_auto_battle_tower_button[0], exit_auto_battle_tower_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                                tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+    """
+    Automates pushing through King's Tower battles for Celestial faction.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+        
+    Returns:
+        bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
+    """
     try:
-
         while True:
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_cel.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
-                tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True)
+                tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
 
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_cel.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/battle_celestial.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+                    tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
                     time.sleep(DELAY)
-
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/kings_tower_cel.png"), timeout=5, random_delay=True):
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                            break
                         time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
-                            return True
-
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                            time.sleep(DELAY)
+                    tap(device_id, kings_tower_celestial[0], kings_tower_celestial[1])
+                    time.sleep(DELAY)
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/text_cel.png")):
+                            if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
+                                return True
+                            break
+                        time.sleep(DELAY)
+                    tap(device_id, kings_tower_button[0], kings_tower_button[1])
+                    time.sleep(DELAY)
 
             if formation_no > 0:
                 choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
-
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
-                    level_up = False
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0cel.png"), threshold=0.9):
-                            time.sleep(10)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png")):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(10)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8)
-                    time.sleep(DELAY)
 
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/battle_celestial.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
+                time.sleep(DELAY)
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
+                    time.sleep(60)
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
+                    time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/items_placed_in_bag.png")):
+                            tap(device_id, exit_auto_battle_tower_button[0], exit_auto_battle_tower_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                                tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+    """
+    Automates pushing through King's Tower battles for Hypogean faction.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        formation_no (int): The formation number to use. Default is 1.
+        artifacts (bool): Whether to copy artifacts. Default is True.
+        
+    Returns:
+        bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
+    """
     try:
-
         while True:
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_hypo.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
-                tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True)
+                tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
 
-            if not find_image(scrcpy.last_frame, resource_path("res/autopush/vs_hypo.png")):
+            if not find_image(scrcpy.last_frame, resource_path("res/autopush/battle_hypogean.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
                 if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-                    tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower.png"), threshold=0.8)
+                    tap(device_id, kings_tower_on_map[0], kings_tower_on_map[1])
                     time.sleep(DELAY)
-
-                    if tap_img_when_visible(device_id, scrcpy, resource_path("res/autopush/kings_tower_hypo.png"), timeout=5, random_delay=True):
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_text.png")):
+                            break
                         time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
-                            return True
-
-                        if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/kings_tower_battle.png"), timeout=5, random_delay=True):
-                            time.sleep(DELAY)
+                    tap(device_id, kings_tower_hypogean[0], kings_tower_hypogean[1])
+                    time.sleep(DELAY)
+                    ## This screen takes longer to load, so a little delay added
+                    for _ in range(3):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/text_hypo.png")):
+                            if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
+                                return True
+                            break
+                        time.sleep(DELAY)
+                    tap(device_id, kings_tower_button[0], kings_tower_button[1])
+                    time.sleep(DELAY)
 
             if formation_no > 0:
                 choose_formation_to_copy(device_id, scrcpy, logger, formation_no, artifacts, DELAY)
-
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/begin_autobattle_button.png"), timeout=5, random_delay=True):
                 time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/global/confirm_begin_autobattle_button.png"), timeout=5, random_delay=True, threshold=0.8):
-                    time.sleep(DELAY*2)
-                    level_up = False
-                    while not level_up:
-                        while find_image(scrcpy.last_frame, resource_path("res/autopush/push_0hypo.png"), threshold=0.9):
-                            time.sleep(10)
-                        tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                        time.sleep(DELAY)
-                        while not find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png")):
-                            tap(device_id, scrcpy.resolution[0] // 2, scrcpy.resolution[1] // 2)
-                            time.sleep(DELAY)
-                        if find_image(scrcpy.last_frame, resource_path("res/autopush/confirm_0.png")):
-                            tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_close.png"), threshold=0.8)
-                            time.sleep(10)
-                        else:
-                            level_up = True
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/autopush/confirm_exit.png"), threshold=0.8)
-                    time.sleep(DELAY)
 
+            if find_image(scrcpy.last_frame, resource_path("res/autopush/battle_hypogean.png")):
+                tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
+                time.sleep(DELAY)
+                tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
+                time.sleep(DELAY)
+                level_up = False
+                time.sleep(30)
+                while not level_up:
+                    time.sleep(60)
+                    tap(device_id, middle_of_screen[0], middle_of_screen[1])
+                    time.sleep(DELAY)
+                    ## Check for level up screen
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                        if find_image(scrcpy.last_frame, resource_path("res/autopush/items_placed_in_bag.png")):
+                            tap(device_id, exit_auto_battle_tower_button[0], exit_auto_battle_tower_button[1])
+                            time.sleep(DELAY)
+                            level_up = True
+                        else:
+                            while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
+                                tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
+                                time.sleep(DELAY)
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
