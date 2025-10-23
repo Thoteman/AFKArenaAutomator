@@ -92,21 +92,22 @@ class SettingsWindow:
                 "Claim free merchants",
                 "Event markers",
             ],
-            "Unlimited Summons": [
-                "Awakened",
-                "Awakened 2 (optional)",
-                "Awakened 3 (optional)",
-                "Celepog",
-                "Celepog 2 (optional)",
-                "Celepog 3 (optional)",
-                "4F",
-                "4F 2 (optional)",
-                "4F 3 (optional)",
-                "4F 4 (optional)",
-                "4F 5 (optional)",
-                "Overwrite on success",
-                "Double 4F",
-            ],
+            ## TODO: turn this on next time this event comes around
+            # "Unlimited Summons": [
+            #     "Awakened",
+            #     "Awakened 2 (optional)",
+            #     "Awakened 3 (optional)",
+            #     "Celepog",
+            #     "Celepog 2 (optional)",
+            #     "Celepog 3 (optional)",
+            #     "4F",
+            #     "4F 2 (optional)",
+            #     "4F 3 (optional)",
+            #     "4F 4 (optional)",
+            #     "4F 5 (optional)",
+            #     "Overwrite on success",
+            #     "Double 4F",
+            # ],
         }
 
         for i, (category, tasks) in enumerate(categories.items()):

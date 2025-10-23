@@ -258,6 +258,7 @@ def read_mail(device_id, scrcpy, logger, delete=False):
         print(e)
         raise
 
+
 def bounty_board(device_id, scrcpy, logger):
     """
     Manages the bounty board by claiming and dispatching bounties.
@@ -352,6 +353,7 @@ def claim_weekly_staves(device_id, scrcpy, logger):
         print(e)
         raise
 
+
 def treasure_scramble(device_id, scrcpy, logger):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "arena", DELAY)
@@ -373,7 +375,8 @@ def treasure_scramble(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
-            
+
+
 def arena_of_heroes(device_id, scrcpy, amount, logger):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "arena", DELAY)
@@ -420,6 +423,7 @@ def arena_of_heroes(device_id, scrcpy, amount, logger):
         print(e)
         raise
 
+
 def gladiator_coins(device_id, scrcpy, logger):
     """
     Claims gladiator coins from the arena legends challenger chest.
@@ -453,6 +457,7 @@ def gladiator_coins(device_id, scrcpy, logger):
         print(e)
         raise
 
+
 def temporal_rift(device_id, scrcpy, logger):
     """
     Claims the afk rewards from the temporal rift fountain.
@@ -485,6 +490,7 @@ def temporal_rift(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
+
 
 def kings_tower(device_id, scrcpy, logger):
     """
@@ -540,7 +546,8 @@ def kings_tower(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
-        
+
+
 def arcane_labyrinth(device_id, scrcpy, logger):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
@@ -552,6 +559,7 @@ def arcane_labyrinth(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
+
 
 def claim_wall_reward(device_id, scrcpy, logger):
     try:
@@ -565,6 +573,7 @@ def claim_wall_reward(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
+
 
 def wall_of_legends(device_id, scrcpy, logger):
     try:
@@ -630,6 +639,7 @@ def wall_of_legends(device_id, scrcpy, logger):
         print(e)
         raise
 
+
 def store_purchases(device_id, scrcpy, logger, refreshes):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
@@ -672,6 +682,7 @@ def store_purchases(device_id, scrcpy, logger, refreshes):
         print(e)
         raise
 
+
 def resonating_crystal(device_id, scrcpy, logger):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
@@ -703,6 +714,7 @@ def resonating_crystal(device_id, scrcpy, logger):
         print(e)
         raise
 
+
 def hunting_contract(device_id, scrcpy, logger):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "guild", DELAY)
@@ -732,6 +744,7 @@ def hunting_contract(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
+
 
 def guild_hunt(device_id, scrcpy, logger):
     try:
@@ -763,6 +776,7 @@ def guild_hunt(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
+
 
 def twisted_realm(device_id, scrcpy, logger):
     try:
@@ -796,6 +810,7 @@ def twisted_realm(device_id, scrcpy, logger):
         print(e)
         raise
 
+
 def oak_inn_gifts(device_id, scrcpy, logger):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "cityup", DELAY)
@@ -814,6 +829,7 @@ def oak_inn_gifts(device_id, scrcpy, logger):
     except Exception as e:
         print(e)
         raise
+
 
 def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, singlestage=False):
     """
@@ -879,6 +895,7 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
+
 
 def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     """
@@ -946,6 +963,7 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
+
 
 def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     """
@@ -1018,6 +1036,7 @@ def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
+
 
 def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     """
@@ -1093,6 +1112,7 @@ def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         logger(f"Error occurred: {e}", "error")
         raise
 
+
 def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Wilder faction.
@@ -1166,6 +1186,7 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
+
 
 def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     """
@@ -1241,6 +1262,7 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         logger(f"Error occurred: {e}", "error")
         raise
 
+
 def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Celestial faction.
@@ -1315,6 +1337,7 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         logger(f"Error occurred: {e}", "error")
         raise
 
+
 def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Hypogean faction.
@@ -1388,6 +1411,7 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
+
 
 def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], F4=[], overwrite_on_success="False", double_4f="False"):
     try:

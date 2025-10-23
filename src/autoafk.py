@@ -636,3 +636,25 @@ def stop_action(logger):
     
     logger("Stopping current action...", "info")
     stop_scrcpy_client(logger)
+
+def disable_buttons(buttons):
+    today = datetime.now(timezone.utc).weekday()
+    for button in buttons:
+
+        if button == "Push Tower of Light" and today not in [0, 4, 6]:
+            buttons[button].config(state="disabled")
+
+        if button == "Push Brutal Citadel" and today not in [1, 4, 6]:
+            buttons[button].config(state="disabled")
+
+        if button == "Push World Tree" and today not in [2, 5, 6]:
+            buttons[button].config(state="disabled")
+
+        if button == "Push Forsaken Necropolis" and today not in [3, 5, 6]:
+            buttons[button].config(state="disabled")
+
+        if button == "Push Celestial Sanctum" and today not in [2, 4, 6]:
+            buttons[button].config(state="disabled")
+
+        if button == "Push Infernal Fortress" and today not in [3, 5, 6]:
+            buttons[button].config(state="disabled")

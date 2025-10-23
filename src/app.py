@@ -8,7 +8,7 @@ from importlib import resources
 import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
-from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action, unlimited_summons
+from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action, unlimited_summons, disable_buttons
 
 class BotApp:
     def __init__(self, root):
@@ -28,6 +28,7 @@ class BotApp:
             for task, val in {**globals, **tasks}.items()
         }
 
+        self.buttons = {}
 
         self.create_menu()
         self.build_layout()
@@ -62,7 +63,7 @@ class BotApp:
         messagebox.showinfo("Help", "Help info goes here.")
 
     def show_about(self):
-        messagebox.showinfo("About", "AFK Arena Bot\nVersion 0.2.7 Beta\nDeveloped by Thoteman")
+        messagebox.showinfo("About", "AFK Arena Automator\nVersion 0.3.0 Beta\nDeveloped by Thoteman")
 
     def build_layout(self):
         frame = tb.Frame(self.root)
@@ -86,14 +87,19 @@ class BotApp:
             "Push Infernal Fortress": lambda: threading.Thread(target=auto_push_hypo, args=(self.log,), daemon=True).start(),
             "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
             "Unlimited Summons": lambda: threading.Thread(target=unlimited_summons, args=(self.log,), daemon=True).start(),
+            "Stop Current Action": lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start(),
         }
 
         btn_texts = button_actions.keys()
         for text in btn_texts:
             pady = (5, 25) if text == "Settings" or text == "Daily tasks" or text == "Push Infernal Fortress" or text == "Unlimited Summons" else 5
             state = "normal" if text != "Unlimited Summons" else "disabled" ##TODO: This is how to activate and deactivate buttons!
-            tb.Button(left_panel, text=text, bootstyle=PRIMARY, width=25, command=button_actions[text], state=state).pack(pady=pady)
-        tb.Button(left_panel, text="Stop Current Action", bootstyle=DANGER, width=25, command=lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start()).pack(pady=(25, 5))
+            style = PRIMARY if text != "Stop Current Action" else DANGER
+            btn = tb.Button(left_panel, text=text, bootstyle=style, width=25, command=button_actions[text], state=state)
+            btn.pack(pady=pady)
+            self.buttons[text] = btn
+
+        disable_buttons(self.buttons)
 
         # Right Panel (Output)
         right_panel = tb.Frame(frame)
