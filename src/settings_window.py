@@ -74,7 +74,6 @@ class SettingsWindow:
             "Ranhorn Tasks": [
                 "Store Purchases",
                 "Amount of Refreshes",
-                "Resonating Crystal",
                 "Hunting Contract",
                 "Guild hunt",
                 "Twisted Realm",

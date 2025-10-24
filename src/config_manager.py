@@ -37,7 +37,6 @@ task_defaults = {
     # ranhorn tasks
     "Store Purchases": False,
     "Amount of Refreshes": 3,
-    "Resonating Crystal": False,
     "Hunting Contract": False,
     "Guild hunt": False,
     "Twisted Realm": False,

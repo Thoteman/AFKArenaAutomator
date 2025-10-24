@@ -313,16 +313,6 @@ def start_daily_tasks(logger):
             logger("Store Purchases completed!\n", "success") if result else logger("Store Purchases failed.\n", "error")
             time.sleep(DELAY)
 
-        if config['Tasks']['Resonating Crystal'] == 'True':
-            attempt = 0
-            result = False
-            logger("Starting Resonating Crystal task...", "info")
-            while attempt < MAX_ATTEMPTS and not result:
-                result = resonating_crystal(DEVICE_ID, SCRCPY_CLIENT, logger)
-                attempt += 1
-            logger("Resonating Crystal leveled!\n", "success") if result else logger("Not enough resources to level Resonating Crystal.\n", "error")
-            time.sleep(DELAY)
-
         if config['Tasks']['Hunting Contract'] == 'True':
             attempt = 0
             result = False

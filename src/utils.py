@@ -162,12 +162,18 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
                 return
             
             case "citydown":
-                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
                     tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
-                
-                scroll(device_id, "up", 1200, 600)
+
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
                 time.sleep(delay)
+                tap(device_id, back_button[0], back_button[1])
+                time.sleep(delay)
+                
+                for _ in range(2):
+                    scroll(device_id, "up", 1200, 600)
+                    time.sleep(delay)
                 
                 return
             

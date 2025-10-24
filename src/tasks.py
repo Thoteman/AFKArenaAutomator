@@ -613,34 +613,53 @@ def arcane_labyrinth(device_id, scrcpy, logger):
 
 
 def store_purchases(device_id, scrcpy, logger, refreshes):
+    """
+    Performs store purchases in the city screen.
+    IMPORTANT: You need to have quick buy unlocked.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+        refreshes (int): The number of times to refresh the store.
+        
+    Returns:
+        tuple: A tuple containing a boolean indicating success and the number of refreshes used.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
 
-        if find_image(scrcpy.last_frame, resource_path("res/city/store.png")):
-            tap_image(device_id, scrcpy.last_frame, resource_path("res/city/store.png"))
-            time.sleep(DELAY)
+        if find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png"), threshold=0.8):
+            tap(device_id, store_on_map[0], store_on_map[1])
+            time.sleep(DELAY*2)
+
+            if not find_image(scrcpy.last_frame, resource_path("res/city/store_quickbuy.png")):
+                tap(device_id, back_button[0], back_button[1])
+                time.sleep(DELAY)
+                logger("Store already done today!", "info")
+                return True, 0
 
             refresh_count = 0
             
-            for refresh in range(refreshes + 1):  # +1 for the initial buy
+            for _ in range(refreshes + 1):  # +1 for the initial buy
                 if not find_image(scrcpy.last_frame, resource_path("res/city/store_text.png")):
                     tap(device_id, back_button[0], back_button[1])
                     time.sleep(DELAY)
                     return False, refresh_count
                 if find_image(scrcpy.last_frame, resource_path("res/city/store_quickbuy.png")):
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/city/store_quickbuy.png"))
+                    tap(device_id, store_quick_buy[0], store_quick_buy[1])
                     time.sleep(DELAY)
-                    if find_image(scrcpy.last_frame, resource_path("res/city/store_purchase.png"), threshold=0.8):
-                        tap_image(device_id, scrcpy.last_frame, resource_path("res/city/store_purchase.png"), threshold=0.8)
+                    if find_image(scrcpy.last_frame, resource_path("res/city/store_confirm_purchase_text.png"), threshold=0.8):
+                        tap(device_id, store_purchase_button[0], store_purchase_button[1])
                         time.sleep(DELAY)
                         tap(device_id, back_button[0], back_button[1])
                         time.sleep(DELAY)
                         if refresh_count != refreshes:
-                            if find_image(scrcpy.last_frame, resource_path("res/city/store_refresh.png")):
-                                tap_image(device_id, scrcpy.last_frame, resource_path("res/city/store_refresh.png"))
+                            if find_image(scrcpy.last_frame, resource_path("res/city/store_text.png")):
+                                tap(device_id, store_refresh_button[0], store_refresh_button[1])
                                 time.sleep(DELAY)
-                                if find_image(scrcpy.last_frame, resource_path("res/city/store_refresh_confirm.png")):
-                                    tap_image(device_id, scrcpy.last_frame, resource_path("res/city/store_refresh_confirm.png"))
+                                if find_image(scrcpy.last_frame, resource_path("res/city/store_refresh_text.png")):
+                                    tap(device_id, store_refresh_confirm_button[0], store_refresh_confirm_button[1])
                                     time.sleep(DELAY)
                                     refresh_count += 1
             while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png"), threshold=0.8):
@@ -650,38 +669,6 @@ def store_purchases(device_id, scrcpy, logger, refreshes):
             return True, refresh_count
 
         return False, 0
-    except Exception as e:
-        print(e)
-        raise
-
-
-def resonating_crystal(device_id, scrcpy, logger):
-    try:
-        go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
-
-        if find_image(scrcpy.last_frame, resource_path("res/city/crystal.png")):
-            return False
-
-        if find_image(scrcpy.last_frame, resource_path("res/city/crystal_red.png")):
-            tap_image(device_id, scrcpy.last_frame, resource_path("res/city/crystal_red.png"))
-            time.sleep(DELAY)
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/city/crystal_levelup.png"), timeout=5, random_delay=True):
-                time.sleep(DELAY)
-                if tap_img_when_visible(device_id, scrcpy, resource_path("res/city/crystal_confirm.png"), timeout=5, random_delay=True):
-                    time.sleep(DELAY)
-                    while not find_image(scrcpy.last_frame, resource_path("res/city/crystal_strengthen.png")):
-                        tap(device_id, back_button[0], back_button[1])
-                        time.sleep(DELAY)
-            while find_image(scrcpy.last_frame, resource_path("res/city/crystal_strengthen.png")):
-                tap_image(device_id, scrcpy.last_frame, resource_path("res/city/crystal_strengthen.png"))
-                time.sleep(DELAY/2)
-            while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png"), threshold=0.8):
-                tap(device_id, back_button[0], back_button[1])
-                time.sleep(DELAY)
-            tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
-            return True
-        tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
-        return False
     except Exception as e:
         print(e)
         raise
