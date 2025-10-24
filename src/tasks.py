@@ -83,6 +83,8 @@ def campaign_battle(device_id, scrcpy, logger):
                     tap(device_id, start_battle_button[0], start_battle_button[1])
                     time.sleep(DELAY)
                     ## Confirm begin autobattle
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                        return False
                     while find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
                         time.sleep(1)
                     tap(device_id, pause_battle_button[0], pause_battle_button[1])
@@ -529,6 +531,8 @@ def kings_tower(device_id, scrcpy, logger):
                 if find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
                     tap(device_id, start_battle_button[0], start_battle_button[1])
                     time.sleep(DELAY)
+                    if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                        return False
                     ## Confirm begin autobattle
                     while find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
                         time.sleep(1)
@@ -549,92 +553,60 @@ def kings_tower(device_id, scrcpy, logger):
 
 
 def arcane_labyrinth(device_id, scrcpy, logger):
+    """
+    Completes the Arcane Labyrinth.
+    IMPORTANT: You need to have the Dismal Labyrinth with sweeping unlocked.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+    
+    Returns:
+        bool: True if the Arcane Labyrinth was completed successfully, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
 
         if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
-            tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/arcane_labyrinth.png"), threshold=0.8)
+            tap(device_id, labyrinth_on_map[0], labyrinth_on_map[1])
             time.sleep(DELAY)
-            #TODO: Implement Arcane Labyrinth tasks
-    except Exception as e:
-        print(e)
-        raise
-
-
-def claim_wall_reward(device_id, scrcpy, logger):
-    try:
-        if tap_img_when_visible(device_id, scrcpy, resource_path("res/city/wall_rewards.png"), timeout=5, random_delay=True):
+            ## This screen takes longer to load, so a little delay added
+            for _ in range(3):
+                if not find_image(scrcpy.last_frame, resource_path("res/darkforest/labyrinth_text.png")):
+                    time.sleep(DELAY)
+                else:
+                    break
+            tap(device_id, labyrinth_dismal_maze[0], labyrinth_dismal_maze[1])
             time.sleep(DELAY)
-            if tap_img_when_visible(device_id, scrcpy, resource_path("res/city/wall_claim.png"), timeout=5, random_delay=True):
-                time.sleep(DELAY)
-        while not find_image(scrcpy.last_frame, resource_path("res/city/wall_text.png")):
-            tap(device_id, back_button[0], back_button[1])
-            time.sleep(DELAY)
-    except Exception as e:
-        print(e)
-        raise
-
-
-def wall_of_legends(device_id, scrcpy, logger):
-    try:
-        go_to_startscreen(device_id, scrcpy, logger, "citydown", DELAY)
-        
-        if find_image(scrcpy.last_frame, resource_path("res/city/wall_red.png")):
-            tap_img_when_visible(device_id, scrcpy, resource_path("res/city/wall_red.png"))
-            time.sleep(DELAY)
-
-            if find_image(scrcpy.last_frame, resource_path("res/city/wall_text.png")):
-                claimed = False       
-                # TODO: Change Coordinates and Values when I get this next milestone
-                if is_color_match(get_pixel_color(scrcpy.last_frame, 475, 216), (233, 66, 54)): # Lightbearers Milestone
-                    tap(device_id, 475, 216)
+            ## Check if in a team or solo
+            if find_image(scrcpy.last_frame, resource_path("res/darkforest/labyrinth_team_text.png")):
+                if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/labyrinth_team_sweep.png"), timeout=5, random_delay=True):
                     time.sleep(DELAY)
-                    claim_wall_reward(device_id, scrcpy)
-                    logger("Claimed Lightbearers Milestone", "success")
-                    claimed = True
-
-                if is_color_match(get_pixel_color(scrcpy.last_frame, 1024, 216), (255, 100, 65)): # Maulers Milestone
-                    tap(device_id, 1024, 216)
-                    time.sleep(DELAY)
-                    claim_wall_reward(device_id, scrcpy)
-                    logger("Claimed Maulers Milestone", "success")
-                    claimed = True
-
-                # TODO: Change Coordinates when I get this next milestone
-                if is_color_match(get_pixel_color(scrcpy.last_frame, 475, 597), (255, 100, 65)): # Wilders Milestone
-                    tap(device_id, 475, 597)
-                    time.sleep(DELAY)
-                    claim_wall_reward(device_id, scrcpy)
-                    logger("Claimed Wilders Milestone", "success")
-                    claimed = True
-
-                if is_color_match(get_pixel_color(scrcpy.last_frame, 1024, 597), (255, 100, 65)): # Graveborn Milestone
-                    tap(device_id, 1024, 597)
-                    time.sleep(DELAY)
-                    claim_wall_reward(device_id, scrcpy)
-                    logger("Claimed Graveborn Milestone", "success")
-                    claimed = True
-
-                if is_color_match(get_pixel_color(scrcpy.last_frame, 1014, 995), (233, 60, 40)): # Campaign Stage Milestone
-                    tap(device_id, 1014, 995)
-                    time.sleep(DELAY)
-                    claim_wall_reward(device_id, scrcpy)
-                    logger("Claimed Campaign Stage Milestone", "success")
-                    claimed = True
-
-                # TODO: Change Coordinates when I get this next milestone
-                if is_color_match(get_pixel_color(scrcpy.last_frame, 1014, 1345), (233, 66, 54)): # King's Tower Milestone
-                    tap(device_id, 1014, 1345)
-                    time.sleep(DELAY)
-                    claim_wall_reward(device_id, scrcpy)
-                    logger("Claimed King's Tower Milestone", "success")
-                    claimed = True
-                    
-                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png"), threshold=0.8):
-                    tap(device_id, back_button[0], back_button[1])
-                    time.sleep(DELAY)
-                return claimed
-        return False
+                    if find_image(scrcpy.last_frame, resource_path("res/darkforest/labyrinth_sweep_confirm.png")):
+                        tap(device_id, labyrinth_sweep_button[0], labyrinth_sweep_button[1])
+                        time.sleep(DELAY)
+                        tap(device_id, back_button[0], back_button[1])
+                        time.sleep(DELAY)
+                        if find_image(scrcpy.last_frame, resource_path("res/darkforest/labyrinth_roamer.png")):
+                            tap(device_id, labyrinth_exit_roamer[0], labyrinth_exit_roamer[1])
+                            time.sleep(DELAY)
+                            return True
+                ## In a team but already done labyrinth
+                elif find_image(scrcpy.last_frame, resource_path("res/darkforest/labyrinth_team_sweep_done.png")):
+                    logger("Labytinth already done this cycle... Skipping.", "info")
+                    while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
+                        tap(device_id, back_button[0], back_button[1])
+                        time.sleep(DELAY)
+                    return True
+                ## In a team, but teammates didn't sweep, so start doing it yourself
+                ## TODO
+                else:
+                    pass
+            ## Solo labyrinth
+            ##TODO
+            else:
+                pass
     except Exception as e:
         print(e)
         raise
@@ -875,7 +847,10 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue campaign push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:
@@ -943,7 +918,10 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue tower push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:
@@ -1016,7 +994,10 @@ def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue tower push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:
@@ -1091,7 +1072,10 @@ def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue tower push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:
@@ -1166,7 +1150,10 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue tower push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:
@@ -1241,7 +1228,10 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue tower push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:
@@ -1316,7 +1306,10 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue tower push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:
@@ -1391,7 +1384,10 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                 tap(device_id, start_auto_battle_button[0], start_auto_battle_button[1])
                 time.sleep(DELAY)
                 tap(device_id, confirm_auto_battle_button[0], confirm_auto_battle_button[1])
-                time.sleep(DELAY)
+                time.sleep(1)
+                if find_image(scrcpy.last_frame, resource_path("res/autopush/not_enough_cr.png")):
+                    logger("Combat rating too low to continue tower push.", "error")
+                    return
                 level_up = False
                 time.sleep(30)
                 while not level_up:

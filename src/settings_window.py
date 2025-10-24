@@ -72,7 +72,6 @@ class SettingsWindow:
                 "Arcane Labyrinth",
             ],
             "Ranhorn Tasks": [
-                "Wall of Legends",
                 "Store Purchases",
                 "Amount of Refreshes",
                 "Resonating Crystal",

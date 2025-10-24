@@ -35,7 +35,6 @@ task_defaults = {
     "King's Tower Battle": True,
     "Arcane Labyrinth": True,
     # ranhorn tasks
-    "Wall of Legends": True,
     "Store Purchases": False,
     "Amount of Refreshes": 3,
     "Resonating Crystal": False,

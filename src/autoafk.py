@@ -292,14 +292,13 @@ def start_daily_tasks(logger):
             time.sleep(DELAY)
 
         if config['Tasks']['Arcane Labyrinth'] == 'True':
+            attempt = 0
+            result = False
             logger("Starting Arcane Labyrinth task...", "info")
-            arcane_labyrinth(DEVICE_ID, SCRCPY_CLIENT, logger)
-            time.sleep(DELAY)
-
-        if config['Tasks']['Wall of Legends'] == 'True':
-            logger("Starting Wall of Legends task...", "info")
-            result = wall_of_legends(DEVICE_ID, SCRCPY_CLIENT, logger)
-            logger("Wall of Legends new Milestones claimed!\n", "success") if result else logger("No new milestones in Wall of Legends.\n", "success")
+            while attempt < MAX_ATTEMPTS and not result:
+                result = arcane_labyrinth(DEVICE_ID, SCRCPY_CLIENT, logger)
+                attempt += 1
+            logger("Arcane Labyrinth completed!\n", "success") if result else logger("Arcane Labyrinth failed.\n", "error")
             time.sleep(DELAY)
 
         if config['Tasks']['Store Purchases'] == 'True':
