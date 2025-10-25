@@ -78,17 +78,15 @@ class SettingsWindow:
                 "Guild hunt",
                 "Twisted Realm",
                 "Oak Inn Gifts",
-                "Draconis gifts",
+                # "Draconis gifts",
             ],
             "Misc Tasks": [
                 "Friendship Points",
                 "Loan Mercenaries",
                 "Read Mail",
                 "Delete Mail",
-                "Claim bags",
-                "Claim quests",
-                "Claim free merchants",
-                "Event markers",
+                # "Claim quests",
+                # "Claim free merchants",
             ],
             ## TODO: turn this on next time this event comes around
             # "Unlimited Summons": [

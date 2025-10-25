@@ -178,12 +178,15 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
                 return
             
             case "cityup":
-                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
                     tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
+
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
+                time.sleep(delay)
+                tap(device_id, back_button[0], back_button[1])
+                time.sleep(delay)
                 
-                scroll(device_id, "down", 1200, 600)
-                time.sleep(1)
                 scroll(device_id, "down", 1200, 600)
                 time.sleep(delay)
                 
@@ -193,25 +196,24 @@ def go_to_startscreen(device_id, scrcpy, logger, task, delay=3):
                 if find_image(scrcpy.last_frame, resource_path("res/city/guild_text.png")):
                     return
                 
-                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png")):
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8) and not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8):
                     tap(device_id, back_button[0], back_button[1])
                     time.sleep(delay)
+
+                tap_image(device_id, scrcpy.last_frame, resource_path("res/darkforest/darkforest_unselected.png"), threshold=0.8)
+                time.sleep(delay)
+                tap(device_id, back_button[0], back_button[1])
+                time.sleep(delay)
                 
-                scroll(device_id, "down", 1200, 600)
-                time.sleep(1)
                 scroll(device_id, "down", 1200, 600)
                 time.sleep(delay)
+                tap(device_id, guild_on_map[0], guild_on_map[1])
 
-                if find_image(scrcpy.last_frame, resource_path("res/city/guild.png"), threshold=0.8):
-                    tap_image(device_id, scrcpy.last_frame, resource_path("res/city/guild.png"), threshold=0.8)
+                while not find_image(scrcpy.last_frame, resource_path("res/city/guild_text.png")):
+                    tap(device_id, guild_chest[0], guild_chest[1])
                     time.sleep(delay)
-
-                    while not find_image(scrcpy.last_frame, resource_path("res/city/guild_text.png")):
-                        tap(device_id, scrcpy.resolution[0]//2, 2*scrcpy.resolution[1]//3)
-                        time.sleep(delay)
-                        tap(device_id, back_button[0], back_button[1])
-                        time.sleep(delay)
-                
+                    tap(device_id, back_button[0], back_button[1])
+                    time.sleep(delay)
                 return
             
             case "unlimited":
