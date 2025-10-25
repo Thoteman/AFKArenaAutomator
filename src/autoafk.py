@@ -353,6 +353,26 @@ def start_daily_tasks(logger):
             logger("Oak Inn Gifts claimed!\n", "success") if result else logger("Oak Inn Gifts claim failed.\n", "error")
             time.sleep(DELAY)
 
+        if config['Tasks']['Draconis Gifts'] == 'True':
+            attempt = 0
+            result = False
+            logger("Starting Draconis Gifts task...", "info")
+            while attempt < MAX_ATTEMPTS and not result:
+                result = draconis_gifts(DEVICE_ID, SCRCPY_CLIENT, logger)
+                attempt += 1
+            logger("Draconis Gifts claimed!\n", "success") if result else logger("Draconis Gifts claim failed.\n", "error")
+            time.sleep(DELAY)
+
+        if config['Tasks']['Claim Quests'] == 'True':
+            attempt = 0
+            result = False
+            logger("Starting Claim Quests task...", "info")
+            while attempt < MAX_ATTEMPTS and not result:
+                result = claim_quests(DEVICE_ID, SCRCPY_CLIENT, logger)
+                attempt += 1
+            logger("Claim Quests completed!\n", "success") if result else logger("Claim Quests failed.\n", "error")
+            time.sleep(DELAY)
+
         stop_scrcpy_client(logger)
     except cv2.error:
         logger("Stopped the current action.", "error")

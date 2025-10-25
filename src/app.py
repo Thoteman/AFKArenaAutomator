@@ -85,7 +85,7 @@ class BotApp:
             "Push Forsaken Necropolis": lambda: threading.Thread(target=auto_push_gb, args=(self.log,), daemon=True).start(),
             "Push Celestial Sanctum": lambda: threading.Thread(target=auto_push_cel, args=(self.log,), daemon=True).start(),
             "Push Infernal Fortress": lambda: threading.Thread(target=auto_push_hypo, args=(self.log,), daemon=True).start(),
-            "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
+            # "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
             "Unlimited Summons": lambda: threading.Thread(target=unlimited_summons, args=(self.log,), daemon=True).start(),
             "Stop Current Action": lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start(),
         }
@@ -109,7 +109,7 @@ class BotApp:
         self.output.pack(fill=BOTH, expand=True)
         self.output.config(state="disabled")
         self.log("Welcome to AFK Arena Automator!\nDeveloped by Thoteman from 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\nJoin the Floofpire Discord for support\n\n", "info", True)
-        self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nArcane Labyrinth / Draconis gift / Claim bags / Claim quests / Claim merchants are not yet implemented!\nI released this version already for testing / auto pushing towers / Unlimited summons!\n\n", "error", True)
+        self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nI released this version already for testing / auto pushing towers / auto pushing campaign!\n\n", "error", True)
                                                                               
 
     def log(self, message, level="info", no_timestamp=False):

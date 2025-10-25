@@ -41,13 +41,13 @@ task_defaults = {
     "Guild hunt": False,
     "Twisted Realm": False,
     "Oak Inn Gifts": False,
-    # "Draconis gifts": False,
+    "Draconis Gifts": False,
     # misc tasks
     "Friendship Points": True,
     "Loan Mercenaries": False,
     "Read Mail": True,
     "Delete Mail": False,
-    # "Claim quests": False,
+    "Claim Quests": False,
     # "Claim free merchants": False,
     # unlimited summons
     "Awakened": "None",

@@ -78,14 +78,14 @@ class SettingsWindow:
                 "Guild hunt",
                 "Twisted Realm",
                 "Oak Inn Gifts",
-                # "Draconis gifts",
+                "Draconis Gifts",
             ],
             "Misc Tasks": [
                 "Friendship Points",
                 "Loan Mercenaries",
                 "Read Mail",
                 "Delete Mail",
-                # "Claim quests",
+                "Claim Quests",
                 # "Claim free merchants",
             ],
             ## TODO: turn this on next time this event comes around

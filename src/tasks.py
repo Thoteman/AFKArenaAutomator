@@ -410,11 +410,8 @@ def arena_of_heroes(device_id, scrcpy, amount, logger):
                         if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/arena_of_heroes_skip.png"), timeout=5, random_delay=True):
                             time.sleep(DELAY)
                         while not find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_of_heroes_text2.png")):
-                            if find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_of_heroes_reward.png")):
-                                win = True
                             tap(device_id, back_button[0], back_button[1])
                             time.sleep(DELAY)
-                        logger(f"Arena of Heroes battle {battle + 1} {'won' if win else 'lost'}", "success" if win else "error")
                     while not find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_text.png")):
                         tap(device_id, back_button[0], back_button[1])
                         time.sleep(DELAY)
@@ -863,6 +860,17 @@ def twisted_realm(device_id, scrcpy, logger):
 
 
 def oak_inn_gifts(device_id, scrcpy, logger):
+    """
+    Claims daily gifts from the Oak Inn in the city.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+    
+    Returns:
+        bool: True if Oak Inn gifts were claimed successfully, False otherwise.
+    """
     try:
         go_to_startscreen(device_id, scrcpy, logger, "cityup", DELAY)
 
@@ -880,6 +888,103 @@ def oak_inn_gifts(device_id, scrcpy, logger):
                 tap(device_id, oak_inn_gift_claim_button[0], oak_inn_gift_claim_button[1])
                 time.sleep(DELAY)
             while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png"), threshold=0.8):
+                tap(device_id, back_button[0], back_button[1])
+                time.sleep(DELAY)
+            return True
+        return False
+    except Exception as e:
+        print(e)
+        raise
+
+
+def draconis_gifts(device_id, scrcpy, logger):
+    """
+    Claims weekly gifts from Draconis in the city.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+    
+    Returns:
+        bool: True if Draconis gifts were claimed successfully, False otherwise.
+    """
+    try:
+        go_to_startscreen(device_id, scrcpy, logger, "cityup", DELAY)
+
+        if find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png"), threshold=0.8):
+            tap(device_id, draconis_on_map[0], draconis_on_map[1])
+            time.sleep(DELAY)
+            
+            time.sleep(3)
+            if not find_image(scrcpy.last_frame, resource_path("res/city/draconis_text.png")):
+                tap(device_id, back_button[0], back_button[1])
+                time.sleep(DELAY)
+                return False
+
+            tap(device_id, draconis_pagoda[0], draconis_pagoda[1])
+            time.sleep(DELAY)
+            tap(device_id, draconis_temple[0], draconis_temple[1])
+            time.sleep(DELAY)
+            if find_image(scrcpy.last_frame, resource_path("res/city/draconis_temple_selected.png")):
+                tap(device_id, draconis_supplies[0], draconis_supplies[1])
+                time.sleep(DELAY*2)
+                tap(device_id, draconis_claim_gift[0], draconis_claim_gift[1])
+                time.sleep(DELAY)
+                while not find_image(scrcpy.last_frame, resource_path("res/city/city_selected.png"), threshold=0.8):
+                    tap(device_id, back_button[0], back_button[1])
+                    time.sleep(DELAY)
+                return True
+        return False
+    except Exception as e:
+        print(e)
+        raise
+
+
+def claim_quests(device_id, scrcpy, logger):
+    """
+    Claims completed daily and weekly quests.
+    
+    Args:
+        device_id (str): The ID of the device.
+        scrcpy (Scrcpy): The Scrcpy instance for screen capturing.
+        logger (function): Logger function to log messages.
+
+    Returns:
+        bool: True if quests were claimed successfully, False otherwise.
+    """
+    try:
+        go_to_startscreen(device_id, scrcpy, logger, "darkforest", DELAY)
+
+        if find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
+            ## Daily Quests
+            tap(device_id, quests[0], quests[1])
+            time.sleep(DELAY)
+            while not find_image(scrcpy.last_frame, resource_path("res/banner/quests_text.png")):
+                time.sleep(DELAY)
+            if find_image(scrcpy.last_frame, resource_path("res/banner/quests_collect.png")):
+                tap(device_id, claim_quest_button[0], claim_quest_button[1])
+                time.sleep(DELAY)
+                for i in range(0,10,2):
+                    for _ in range(2):
+                        tap(device_id, daily_quest_chests[i], daily_quest_chests[i+1])
+                        time.sleep(DELAY)
+                while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
+                    tap(device_id, back_button[0], back_button[1])
+                    time.sleep(DELAY)
+            ## Weekly Quests
+            tap(device_id, quests[0], quests[1])
+            time.sleep(DELAY)
+            while not find_image(scrcpy.last_frame, resource_path("res/banner/quests_text.png")):
+                time.sleep(DELAY)
+            if find_image(scrcpy.last_frame, resource_path("res/banner/quests_collect.png")):
+                tap(device_id, claim_quest_button[0], claim_quest_button[1])
+                time.sleep(DELAY)
+                for i in range(0,12,2):
+                    for _ in range(2):
+                        tap(device_id, weekly_quest_chests[i], weekly_quest_chests[i+1])
+                        time.sleep(DELAY)
+            while not find_image(scrcpy.last_frame, resource_path("res/darkforest/darkforest_selected.png"), threshold=0.8):
                 tap(device_id, back_button[0], back_button[1])
                 time.sleep(DELAY)
             return True
