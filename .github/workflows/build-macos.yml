@@ -26,7 +26,7 @@ jobs:
 
       - name: Build macOS app with spec file
         run: |
-          pyinstaller main.spec
+          pyinstaller macos.spec
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

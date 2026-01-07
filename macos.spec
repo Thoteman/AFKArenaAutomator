@@ -1,13 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_data_files
-import sys
 
 block_cipher = None
 adbauto_data = collect_data_files('adbauto')
-
-icon_file = 'icon.ico'
-if sys.platform == 'darwin':
-    icon_file = 'icon.icns'
 
 a = Analysis(
     ['main.py'],
@@ -16,7 +11,7 @@ a = Analysis(
     datas=[
         ('res', 'res'),
         ('config.ini', '.'),
-        (icon_file, '.'),
+        ('icon.icns', '.'),
         ('src', 'src'),
         *adbauto_data,
     ],
@@ -26,8 +21,6 @@ a = Analysis(
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
     optimize=0,
     cipher=block_cipher,
 )
@@ -49,9 +42,16 @@ exe = EXE(
     runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
-    argv_emulation=False,
+    argv_emulation=True,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['icon.ico'],
+    icon='icon.icns',
+)
+
+app = BUNDLE(
+    exe,
+    name='AFKArenaAutomator.app',
+    icon='icon.icns',
+    bundle_identifier='com.thoteman.afkarenautomator',
 )
