@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_data_files
+import sys
 
 block_cipher = None
 adbauto_data = collect_data_files('adbauto')
