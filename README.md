@@ -28,11 +28,11 @@ AutoAFK is a GUI-based bot for automating daily tasks in **AFK Arena**, built wi
     * ❌ Bet on Legend's Tournament
     * ✅ Claim Temporal Fountain
     * ✅ Attempt King's Tower Battle
-    * ❌ Arcane Labyrinth
+    * ✅ Arcane Labyrinth
   * Ranhorn
-    * ⚠️ Claim wall of Legends Milestones
     * ✅ Store Purchases
     * ✅ Level Resonating Crystal
+    * ✅ Guild Hunting Contract
     * ✅ Guild Hunt
     * ✅ Twisted Realm
     * ✅ Claim Oak Inn gifts
@@ -41,8 +41,7 @@ AutoAFK is a GUI-based bot for automating daily tasks in **AFK Arena**, built wi
     * ✅ Send out Mercenaries
     * ✅ Read (and delete) Mail
     * ❌ Use Bag Items
-    * ❌ Claim Quests
-    * ❌ Claim Merchant deals
+    * ✅ Claim Quests
 * ⚙️ Auto-saves configuration to `config.ini`
 * 🧠 Future plans:
   * Turn all ❌ into ✅
