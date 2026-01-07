@@ -2,13 +2,14 @@
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Style
+from ttkbootstrap.scrolled import ScrolledText
 from tkinter import messagebox
 from datetime import datetime
 from importlib import resources
 import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
-from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action, unlimited_summons, disable_buttons
+from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action, unlimited_summons, illusory_journey, disable_buttons
 
 class BotApp:
     def __init__(self, root):
@@ -87,12 +88,13 @@ class BotApp:
             "Push Infernal Fortress": lambda: threading.Thread(target=auto_push_hypo, args=(self.log,), daemon=True).start(),
             # "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
             "Unlimited Summons": lambda: threading.Thread(target=unlimited_summons, args=(self.log,), daemon=True).start(),
+            "Illusory Journey": lambda: threading.Thread(target=illusory_journey, args=(self.log,), daemon=True).start(),
             "Stop Current Action": lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start(),
         }
 
         btn_texts = button_actions.keys()
         for text in btn_texts:
-            pady = (5, 25) if text == "Settings" or text == "Daily tasks" or text == "Push Infernal Fortress" or text == "Unlimited Summons" else 5
+            pady = (5, 25) if text == "Settings" or text == "Daily tasks" or text == "Push Infernal Fortress" or text == "Illusory Journey" else 5
             state = "normal" if text != "Unlimited Summons" else "disabled" ##TODO: This is how to activate and deactivate buttons!
             style = PRIMARY if text != "Stop Current Action" else DANGER
             btn = tb.Button(left_panel, text=text, bootstyle=style, width=25, command=button_actions[text], state=state)
@@ -105,9 +107,9 @@ class BotApp:
         right_panel = tb.Frame(frame)
         right_panel.pack(side=RIGHT, fill=BOTH, expand=True)
 
-        self.output = tb.ScrolledText(right_panel, wrap="word", height=25)
+        self.output = ScrolledText(right_panel, wrap="word", height=25)
         self.output.pack(fill=BOTH, expand=True)
-        self.output.config(state="disabled")
+        self.output.text.configure(state="disabled")
         self.log("Welcome to AFK Arena Automator!\nDeveloped by Thoteman from 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\nJoin the Floofpire Discord for support\n\n", "info", True)
         self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nI released this version already for testing / auto pushing towers / auto pushing campaign!\n\n", "error", True)
                                                                               
@@ -129,12 +131,11 @@ class BotApp:
                 timestamp = datetime.now().strftime("[%H:%M:%S]")  # Add timestamp
                 full_message = f"{timestamp} {message}" if message else ""
 
-            self.output.config(state="normal")
-            self.output.insert("end", full_message + "\n", level)
-            self.output.tag_config(level, foreground=color)
-            self.output.see("end")
-            self.output.config(state="disabled")
-
+            self.output.text.configure(state="normal")
+            self.output.text.insert("end", full_message + "\n", level)
+            self.output.text.tag_config(level, foreground=color)
+            self.output.text.see("end")
+            self.output.text.configure(state="disabled")
         self.output.after(0, _log)
 
 

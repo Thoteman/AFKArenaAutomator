@@ -136,6 +136,31 @@ def unlimited_summons(logger):
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
+def illusory_journey(logger):
+    try:
+        global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, MAX_ATTEMPTS, DELAY
+        if not DEVICE_ID:
+            connect_emulator(logger)
+
+        if SCRCPY_CLIENT:
+            logger("Already running a task. Can't run 2 at the same time.", "error")
+            return
+        start_scrcpy_client(logger)
+
+        logger("") # Logs newline for better readability
+        config = configparser.ConfigParser()
+        config.read(CONFIG_PATH)
+        DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
+        set_delay(DELAY)
+
+        illusory_journey_cycle(DEVICE_ID, SCRCPY_CLIENT, logger)
+        stop_scrcpy_client(logger)
+
+    except cv2.error:
+        logger("Stopped the current action.", "error")
+    except Exception as e:
+        logger(f"Something went wrong: {e}", "error")
+
 
 def start_daily_tasks(logger):
     try:

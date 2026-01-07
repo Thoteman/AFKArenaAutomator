@@ -5,6 +5,7 @@ import time
 from PIL import Image
 from datetime import datetime, timezone
 import cv2
+import random
 
 ## Global values
 DELAY = 3
@@ -1687,6 +1688,26 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], 
                 for _ in range(2):
                     tap(device_id, unlimited_summons_tap_next[0], unlimited_summons_tap_next[1])
                     time.sleep(1)
+
+    except Exception as e:
+        logger(f"Error occurred: {e}", "error")
+        raise
+
+
+def illusory_journey_cycle(device_id, scrcpy, logger):
+    try:
+        if not find_image(scrcpy.last_frame, resource_path("res/campaign/illusory_journey_text.png"), threshold=0.8):
+            go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
+            tap(device_id, illusory_journey_button[0], illusory_journey_button[1])
+            time.sleep(DELAY*2)
+
+        if not find_image(scrcpy.last_frame, resource_path("res/campaign/illusory_journey_text.png"), threshold=0.8):
+            logger("Illusory Journey page not found...", "error")
+            return
+        
+        while True:
+            time.sleep(random.uniform(3, 6))
+            tap(device_id, illusory_journey_battle[0], illusory_journey_battle[1])
 
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
