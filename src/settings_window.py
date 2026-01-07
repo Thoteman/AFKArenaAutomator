@@ -107,7 +107,7 @@ class SettingsWindow:
         }
 
         for i, (category, tasks) in enumerate(categories.items()):
-            col = tb.LabelFrame(frame, text=category, padding=10)
+            col = tb.LabelFrame(frame, text=category, pady=10, padx=10)
             col.grid(row=0, column=i, padx=10, pady=5, sticky="n")
 
             for task in tasks:
