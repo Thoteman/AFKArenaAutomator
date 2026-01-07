@@ -2,3 +2,7 @@ adbauto
 adbutils
 av
 ttkbootstrap
+opencv-python
+numpy
+pillow
+pyinstaller

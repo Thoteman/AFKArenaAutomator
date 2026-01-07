@@ -2,4 +2,5 @@ src/__pycache__
 screenshots
 dist/
 build/
-AutoAFK.spec
+*.spec.bak
+*.log

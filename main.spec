@@ -4,6 +4,10 @@ from PyInstaller.utils.hooks import collect_data_files
 block_cipher = None
 adbauto_data = collect_data_files('adbauto')
 
+icon_file = 'icon.ico'
+if sys.platform == 'darwin':
+    icon_file = 'icon.icns'
+
 a = Analysis(
     ['main.py'],
     pathex=[],
@@ -11,7 +15,7 @@ a = Analysis(
     datas=[
         ('res', 'res'),
         ('config.ini', '.'),
-        ('icon.ico', '.'),
+        (icon_file, '.'),
         ('src', 'src'),
         *adbauto_data,
     ],
