@@ -28,8 +28,14 @@ jobs:
         run: |
           pyinstaller macos.spec
 
+      - name: Zip macOS app bundle
+        run: |
+          cd dist
+          zip -r AFKArenaAutomator.app.zip AFKArenaAutomator.app
+
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: AFKArenaAutomator-macOS
-          path: dist/AFKArenaAutomator.app
+          path: dist/AFKArenaAutomator.app.zip
