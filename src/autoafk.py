@@ -60,7 +60,7 @@ def stop_scrcpy_client(logger):
     
     return
 
-def take_screenshot(logger):
+def take_screenshot(logger, stop_event):
     # pass
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH
@@ -88,7 +88,8 @@ def take_screenshot(logger):
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def unlimited_summons(logger):
+def unlimited_summons(logger, stop_event):
+    #TODO: Implement stop_event when event comes back
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, MAX_ATTEMPTS, DELAY
         if not DEVICE_ID:
@@ -136,7 +137,7 @@ def unlimited_summons(logger):
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def illusory_journey(logger):
+def illusory_journey(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, MAX_ATTEMPTS, DELAY
         if not DEVICE_ID:
@@ -153,7 +154,8 @@ def illusory_journey(logger):
         DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
         set_delay(DELAY)
 
-        illusory_journey_cycle(DEVICE_ID, SCRCPY_CLIENT, logger)
+        illusory_journey_cycle(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event)
+
         stop_scrcpy_client(logger)
 
     except cv2.error:
@@ -162,7 +164,7 @@ def illusory_journey(logger):
         logger(f"Something went wrong: {e}", "error")
 
 
-def start_daily_tasks(logger):
+def start_daily_tasks(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, MAX_ATTEMPTS, DELAY
         if not DEVICE_ID:
@@ -191,6 +193,11 @@ def start_daily_tasks(logger):
             logger("Claimed AFK rewards!\n", "success") if result else logger("Failed claming AFK rewards.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Campaign Battle'] == 'True':
             attempt = 0
             result = False
@@ -200,6 +207,11 @@ def start_daily_tasks(logger):
                 attempt += 1
             logger("Campaign Battle completed!\n", "success") if result else logger("Campaign Battle failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Claim Fast Rewards'] == 'True':
             attempt = 0
@@ -212,6 +224,11 @@ def start_daily_tasks(logger):
             logger(f"Claimed fast rewards {amount} of time(s)!\n", "success") if result else logger("Claiming fast rewards failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Friendship Points'] == 'True':
             attempt = 0
             result = False
@@ -222,6 +239,11 @@ def start_daily_tasks(logger):
             logger("Friendship Points claimed!\n", "success") if result else logger("Friendship Points claim failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Loan Mercenaries'] == 'True':
             attempt = 0
             result = False
@@ -231,6 +253,11 @@ def start_daily_tasks(logger):
                 attempt += 1
             logger("Mercenaries loaned!\n", "success") if result else logger("Mercenaries loan failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Read Mail'] == 'True':
             attempt = 0
@@ -243,6 +270,11 @@ def start_daily_tasks(logger):
             logger(f"Mail read{' and deleted' if delete else ''}!\n", "success") if result else logger("Mail reading failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Bounty Board'] == 'True':
             attempt = 0
             result = False
@@ -252,6 +284,11 @@ def start_daily_tasks(logger):
                 attempt += 1
             logger("Bounty Board completed!\n", "success") if result else logger("Bounty Board failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         # TODO: check last time this task was completed
         if config['Tasks']['Claim 10 weekly Staves (GG)'] == 'True':
@@ -264,6 +301,11 @@ def start_daily_tasks(logger):
             logger("Weekly Staves claimed!\n", "success") if result else logger("Weekly Staves claim failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Treasure Scramble'] == 'True':
             attempt = 0
             result = False
@@ -274,17 +316,27 @@ def start_daily_tasks(logger):
             logger("Treasure Scramble resources claimed!\n", "success") if result else logger("Treasure Scramble resources claim failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Arena of Heroes'] == 'True':
             attempt = 0
             result = False
             amount_of_battles = int(config['Tasks']['Amount of Arena Battles'])
             logger("Starting Arena of Heroes task...", "info")
             while attempt < MAX_ATTEMPTS and not result:
-                result, amount = arena_of_heroes(DEVICE_ID, SCRCPY_CLIENT, amount_of_battles, logger)
+                result, amount = arena_of_heroes(DEVICE_ID, SCRCPY_CLIENT, amount_of_battles, logger, stop_event)
                 amount_of_battles -= amount
                 attempt += 1
             logger("Arena of Heroes battles completed!\n", "success") if result else logger("Arena of Heroes battles failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Claim Gladiator Coins'] == 'True':
             attempt = 0
@@ -294,7 +346,12 @@ def start_daily_tasks(logger):
                 result = gladiator_coins(DEVICE_ID, SCRCPY_CLIENT, logger)
                 attempt += 1
             logger("Gladiator Coins claimed!\n", "success") if result else logger("Gladiator Coins claim failed.\n", "error")
-            time.sleep(DELAY)  
+            time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Temporal Rift Fountain'] == 'True':
             attempt = 0
@@ -306,6 +363,11 @@ def start_daily_tasks(logger):
             logger("Temporal Rift fountain collected!\n", "success") if result else logger("Temporal Rift fountain failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['King\'s Tower Battle'] == 'True':
             attempt = 0
             result = False
@@ -316,6 +378,11 @@ def start_daily_tasks(logger):
             logger("King's Tower Battle completed!\n", "success") if result else logger("King's Tower Battle failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Arcane Labyrinth'] == 'True':
             attempt = 0
             result = False
@@ -325,6 +392,11 @@ def start_daily_tasks(logger):
                 attempt += 1
             logger("Arcane Labyrinth completed!\n", "success") if result else logger("Arcane Labyrinth failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Store Purchases'] == 'True':
             attempt = 0
@@ -338,6 +410,11 @@ def start_daily_tasks(logger):
             logger("Store Purchases completed!\n", "success") if result else logger("Store Purchases failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Hunting Contract'] == 'True':
             attempt = 0
             result = False
@@ -347,6 +424,11 @@ def start_daily_tasks(logger):
                 attempt += 1
             logger("Hunting Contract completed!\n", "success") if result else logger("Hunting Contract failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Guild hunt'] == 'True':
             attempt = 0
@@ -358,6 +440,11 @@ def start_daily_tasks(logger):
             logger("Guild hunt completed!\n", "success") if result else logger("Guild hunt failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Twisted Realm'] == 'True':
             attempt = 0
             result = False
@@ -367,6 +454,11 @@ def start_daily_tasks(logger):
                 attempt += 1
             logger("Twisted Realm completed!\n", "success") if result else logger("Twisted Realm failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Oak Inn Gifts'] == 'True':
             attempt = 0
@@ -378,6 +470,11 @@ def start_daily_tasks(logger):
             logger("Oak Inn Gifts claimed!\n", "success") if result else logger("Oak Inn Gifts claim failed.\n", "error")
             time.sleep(DELAY)
 
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
+
         if config['Tasks']['Draconis Gifts'] == 'True':
             attempt = 0
             result = False
@@ -387,6 +484,11 @@ def start_daily_tasks(logger):
                 attempt += 1
             logger("Draconis Gifts claimed!\n", "success") if result else logger("Draconis Gifts claim failed.\n", "error")
             time.sleep(DELAY)
+
+        if stop_event.is_set():
+            stop_scrcpy_client(logger)
+            logger("Stopped the current action.", "success")
+            return
 
         if config['Tasks']['Claim Quests'] == 'True':
             attempt = 0
@@ -404,8 +506,45 @@ def start_daily_tasks(logger):
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
         return
+    
+def spend_arena_tickets(logger, stop_event):
+    try:
+        global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
+        if not DEVICE_ID:
+            connect_emulator(logger)
 
-def auto_push_campaign(logger):
+        if SCRCPY_CLIENT:
+            logger("Already running a task. Can't run 2 at the same time.", "error", True)
+            return
+
+        config = configparser.ConfigParser()
+        config.read(CONFIG_PATH)
+        DELAY = int(config['Global']['Delay']) if 'delay' in config['Global'] else 3
+        set_delay(DELAY)
+        start_scrcpy_client(logger)
+
+        attempt = 0
+        result = False
+        amount_of_battles = 50
+        logger("Starting 50 Arena of Heroes battles...", "info")
+        while attempt < 3 and not result:
+            if stop_event.is_set():
+                stop_scrcpy_client(logger)
+                logger("Stopped the current action.", "success")
+                return
+            result, amount = arena_of_heroes(DEVICE_ID, SCRCPY_CLIENT, amount_of_battles, logger, stop_event)
+            amount_of_battles -= amount
+            attempt += 1
+        logger("Arena of Heroes battles completed!\n", "success") if result else logger("Arena of Heroes battles failed.\n", "error")
+        time.sleep(DELAY)
+
+        stop_scrcpy_client(logger)
+    except cv2.error:
+        logger("Stopped the current action.", "error")
+    except Exception as e:
+        logger(f"Something went wrong: {e}", "error")
+
+def auto_push_campaign(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         if not DEVICE_ID:
@@ -425,14 +564,16 @@ def auto_push_campaign(logger):
         singlestage = True if config['Global']['Copy Singlestage Formations'] == "True" else False
         start_scrcpy_client(logger)
 
-        push_campaign(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts, singlestage)
+        push_campaign(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts, singlestage)
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing campaign!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def auto_push_tower(logger):
+def auto_push_tower(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         if not DEVICE_ID:
@@ -451,14 +592,16 @@ def auto_push_tower(logger):
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
         start_scrcpy_client(logger)
 
-        push_tower(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        push_tower(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts)
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing tower!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def auto_push_lb(logger):
+def auto_push_lb(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         today = datetime.now(timezone.utc).weekday()
@@ -482,17 +625,19 @@ def auto_push_lb(logger):
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
         start_scrcpy_client(logger)
 
-        done60 = push_lb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_lb(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts)
         if done60:
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['lb'] = "True"
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing Lightbearer Tower!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def auto_push_m(logger):
+def auto_push_m(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         today = datetime.now(timezone.utc).weekday()
@@ -516,17 +661,19 @@ def auto_push_m(logger):
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
         start_scrcpy_client(logger)
 
-        done60 = push_m(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_m(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts)
         if done60:
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['m'] = "True"
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing Mauler Tower!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def auto_push_w(logger):
+def auto_push_w(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         today = datetime.now(timezone.utc).weekday()
@@ -550,17 +697,19 @@ def auto_push_w(logger):
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
         start_scrcpy_client(logger)
 
-        done60 = push_w(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_w(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts)
         if done60:
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['w'] = "True"
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing Wilder Tower!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def auto_push_gb(logger):
+def auto_push_gb(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         today = datetime.now(timezone.utc).weekday()
@@ -584,17 +733,19 @@ def auto_push_gb(logger):
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
         start_scrcpy_client(logger)
 
-        done60 = push_gb(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_gb(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts)
         if done60:
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['gb'] = "True"
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing Graveborn Tower!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def auto_push_cel(logger):
+def auto_push_cel(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         today = datetime.now(timezone.utc).weekday()
@@ -618,17 +769,19 @@ def auto_push_cel(logger):
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
         start_scrcpy_client(logger)
 
-        done60 = push_cel(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_cel(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts)
         if done60:
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['cel'] = "True"
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing Celestial Tower!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
 
-def auto_push_hypo(logger):
+def auto_push_hypo(logger, stop_event):
     try:
         global DEVICE_ID, SCRCPY_CLIENT, CONFIG_PATH, DELAY
         today = datetime.now(timezone.utc).weekday()
@@ -652,24 +805,17 @@ def auto_push_hypo(logger):
         artifacts = True if config['Global']['Copy Artifacts'] == "True" else False
         start_scrcpy_client(logger)
 
-        done60 = push_hypo(DEVICE_ID, SCRCPY_CLIENT, logger, formation_no, artifacts)
+        done60 = push_hypo(DEVICE_ID, SCRCPY_CLIENT, logger, stop_event, formation_no, artifacts)
         if done60:
             logger("All 60 battles done... Come back another day!")
             config['Autopush']['hypo'] = "True"
+
         stop_scrcpy_client(logger)
+        logger("Finished pushing Hypogean Tower!", "success")
     except cv2.error:
         logger("Stopped the current action.", "error")
     except Exception as e:
         logger(f"Something went wrong: {e}", "error")
-
-def stop_action(logger):
-    global SCRCPY_CLIENT
-    if not SCRCPY_CLIENT:
-        logger("No task is currently running.", "info")
-        return
-    
-    logger("Stopping current action...", "info")
-    stop_scrcpy_client(logger)
 
 def disable_buttons(buttons):
     today = datetime.now(timezone.utc).weekday()

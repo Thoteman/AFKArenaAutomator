@@ -9,7 +9,7 @@ from importlib import resources
 import threading
 from src.config_manager import ConfigManager
 from src.settings_window import SettingsWindow
-from src.autoafk import take_screenshot, start_daily_tasks, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, stop_action, unlimited_summons, illusory_journey, disable_buttons
+from src.autoafk import take_screenshot, start_daily_tasks, spend_arena_tickets, auto_push_campaign, auto_push_tower, auto_push_lb, auto_push_m, auto_push_w, auto_push_gb, auto_push_cel, auto_push_hypo, unlimited_summons, illusory_journey, disable_buttons
 
 class BotApp:
     def __init__(self, root):
@@ -30,6 +30,10 @@ class BotApp:
         }
 
         self.buttons = {}
+
+        # Thread control
+        self.stop_event = threading.Event()
+        self.current_thread = None
 
         self.create_menu()
         self.build_layout()
@@ -66,6 +70,24 @@ class BotApp:
     def show_about(self):
         messagebox.showinfo("About", "AFK Arena Automator\nVersion 1.0.0 \nDeveloped by Thoteman")
 
+    def start_task(self, target):
+        # Stop currently running task
+        self.stop_current_action()
+
+        self.stop_event.clear()
+
+        self.current_thread = threading.Thread(
+            target=target,
+            args=(self.log, self.stop_event),
+            daemon=True
+        )
+        self.current_thread.start()
+
+    def stop_current_action(self):
+        if self.current_thread and self.current_thread.is_alive():
+            self.stop_event.set()
+            self.log("Stopping current action...")
+
     def build_layout(self):
         frame = tb.Frame(self.root)
         frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
@@ -77,24 +99,25 @@ class BotApp:
         # Button Functions
         button_actions = {
             "Settings": self.show_settings,
-            "Daily tasks": lambda: threading.Thread(target=start_daily_tasks, args=(self.log,), daemon=True).start(),
-            "Push Campaign": lambda: threading.Thread(target=auto_push_campaign, args=(self.log,), daemon=True).start(),
-            "Push Kings Tower": lambda: threading.Thread(target=auto_push_tower, args=(self.log,), daemon=True).start(),
-            "Push Tower of Light": lambda: threading.Thread(target=auto_push_lb, args=(self.log,), daemon=True).start(),
-            "Push Brutal Citadel": lambda: threading.Thread(target=auto_push_m, args=(self.log,), daemon=True).start(),
-            "Push World Tree": lambda: threading.Thread(target=auto_push_w, args=(self.log,), daemon=True).start(),
-            "Push Forsaken Necropolis": lambda: threading.Thread(target=auto_push_gb, args=(self.log,), daemon=True).start(),
-            "Push Celestial Sanctum": lambda: threading.Thread(target=auto_push_cel, args=(self.log,), daemon=True).start(),
-            "Push Infernal Fortress": lambda: threading.Thread(target=auto_push_hypo, args=(self.log,), daemon=True).start(),
-            # "Screenshot": lambda: threading.Thread(target=take_screenshot, args=(self.log,), daemon=True).start(),
-            "Unlimited Summons": lambda: threading.Thread(target=unlimited_summons, args=(self.log,), daemon=True).start(),
-            "Illusory Journey": lambda: threading.Thread(target=illusory_journey, args=(self.log,), daemon=True).start(),
-            "Stop Current Action": lambda: threading.Thread(target=stop_action, args=(self.log,), daemon=True).start(),
+            "Daily tasks": lambda: self.start_task(start_daily_tasks),
+            "Spend 50 Arena Tickets": lambda: self.start_task(spend_arena_tickets),
+            "Push Campaign": lambda: self.start_task(auto_push_campaign),
+            "Push Kings Tower": lambda: self.start_task(auto_push_tower),
+            "Push Tower of Light": lambda: self.start_task(auto_push_lb),
+            "Push Brutal Citadel": lambda: self.start_task(auto_push_m),
+            "Push World Tree": lambda: self.start_task(auto_push_w),
+            "Push Forsaken Necropolis": lambda: self.start_task(auto_push_gb),
+            "Push Celestial Sanctum": lambda: self.start_task(auto_push_cel),
+            "Push Infernal Fortress": lambda: self.start_task(auto_push_hypo),
+            "Unlimited Summons": lambda: self.start_task(unlimited_summons),
+            "Illusory Journey": lambda: self.start_task(illusory_journey),
+            "Stop Current Action": self.stop_current_action,
+            # "Screenshot": lambda: self.start_task(take_screenshot),
         }
 
         btn_texts = button_actions.keys()
         for text in btn_texts:
-            pady = (5, 25) if text == "Settings" or text == "Daily tasks" or text == "Push Infernal Fortress" or text == "Illusory Journey" else 5
+            pady = (5, 25) if text == "Settings" or text == "Spend 50 Arena Tickets" or text == "Push Infernal Fortress" or text == "Illusory Journey" else 5
             state = "normal" if text != "Unlimited Summons" else "disabled" ##TODO: This is how to activate and deactivate buttons!
             style = PRIMARY if text != "Stop Current Action" else DANGER
             btn = tb.Button(left_panel, text=text, bootstyle=style, width=25, command=button_actions[text], state=state)
@@ -111,7 +134,7 @@ class BotApp:
         self.output.pack(fill=BOTH, expand=True)
         self.output.text.configure(state="disabled")
         self.log("Welcome to AFK Arena Automator!\nDeveloped by Thoteman from 10,000 Diamonds\nJoin our Discord Server: bit.ly/afk10kd\nJoin the Floofpire Discord for support\n\n", "info", True)
-        self.log("DISCLAIMER:\nThis bot is still in development! This is a beta release! Not everything is working yet!\nI released this version already for testing / auto pushing towers / auto pushing campaign!\n\n", "error", True)
+        self.log("DISCLAIMER:\nThis bot is still in development! If you find a bug, contact me through Discord (I am lurking in the 10K DIamonds and Floof servers...\nI released this version already for testing / auto pushing towers / auto pushing campaign!\n\n", "error", True)
                                                                               
 
     def log(self, message, level="info", no_timestamp=False):

@@ -380,7 +380,7 @@ def treasure_scramble(device_id, scrcpy, logger):
         raise
 
 
-def arena_of_heroes(device_id, scrcpy, amount, logger):
+def arena_of_heroes(device_id, scrcpy, amount, logger, stop_event):
     try:
         go_to_startscreen(device_id, scrcpy, logger, "arena", DELAY)
 
@@ -399,6 +399,9 @@ def arena_of_heroes(device_id, scrcpy, amount, logger):
                 if tap_img_when_visible(device_id, scrcpy, resource_path("res/darkforest/arena_of_heroes_challenge.png"), timeout=5, random_delay=True):
                     time.sleep(DELAY)
                     for battle in range(amount):
+                        if stop_event.is_set():
+                            logger("Stopped the current action.", "success")
+                            return True, battle
                         win = False
                         if not find_image(scrcpy.last_frame, resource_path("res/darkforest/arena_of_heroes_text2.png")):
                             return False, battle
@@ -995,7 +998,7 @@ def claim_quests(device_id, scrcpy, logger):
         raise
 
 
-def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, singlestage=False):
+def push_campaign(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True, singlestage=False):
     """
     Automates pushing through campaign battles.
     
@@ -1008,7 +1011,7 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
         singlestage (bool): Whether to copy single stage battles. Default is False.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if not find_image(scrcpy.last_frame, resource_path("res/campaign/battle_factions.png")):
                 go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
 
@@ -1045,7 +1048,7 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1059,12 +1062,13 @@ def push_campaign(device_id, scrcpy, logger, formation_no=1, artifacts=True, sin
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_text.png")):
                                 tap(device_id, continue_auto_battle_button[0], continue_auto_battle_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 
-def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_tower(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles.
     
@@ -1076,7 +1080,7 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         artifacts (bool): Whether to copy artifacts. Default is True.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if find_image(scrcpy.last_frame, resource_path("res/darkforest/kings_tower_main_text.png")):
                 tap(device_id, kings_tower_button[0], kings_tower_button[1])
                 time.sleep(DELAY)
@@ -1116,7 +1120,7 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1130,12 +1134,13 @@ def push_tower(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
                                 tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 
-def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_lb(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Lightbearer faction.
     
@@ -1150,7 +1155,7 @@ def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_lb.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
@@ -1192,7 +1197,7 @@ def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1206,12 +1211,13 @@ def push_lb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
                                 tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 
-def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_m(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Mauler faction.
     
@@ -1226,7 +1232,7 @@ def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_m.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
@@ -1270,7 +1276,7 @@ def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1284,12 +1290,13 @@ def push_m(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
                                 tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 
-def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_w(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Wilder faction.
     
@@ -1304,7 +1311,7 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_w.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
@@ -1348,7 +1355,7 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1362,12 +1369,13 @@ def push_w(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
                                 tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 
-def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_gb(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Graveborn faction.
     
@@ -1382,7 +1390,7 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_gb.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
@@ -1426,7 +1434,7 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1440,12 +1448,13 @@ def push_gb(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
                                 tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 
-def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_cel(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Celestial faction.
     
@@ -1460,7 +1469,7 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_cel.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
@@ -1504,7 +1513,7 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1518,12 +1527,13 @@ def push_cel(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
                                 tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
 
 
-def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
+def push_hypo(device_id, scrcpy, logger, stop_event, formation_no=1, artifacts=True):
     """
     Automates pushing through King's Tower battles for Hypogean faction.
     
@@ -1538,7 +1548,7 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
         bool: True if the maximum amount of floors was reached, stays in a loop until interrupted otherwise.
     """
     try:
-        while True:
+        while not stop_event.is_set():
             if find_image(scrcpy.last_frame, resource_path("res/autopush/text_hypo.png")):
                 if find_image(scrcpy.last_frame, resource_path("res/autopush/done_60.png")):
                     return True
@@ -1582,7 +1592,7 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                     return
                 level_up = False
                 time.sleep(30)
-                while not level_up:
+                while not level_up and not stop_event.is_set():
                     time.sleep(60)
                     tap(device_id, middle_of_screen[0], middle_of_screen[1])
                     time.sleep(DELAY)
@@ -1596,6 +1606,7 @@ def push_hypo(device_id, scrcpy, logger, formation_no=1, artifacts=True):
                             while find_image(scrcpy.last_frame, resource_path("res/autopush/pause_auto_battle_tower_text.png")):
                                 tap(device_id, continue_auto_battle_tower_button[0], continue_auto_battle_tower_button[1])
                                 time.sleep(DELAY)
+        return
     except Exception as e:
         logger(f"Error occurred: {e}", "error")
         raise
@@ -1694,19 +1705,20 @@ def unlimited_summons_cycle(device_id, scrcpy, logger, awakened=[], celepog=[], 
         raise
 
 
-def illusory_journey_cycle(device_id, scrcpy, logger):
+def illusory_journey_cycle(device_id, scrcpy, logger, stop_event):
     try:
         if not find_image(scrcpy.last_frame, resource_path("res/campaign/illusory_journey_text.png"), threshold=0.8):
             go_to_startscreen(device_id, scrcpy, logger, "campaign", DELAY)
             tap(device_id, illusory_journey_button[0], illusory_journey_button[1])
-            time.sleep(DELAY*2)
+            time.sleep(DELAY * 3)
 
         if not find_image(scrcpy.last_frame, resource_path("res/campaign/illusory_journey_text.png"), threshold=0.8):
             logger("Illusory Journey page not found...", "error")
             return
         
-        while True:
+        while not stop_event.is_set():
             time.sleep(random.uniform(3, 6))
+            tap(device_id, illusory_journey_next[0], illusory_journey_next[1])
             tap(device_id, illusory_journey_battle[0], illusory_journey_battle[1])
 
     except Exception as e:
